@@ -1,0 +1,27 @@
+<div class="row">
+    <div class="col-sm-12 col-md-3 col-lg-3"></div>
+    <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="card" style="padding: 10px;">
+            <h2>Login As a Student</h2>
+            <hr />
+            <form [formGroup]="formGroup">
+                <label>User name</label>
+                <p>
+                    <input class="form-control form-control-lg" placeholder="Enter username" required formControlName="username">
+                </p>
+                <label>Password</label>
+                <p>
+                    <input class="form-control form-control-lg" placeholder="Enter password" type="password" required formControlName="password">
+                </p>
+
+                <button *ngIf="!showLoading" type="submit" class="btn btn-primary btn-lg btn-block" (click)="Submit()" [disabled]="formGroup.invalid">
+                    Login
+                </button>
+                <div class="btn btn-primary btn-lg btn-block disabled" *ngIf="showLoading">
+                    Login <i class="fa fa-spinner ml-4" aria-hidden="true"></i>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-3 col-lg-3"></div>
+</div>

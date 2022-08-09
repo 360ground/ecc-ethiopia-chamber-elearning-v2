@@ -1,0 +1,16 @@
+.header-text {
+    color: gray !important;
+    font-size: medium !important;
+
+}
+
+.jumbo-tron {
+    border-bottom: 1px solid #e8eaed;
+    background-color: white !important;
+}
+
+.signupBtn {
+    color: white;
+    padding: 10px;
+    border-radius: 0px;
+}

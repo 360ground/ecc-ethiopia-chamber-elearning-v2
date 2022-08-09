@@ -1,0 +1,62 @@
+<div *ngIf="isLoading">
+    <h2 style="color: gray;
+    font-weight: lighter;
+    text-align: center;
+    margin-top: 12px;
+"> Loading Courses <i class="fa fa-spinner" aria-hidden="true"></i></h2>
+</div>
+<div class="row" *ngIf="courses.length">
+    <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-6 mb-4 mr-2" *ngFor="let course of courses; let i = index">
+            <div class="card">
+                <img class="card-img-top" [src]="course?.overviewfiles[0]?.fileurl" [alt]="course?.overviewfiles[0]?.filename" width="100%" height="50%">
+
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a routerLink="/detail/{{course?.id}}" [state]="course">
+                            {{course?.displayname}}
+                        </a>
+                    </h5>
+
+                    <p>
+                        <span>Start date : {{ course?.startdate | date}}</span>
+                    </p>
+
+                    <p>
+                        <span class="progress">
+                            <span class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="{course?.progress}" aria-valuemin="0"
+                                aria-valuemax="100">
+                            </span>
+                        </span>
+                    </p>
+
+                    <p class="mt-4" style="color: gray !important;">
+                        <span style="color: gray;background-color: whitesmoke;padding: 8px;border-radius: 5px;font-size: 14px;">
+                            {{ course?.completed ? 'Completed' : 'Not Completed' }}
+                        </span>
+                        <span style="float: right; color:gray">
+                            <span *ngIf="course?.isfavourite">
+                                <i class="fa fa-star" aria-hidden="true" title="favorited"></i>
+                            </span>
+                            <span *ngIf="!course?.isfavourite">
+                                <i class="fa fa-star-o" aria-hidden="true" title="not favorited"></i>
+                            </span>
+                        </span>
+                    </p>
+                    <p>
+                        <span>
+                            <button type="button" class="btn btn-success btn-lg btn-block">Continue Learning</button>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" *ngIf="!isLoading && !courses.length">
+    <h2 style="color: gray;
+    font-weight: lighter;
+    text-align: center;
+    margin-top: 12px;
+">-- no enrolled courses available --</h2>
+</div>

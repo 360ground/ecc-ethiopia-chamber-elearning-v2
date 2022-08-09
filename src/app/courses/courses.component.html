@@ -1,0 +1,149 @@
+<div *ngIf="isLoading">
+    <h2 style="color: gray;
+    font-weight: lighter;
+    text-align: center;
+    margin-top: 12px;
+"> Loading Courses <i class="fa fa-spinner" aria-hidden="true"></i></h2>
+</div>
+<div *ngIf="courses.length" style="margin-top: 64px !important;">
+    <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 mb-4 mr-2">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
+                    <h1 class="gray mb-4">CATEGORIES</h1>
+                    <div style="color: gray; padding-left: 5px !important">
+                        <p *ngFor="let categories of courseCategories">
+                            <mat-checkbox color="primary" class="example-margin">{{categories.name}}</mat-checkbox>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
+                    <h1 class="gray mb-4">FREE or WITH PAYMENT</h1>
+                    <div style="color: gray; padding-left: 5px !important">
+                        <p>
+                            <mat-checkbox color="primary" class="example-margin">
+                                <span>
+                                    Free
+                                </span>
+                            </mat-checkbox>
+                        </p>
+                        <p>
+                            <mat-checkbox color="primary" class="example-margin">
+                                <span>
+                                    With Payment
+                                </span>
+                            </mat-checkbox>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
+                    <h1 class="gray mb-4">CERTIFICATION</h1>
+                    <div style="color: gray; padding-left: 5px !important">
+                        <p>
+                            <mat-checkbox color="primary" class="example-margin">
+                                <span>
+                                    Free certificate
+                                </span>
+                            </mat-checkbox>
+                        </p>
+                        <p>
+                            <mat-checkbox color="primary" class="example-margin">
+                                <span>
+                                    Paid certificate
+                                </span>
+                            </mat-checkbox>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
+                    <h1 class="gray mb-4">COURSE LENGTH</h1>
+                    <div style="color: gray; padding-left: 5px !important">
+                        <p>
+                            <mat-checkbox color="primary" class="example-margin">
+                                <span>
+                                    Under 2 hours
+                                </span>
+                            </mat-checkbox>
+                        </p>
+                        <p>
+                            <mat-checkbox color="primary" class="example-margin">
+                                <span>
+                                    2 -10 hours
+                                </span>
+                            </mat-checkbox>
+                        </p>
+                        <p>
+                            <mat-checkbox color="primary" class="example-margin">
+                                <span>
+                                    11 -20 hours
+                                </span>
+                            </mat-checkbox>
+                        </p>
+                        <p>
+                            <mat-checkbox color="primary" class="example-margin">
+                                <span>
+                                    20+ hours
+                                </span>
+                            </mat-checkbox>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
+                    <hr style="color: gray;" />
+                    <button type="button" class="btn btn-primary">
+                        <i class="fa fa-refresh br-4" aria-hidden="true"></i>
+                        Reset Filter
+                    </button>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-9 col-lg-9 mb-4 mr-2">
+            <p class="gray">Results: {{ courses.length }} courses
+            </p>
+            <div class="row">
+                <div class="col-sm-12 col-md-5 col-lg-5 mb-4 mr-2" *ngFor="let course of courses; let i = index">
+                    <div class="card">
+                        <img class="card-img-top" style="height: 220px !important" [src]="course?.overviewfiles[0]?.fileurl + '?token=9bae26a1313acd2c628e3ee75da3db7f'"
+                            [alt]="course?.overviewfiles[0]?.filename" width="100%" height="30%">
+
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a routerLink="/detail/{{course?.id}}" [state]="course" style="font-size: 15px;color: #3c4043; text-decoration: none !important;">
+                                    {{course?.displayname}}
+                                </a>
+                            </h5>
+                            <p class="mt-4">
+                                <span style="font-size: smaller; color: gray">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                    {{ course?.contacts[0]?.fullname }}
+                                </span>
+                                <span style="float: right; color:gray">
+                                    <span *ngIf="course?.customfields[0]?.valueraw">
+                                        <b>FREE</b>
+                                    </span>
+                                    <span *ngIf="!course?.customfields[0]?.valueraw">
+                                        <b>ETB {{ course?.customfields[1]?.valueraw | number}}</b>
+                                    </span>
+                                </span>
+                            </p>
+                            <p>
+                                <a routerLink="/detail/{{course?.id}}" [state]="course" style="float: right !important; color: #1a73e8 !important;">
+                                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" *ngIf="!isLoading && !courses.length">
+    <h2 style="color: gray;
+    font-weight: lighter;
+    text-align: center;
+    margin-top: 12px;
+">-- no courses available --</h2>
+</div>
