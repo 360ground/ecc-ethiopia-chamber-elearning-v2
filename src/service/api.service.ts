@@ -6,39 +6,23 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class ApiService {
-  private url = environment.baseUrl;
   public loadedCourses: any = null;
   public myCourses: any = null;
 
   public userData: any = null;
   public token: any = null;
-  courseCategories: any;
+  public courseCategories: any;
 
   constructor(public http: HttpClient) { }
 
-  courses(data: any) {
-    return this.http.post(environment.baseUrl, data);
-  }
 
-  courseDetail(data: any) {
-    return this.http.post(environment.baseUrl, data);
-  }
-
+  // login to the moodle site
   login(data: any) {
     return this.http.post(environment.loginUrl, data);
   }
 
-  getUserData(data: any) {
-    return this.http.post(environment.baseUrl, data);
-  }
-
-  getUserEnrolledCourses(data: any) {
-    return this.http.post(environment.baseUrl, data);
-  }
-
-  getUserCourseCategories(data: any) {
-    return this.http.post(environment.baseUrl, data);
-  }
+  
+  //this function is used to get reference number  for the payment
   getReferenceNumber(data: any) {
     let header = {
       headers: new HttpHeaders()
@@ -46,6 +30,11 @@ export class ApiService {
     }
 
     return this.http.post(environment.medapayUrl, data, header);
+  }
+
+  // this function is used for main request sending  for the rest of moodle
+  main(data: any) {
+    return this.http.post(environment.baseUrl, data);
   }
 
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from '../api.service';
+import { ApiService } from 'src/service/api.service';
 
 @Component({
   selector: 'app-my-course',
@@ -26,8 +26,7 @@ export class MyCourseComponent implements OnInit {
       formData.append('moodlewsrestformat', 'json')
       formData.append('userid', this.service.userData.userid)
 
-
-      this.service.getUserEnrolledCourses(formData).subscribe((response: any) => {
+      this.service.main(formData).subscribe((response: any) => {
         this.courses = response;
         this.service.myCourses = this.courses;
 

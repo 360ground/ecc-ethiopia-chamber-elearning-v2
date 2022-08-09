@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs';
-import { ApiService } from '../api.service';
+import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { ApiService } from 'src/service/api.service';
 
 
 @Component({
@@ -65,7 +64,7 @@ export class LoginComponent implements OnInit {
     formData.append('wsfunction', 'core_webservice_get_site_info')
     formData.append('moodlewsrestformat', 'json')
 
-    this.service.getUserData(formData).subscribe((response: any) => {
+    this.service.main(formData).subscribe((response: any) => {
       this.service.userData = response;
 
       let state: any = this.location.getState();

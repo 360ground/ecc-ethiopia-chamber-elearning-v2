@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from './api.service';
+import { ApiService } from 'src/service/api.service';
 
 
 @Component({
@@ -11,9 +11,7 @@ import { ApiService } from './api.service';
 export class AppComponent implements OnInit {
   constructor(public service: ApiService, public router: Router) { }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   logout() {
     if (confirm("are you sure want to logout from the system ?")) {

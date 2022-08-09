@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService } from '../api.service';
 
 import { Location } from '@angular/common';
 import { environment } from 'src/environments/environment';
+import { ApiService } from 'src/service/api.service';
 
 
 @Component({
@@ -23,19 +23,7 @@ export class CourseDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.actRoute.snapshot.paramMap.get('id');
-
     this.state = this.location.getState();
-
-    // const formData = new FormData();
-
-    // formData.append('wstoken', 'e466a3adcc463e1b0e7c5296288f6641')
-    // formData.append('wsfunction', 'core_course_get_contents')
-    // formData.append('moodlewsrestformat', 'json')
-    // formData.append('courseid', this.id)
-
-    // this.service.courseDetail(formData).subscribe((response: any) => {
-    //   this.detail = response;
-    // });
 
   }
 
@@ -65,7 +53,7 @@ export class CourseDetailComponent implements OnInit {
     formData.append('moodlewsrestformat', 'json')
     formData.append('enrolments[]', '{}')
 
-    this.service.courseDetail(formData).subscribe((response: any) => {
+    this.service.main(formData).subscribe((response: any) => {
       console.log(response)
     });
 
@@ -86,7 +74,7 @@ export class CourseDetailComponent implements OnInit {
           "description": `Payment For the course : ${this.state.fullname}`,
           "amount": +this.state.customfields[1].valueraw,
           "customerName": `${this.service.userData.fullname}`,
-          "customerPhoneNumber": '0921622652'
+          "customerPhoneNumber": '0000000000'
         },
         "redirectUrls": {
           "returnUrl": "google.com",

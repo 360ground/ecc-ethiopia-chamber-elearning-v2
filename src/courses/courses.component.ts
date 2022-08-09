@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from '../api.service';
+import { ApiService } from 'src/service/api.service';
 
 @Component({
   selector: 'app-courses',
@@ -27,8 +27,7 @@ export class CoursesComponent implements OnInit {
       formData.append('wsfunction', 'core_course_get_courses_by_field')
       formData.append('moodlewsrestformat', 'json')
 
-
-      this.service.courses(formData).subscribe((response: any) => {
+      this.service.main(formData).subscribe((response: any) => {
         this.courses = response.courses;
         this.courses.shift();
         this.service.loadedCourses = this.courses;
@@ -57,7 +56,7 @@ export class CoursesComponent implements OnInit {
     formData.append('moodlewsrestformat', 'json')
 
 
-    this.service.courses(formData).subscribe((response: any) => {
+    this.service.main(formData).subscribe((response: any) => {
       this.courseCategories = response;
       this.service.courseCategories = this.courseCategories;
       this.isLoadingCourseCategories = false;
