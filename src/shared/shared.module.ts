@@ -5,34 +5,33 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppRoutingModule } from 'src/app/app-routing.module';
-import { ApiService } from 'src/service/api.service';
+import { AuthGuard } from 'src/service/AuthGuard';
+import {
+  NgbAlert,
+  NgbAlertConfig,
+  NgbDropdown,
+  NgbModule,
+} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
-  declarations: [
-    HtmlSanitaizerPipe,  
-  ],
+  declarations: [HtmlSanitaizerPipe],
   imports: [
-    BrowserModule,
-    AppRoutingModule,
     CommonModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
-    MatCheckboxModule 
+    MatCheckboxModule,
+    NgbModule,
   ],
   exports: [
-    BrowserModule,
-    AppRoutingModule,
     CommonModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
     MatCheckboxModule,
+    HtmlSanitaizerPipe,
+    NgbModule,
   ],
-  providers: []
+  providers: [AuthGuard],
 })
-export class SharedModule { }
+export class SharedModule {}

@@ -5,7 +5,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { SharedModule } from 'src/shared/shared.module';
 import { AuthGuard } from 'src/service/AuthGuard';
-
+import { NgbAlertConfig } from '@ng-bootstrap/ng-bootstrap';
+import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 
 const routes: Routes = [
   {
@@ -19,7 +20,11 @@ const routes: Routes = [
   {
     path: 'profile',
     component: UpdateProfileComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'forget',
+    component: ForgetPasswordComponent,
   },
 ];
 
@@ -27,13 +32,11 @@ const routes: Routes = [
   declarations: [
     LoginComponent,
     SignupComponent,
-    UpdateProfileComponent
+    UpdateProfileComponent,
+    ForgetPasswordComponent,
   ],
-  imports: [
-    SharedModule,
-    RouterModule.forChild(routes)
-  ],
-  exports: [RouterModule]
-
+  imports: [SharedModule, RouterModule.forChild(routes)],
+  providers: [NgbAlertConfig],
+  exports: [RouterModule],
 })
-export class AccountModule { }
+export class AccountModule {}

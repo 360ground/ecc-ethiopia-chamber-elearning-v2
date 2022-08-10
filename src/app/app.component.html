@@ -18,26 +18,37 @@
           <a class="nav-link white" [routerLink]="['/mycourse']">My Course</a>
         </li>
       </ul>
+      
       <span class="navbar-text" style="margin-right: 32px;">
         <span *ngIf="service.userData" class="white">
-          <span class="white">
-            <img [src]="service.userData?.userpictureurl" style="width: 29px; height: 30px;border-radius: 50%;margin-right: 5px;" />
-          </span>
-          welcome, {{ service.userData?.fullname }} |
-          <span style="margin-left: 10px; cursor:pointer" (click)="logout()">
-            Logout <i class="fa fa-sign-out" aria-hidden="true" title="logout"></i>
-          </span>
+            <div ngbDropdown class="d-inline-block">
+              <span type="button"  id="dropdownBasic1" ngbDropdownToggle>
+                  <img [src]="service.userData?.userpictureurl" style="width: 29px; height: 30px;border-radius: 50%;margin-right: 5px;" />
+                  welcome, {{ service.userData?.fullname }} 
+              </span>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <a ngbDropdownItem [routerLink]="['/mycourse']">My Course</a>
+                <a ngbDropdownItem href="#">My Certification</a>
+                <a ngbDropdownItem  [routerLink]="['/account/profile']">Update profile</a>
+                <div class="dropdown-divider"></div>
+                <a ngbDropdownItem href="#" (click)="logout()">
+                  <i class="fa fa-sign-out mr-4" aria-hidden="true" title="logout"></i>Sign out
+                </a>
+              </div>
+            </div>
         </span>
 
         <span *ngIf="!service.userData">
-          <a class="nav-link white" [routerLink]="['/login']" aria-current="page">Login</a>
+          <a class="nav-link white" [routerLink]="['/account/login']" aria-current="page">Login</a>
         </span>
       </span>
       <span class="navbar-text" style="margin-right: 32px;">
         <span *ngIf="!service.userData">
-          <a class="nav-link btn btn-primary signupBtn" [routerLink]="['/login']" aria-current="page">Sign up</a>
+          <a class="nav-link btn btn-primary signupBtn" [routerLink]="['/account/signup']" aria-current="page">Sign up</a>
         </span>
       </span>
+
+
     </div>
   </div>
 </nav>

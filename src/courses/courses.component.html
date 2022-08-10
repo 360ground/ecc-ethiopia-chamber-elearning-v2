@@ -12,26 +12,21 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
                     <h1 class="gray mb-4">CATEGORIES</h1>
                     <div style="color: gray; padding-left: 5px !important">
-                        <p *ngFor="let categories of courseCategories">
-                            <mat-checkbox color="primary" class="example-margin">{{categories.name}}</mat-checkbox>
+                        <p *ngFor="let categories of courseCategories; let i as index">
+                            <mat-checkbox color="primary" class="example-margin" 
+                                (change)="setFilterCategories($event.checked,categories.id)">
+                                {{categories.name}}
+                            </mat-checkbox>
                         </p>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
                     <h1 class="gray mb-4">FREE or WITH PAYMENT</h1>
                     <div style="color: gray; padding-left: 5px !important">
-                        <p>
-                            <mat-checkbox color="primary" class="example-margin">
-                                <span>
-                                    Free
-                                </span>
-                            </mat-checkbox>
-                        </p>
-                        <p>
-                            <mat-checkbox color="primary" class="example-margin">
-                                <span>
-                                    With Payment
-                                </span>
+                        <p *ngFor="let option of paymentOptions">
+                            <mat-checkbox color="primary" class="example-margin" 
+                                (change)="setFilterPayment($event.checked,option.value)">
+                                {{option.title|titlecase}}
                             </mat-checkbox>
                         </p>
                     </div>
@@ -39,18 +34,10 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
                     <h1 class="gray mb-4">CERTIFICATION</h1>
                     <div style="color: gray; padding-left: 5px !important">
-                        <p>
-                            <mat-checkbox color="primary" class="example-margin">
-                                <span>
-                                    Free certificate
-                                </span>
-                            </mat-checkbox>
-                        </p>
-                        <p>
-                            <mat-checkbox color="primary" class="example-margin">
-                                <span>
-                                    Paid certificate
-                                </span>
+                        <p *ngFor="let option of certificationOptions">
+                            <mat-checkbox color="primary" class="example-margin" 
+                                (change)="setFiltercertificate($event.checked,option.value)">
+                                {{option.title|titlecase}}
                             </mat-checkbox>
                         </p>
                     </div>
@@ -58,32 +45,10 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
                     <h1 class="gray mb-4">COURSE LENGTH</h1>
                     <div style="color: gray; padding-left: 5px !important">
-                        <p>
-                            <mat-checkbox color="primary" class="example-margin">
-                                <span>
-                                    Under 2 hours
-                                </span>
-                            </mat-checkbox>
-                        </p>
-                        <p>
-                            <mat-checkbox color="primary" class="example-margin">
-                                <span>
-                                    2 -10 hours
-                                </span>
-                            </mat-checkbox>
-                        </p>
-                        <p>
-                            <mat-checkbox color="primary" class="example-margin">
-                                <span>
-                                    11 -20 hours
-                                </span>
-                            </mat-checkbox>
-                        </p>
-                        <p>
-                            <mat-checkbox color="primary" class="example-margin">
-                                <span>
-                                    20+ hours
-                                </span>
+                        <p *ngFor="let option of courseLengthOptions">
+                            <mat-checkbox color="primary" class="example-margin" 
+                                (change)="setFilterCourseLength($event.checked,option.value)">
+                                {{option.title|titlecase}}
                             </mat-checkbox>
                         </p>
                     </div>
@@ -91,10 +56,13 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
                     <hr style="color: gray;" />
                     <button type="button" class="btn btn-primary">
-                        <i class="fa fa-refresh br-4" aria-hidden="true"></i>
-                        Reset Filter
+                        <i class="fa fa-search pr-4" aria-hidden="true"></i>
+                        <small>Filter</small>
                     </button>
-
+                    <button type="button" class="btn btn-danger"  style="float: right;">
+                        <i class="fa fa-refresh pr-4" aria-hidden="true"></i>
+                        <small>Reset</small>
+                    </button>
                 </div>
             </div>
         </div>

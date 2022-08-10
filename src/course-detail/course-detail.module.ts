@@ -4,24 +4,18 @@ import { CourseDetailComponent } from './course-detail.component';
 import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from 'src/shared/shared.module';
 import { AuthGuard } from 'src/service/AuthGuard';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const routes: Routes = [
   {
     path: '',
     component: CourseDetailComponent,
-    canActivate: [AuthGuard]
   },
 ];
 
 @NgModule({
-  declarations: [
-    CourseDetailComponent
-  ],
-  imports: [
-    SharedModule,
-    RouterModule.forChild(routes)
-  ],
-  exports: [RouterModule]
+  declarations: [CourseDetailComponent],
+  imports: [SharedModule, NgbModule, RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
-
-export class CourseDetailModule { }
+export class CourseDetailModule {}

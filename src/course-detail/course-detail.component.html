@@ -25,14 +25,53 @@
         <div class="col-sm-12 col-md-6 col-lg-6">
             <h1 class="gray">{{state?.fullname}}</h1>
             <p class="gray">{{state?.shortname}}</p>
-            <p class="gray">Presented By : {{state?.contacts[0]?.fullname}}</p>
+            <p class="gray mb-4">Presented By : {{state?.contacts[0]?.fullname}}</p>
+
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <p class="">
+                        <span><i class="icons1 fa fa-bars" aria-hidden="true"></i>
+                        </span>
+                        <span>Modules : {{ state?.customfields[5]?.valueraw }}</span>
+                    </p>
+                    <p class="">
+                        <span><i class="icons1 fa fa-clock-o" aria-hidden="true"></i>
+                        </span>
+                        <span>Estimated Hours : {{ state?.customfields[4]?.valueraw }}</span>
+                    </p>
+                    <p class="">
+                        <span><i class="icons1 fa fa-user" aria-hidden="true"></i>
+                        </span>
+                        <span>{{ state?.customfields[3]?.valueraw }}</span>
+                    </p>
+                    <p class="">
+                        <span><i class="icons1 fa fa-money" aria-hidden="true"></i>
+                        </span>
+                        <span>{{ state?.customfields[0]?.valueraw ? 'Free' :  state.customfields[1].valueraw}}</span>
+                    </p>
+
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6" *ngIf="courseFeatures">
+                    <div *ngFor="let feature of courseFeatures">
+                        <p>
+                            <span>
+                                <i class="icons2 fa fa-check-circle" aria-hidden="true"></i>
+                            </span>
+                            <span>
+                                {{ feature | titlecase }}
+                            </span>
+                        </p>
+                    </div>    
+                </div>
+
             <p class="mt-4">
                 <button type="button" class="btn btn-primary" style="border-radius: 0px; width: 200px;
                 padding: 14px;">
                     Start course
                 </button>
             </p>
-        </div>
+            </div>
+        </div>    
         <div class="col-sm-12 col-md-6 col-lg-6">
             <img class="card-img-top" [src]="state?.overviewfiles[0]?.fileurl + '?token=9bae26a1313acd2c628e3ee75da3db7f'" [alt]="state?.overviewfiles[0]?.filename"
                 width="100%" height="100%">
@@ -40,15 +79,61 @@
     </div>
 </div>
 
-<div class="card" style="padding: 25px !important; border-radius: 0px !important">
+<div class="card mb-8" style="padding: 25px !important; border-radius: 0px !important">
     <div class="row">
-        <!-- <div class="col-sm-12 col-md-6 col-lg-6">
-
-        </div> -->
         <div class="col-sm-12 col-md-12 col-lg-12">
-            <h1 class="dark mb-4">About this Course</h1>
-            <p class="gray" [innerHTML]="state?.summary | htmlSanitaizer">
-
+            <h1 class="mb-4" style="font-weight: lighter;">About this Course</h1>
+            <p class="gray mb-4" [innerHTML]="state?.summary | htmlSanitaizer">
+                <hr class="mb-4"/>
+             <h1 class="mb-4 steps" style="color: black;">
+                How it Works</h1>
+             <div class="row">
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <p class="steps">
+                        <span class="btn btn-primary" 
+                        style="border-radius: 50%; width:16%; height: 10%; font-size: 33px;">
+                            1
+                        </span>
+                    </p>
+                    <p class="steps">
+                        Learn all the Lessons in this course and earn the required skills.
+                    </p>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <p class="steps">
+                        <span class="btn btn-primary" 
+                        style="border-radius: 50%; width:16%; height: 10%; font-size: 33px;">
+                            3
+                        </span>
+                    </p>
+                    <p class="steps">
+                        Pass the final 40-question exam and get certified.
+                    </p>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <p class="steps">
+                        <span class="btn btn-primary" 
+                        style="border-radius: 50%; width:16%; height: 10%; font-size: 33px;">
+                            3
+                        </span>
+                    </p>
+                    <p class="steps">
+                        Download and showcase your new qualification on LinkedIn and your CV.
+                    </p>
+                </div>
+             </div>    
         </div>
     </div>
 </div>
+<div *ngIf="state.activities">
+    <h1 class="mb-4 mt-8" style="text-align: center;">Modules ({{ state?.activities.length }})</h1>
+    <div id="main">
+        <div class="card moduleCards" *ngFor="let activity of state?.activities; let i = index">
+            <p><img /></p>
+            <p class="gray">{{activity.name}}</p>
+        </div>
+    </div>
+</div>
+    
+
+

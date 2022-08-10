@@ -1,24 +1,37 @@
 <div class="row">
     <div class="col-sm-12 col-md-3 col-lg-3"></div>
     <div class="col-sm-12 col-md-6 col-lg-6">
-        <div class="card" style="padding: 10px;">
-            <h2>Login As a Student</h2>
+        <div class="card" style="padding: 30px; margin-top: 86px;">
+            <h1 class="mb-4" class="gray">Login</h1>
             <hr />
             <form [formGroup]="formGroup">
-                <label>User name</label>
-                <p>
-                    <input class="form-control form-control-lg" placeholder="Enter username" required formControlName="username">
-                </p>
-                <label>Password</label>
-                <p>
-                    <input class="form-control form-control-lg" placeholder="Enter password" type="password" required formControlName="password">
-                </p>
+                <div class="mb-4">
+                    <label>User name</label>
+                    <input class="form-control form-control-lg"  required formControlName="username">
+                </div>
+                <div class="mb-4">
+                    <label>Password</label>
+                    <input class="form-control form-control-lg" 
+                    type="password" required formControlName="password">
+                </div>
 
-                <button *ngIf="!showLoading" type="submit" class="btn btn-primary btn-lg btn-block" (click)="Submit()" [disabled]="formGroup.invalid">
-                    Login
-                </button>
-                <div class="btn btn-primary btn-lg btn-block disabled" *ngIf="showLoading">
-                    Login <i class="fa fa-spinner ml-4" aria-hidden="true"></i>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <button *ngIf="!showLoading" type="submit" class="btn btn-primary btn-lg btn-block"
+                         (click)="Submit()" [disabled]="formGroup.invalid">
+                            Login
+                        </button>
+                        <div class="btn btn-primary btn-lg btn-block disabled" *ngIf="showLoading">
+                            Login <i class="fa fa-spinner ml-4" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <h3 style="float: right;">
+                            <a class="nav-link" [routerLink]="['/account/forget']" aria-current="page">
+                                Lost password ?
+                            </a>
+                        </h3>
+                    </div>
                 </div>
             </form>
         </div>
