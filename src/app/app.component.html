@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <a class="navbar-brand white" [routerLink]="['/']">
       <img style="width: 218px !important;"
-        src="https://lh3.googleusercontent.com/kvtXWUZ756KishzmjWDgAf0AW77QeBSuLbUXDQidstlS2h63BSRrlgm4bU97NPjdF5skHZFKQufqTqGt1UbTO8VV0OB7SqXAz7qCng" />
+        src="../assets/logo.png" alt="ecc logo" />
     </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false"
@@ -15,7 +15,7 @@
           <a class="nav-link white" [routerLink]="['/courses']" aria-current="page">Online Courses</a>
         </li>
         <li class="nav-item" *ngIf="service.userData">
-          <a class="nav-link white" [routerLink]="['/mycourse']">My Course</a>
+          <a class="nav-link white" [routerLink]="['/mycourse']">My Learning Plan</a>
         </li>
       </ul>
       
@@ -27,7 +27,7 @@
                   welcome, {{ service.userData?.fullname }} 
               </span>
               <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <a ngbDropdownItem [routerLink]="['/mycourse']">My Course</a>
+                <a ngbDropdownItem [routerLink]="['/mycourse']">My Learning Plan</a>
                 <a ngbDropdownItem href="#">My Certification</a>
                 <a ngbDropdownItem  [routerLink]="['/account/profile']">Update profile</a>
                 <div class="dropdown-divider"></div>

@@ -1,9 +1,5 @@
 <div *ngIf="isLoading">
-    <h2 style="color: gray;
-    font-weight: lighter;
-    text-align: center;
-    margin-top: 12px;
-"> Loading Courses <i class="fa fa-spinner" aria-hidden="true"></i></h2>
+    
 </div>
 <div *ngIf="courses.length" style="margin-top: 64px !important;">
     <div class="row">
@@ -72,27 +68,27 @@
             <div class="row">
                 <div class="col-sm-12 col-md-5 col-lg-5 mb-4 mr-2" *ngFor="let course of courses; let i = index">
                     <div class="card">
-                        <img class="card-img-top" style="height: 220px !important" [src]="course?.overviewfiles[0]?.fileurl + '?token=9bae26a1313acd2c628e3ee75da3db7f'"
+                        <img class="card-img-top" style="height: 220px !important" [src]="course?.overviewfiles[0]?.fileurl + '?token='+ adminToken"
                             [alt]="course?.overviewfiles[0]?.filename" width="100%" height="30%">
 
                         <div class="card-body">
                             <h5 class="card-title">
-                                <a routerLink="/detail/{{course?.id}}" [state]="course" style="font-size: 15px;color: #3c4043; text-decoration: none !important;">
+                                <a routerLink="/detail/{{course?.id}}" [state]="course" 
+                                    style="font-size: 15px;color: #3c4043; font-weight: 500; text-decoration: none !important;">
                                     {{course?.displayname}}
                                 </a>
                             </h5>
-                            <p class="mt-4">
-                                <span style="font-size: smaller; color: gray">
-                                    <i class="fa fa-user" aria-hidden="true"></i>
-                                    {{ course?.contacts[0]?.fullname }}
+                            <p class="mt-4" style="color: gray;">
+                                <span>
+                                    <span><i class="icons1 fa fa-bars" aria-hidden="true"></i>
+                                    </span>
+                                    <span>Modules : {{ course?.customfields[5]?.valueraw }}</span>
                                 </span>
-                                <span style="float: right; color:gray">
-                                    <span *ngIf="course?.customfields[0]?.valueraw">
-                                        <b>FREE</b>
+
+                                <span>
+                                    <span><i class="icons1 fa fa-clock-o" aria-hidden="true"></i>
                                     </span>
-                                    <span *ngIf="!course?.customfields[0]?.valueraw">
-                                        <b>ETB {{ course?.customfields[1]?.valueraw | number}}</b>
-                                    </span>
+                                    <span>Estimated Hours : {{ course?.customfields[4]?.valueraw }}</span>
                                 </span>
                             </p>
                             <p>

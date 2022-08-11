@@ -15,3 +15,19 @@ body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+
+Button {
+    border-radius: 0px !important;
+    font-size: 15px !important;
+    font-weight: lighter !important;
+}
+
+.card {
+    border-radius: 0px !important;
+    background-color: #FFFFFF !important;
+    border: 0px none #FFFFFF !important;
+}
+Button:hover{
+    color: #FFFFFF !important;
+}

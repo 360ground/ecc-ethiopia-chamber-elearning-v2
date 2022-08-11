@@ -1,4 +1,4 @@
-<div *ngIf="isLoading">
+<!-- <div *ngIf="isLoading">
     <h2 style="color: gray;
     font-weight: lighter;
     text-align: center;
@@ -59,4 +59,98 @@
     text-align: center;
     margin-top: 12px;
 ">-- no enrolled courses available --</h2>
+</div> -->
+
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="card" style="margin-top: 0px; padding: 25px;">
+            <h1  class="mb-4 mt-4" style="color: #3c4043; font-weight:500;">
+                My Learning Plan
+            </h1>
+            <p class="mb-4">
+                Keep track of all the courses you've added. Let's get started!
+            </p>
+            <hr style="margin-top: 24px !important; margin-bottom: 24px !important; color: gray;" />
+            <mat-tab-group>
+                <mat-tab label="In progress ({{courses.length}})">
+                    <div class="card"  *ngIf="!courses.length" style="padding: 24px !important;">
+                        <div class="empty-card">
+                           <h4 class="empty-card-title">What would you like to learn?</h4>
+                           <p class="empty-card-description mt-4">Get started by adding courses to your plan.</p>
+                           <h4 class="empty-card-button mt-4">
+                            <button class="btn btn-primary" [routerLink]="['/courses']">
+                                Find courses
+                            </button>
+                           </h4>
+                        </div> 
+                    </div>
+
+                    <div class="row mt-4" *ngIf="courses.length">
+                        <div class="col-sm-12 col-md-4 col-lg-4 mb-4 mr-2" *ngFor="let course of courses; let i = index">
+                            <div class="card">
+                                <img class="card-img-top" style="height: 220px !important" [src]="course?.overviewfiles[0]?.fileurl + '?token='+ adminToken"
+                                    [alt]="course?.overviewfiles[0]?.filename" width="100%" height="100%">
+        
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <a routerLink="/learning" [state]="course" 
+                                            style="font-size: 15px;color: #3c4043; font-weight: 500; text-decoration: none !important;">
+                                            {{course?.displayname}}
+                                        </a>
+                                    </h5>
+                                    <p class="mt-4" style="color: gray;">
+                                        <span>
+                                            <span><i class="icons1 fa fa-clock-o" aria-hidden="true"></i>
+                                            </span>
+                                            <span *ngIf="course?.lastaccess">Last access : 
+                                                {{ course?.lastaccess | TimeStamp | date }}</span>
+                                                <span *ngIf="!course?.lastaccess">Last access : 
+                                                    {{ course?.lastaccess | TimeStamp }}</span>
+                                        </span>
+        
+                                        <!-- <span>
+                                            <span><i class="icons1 fa fa-users" aria-hidden="true"></i>
+                                            </span>
+                                            <span>Student : {{ course?.enrolledusercount | number }}</span>
+                                        </span> -->
+                                        <Button class="btn btn-success" style="border-radius: 50%; float: right;">
+                                            {{ course?.completed ? 'complete' : 'Inprogress'  }}
+                                        </Button>
+                                    </p>
+                                    <p class="mt-4" style="color: gray;">
+                                        Progress :
+                                    </p>
+                                    <p>
+                                        <ngb-progressbar type="success" textType="white" 
+                                            [value]="course?.progress" [showValue]="true">
+                                        </ngb-progressbar>
+                                    </p>
+
+                                    <!-- <p>
+                                        <a routerLink="/detail/{{course?.id}}" [state]="course" style="float: right !important; color: #1a73e8 !important;">
+                                            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                        </a>
+                                    </p> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+                <mat-tab label="Completed ({{courses.length}})">
+                    <div class="card" style="padding: 24px !important;">
+                        <div class="empty-card" *ngIf="true">
+                           <h4 class="empty-card-title">What would you like to learn?</h4>
+                           <p class="empty-card-description mt-4">Go back to your courses in progress.</p>
+                           <h4 class="empty-card-button mt-4">
+                            <button class="btn btn-primary">
+                                View in progress
+                            </button>
+                           </h4>
+                        </div> 
+                </div>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+
+    </div>
 </div>

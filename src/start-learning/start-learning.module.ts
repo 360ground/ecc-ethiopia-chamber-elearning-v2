@@ -8,18 +8,13 @@ const routes: Routes = [
   {
     path: '',
     component: StartLearningComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
 ];
 
 @NgModule({
-  declarations: [
-    StartLearningComponent
-  ],
-  imports: [
-    SharedModule,
-    RouterModule.forChild(routes)
-  ],
-  exports: [RouterModule]
+  declarations: [StartLearningComponent],
+  imports: [SharedModule, RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
-export class StartLearningModule { }
+export class StartLearningModule {}

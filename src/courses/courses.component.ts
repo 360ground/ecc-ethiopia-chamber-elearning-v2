@@ -1,7 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/service/api.service';
+import {
+  NgbModal,
+  ModalDismissReasons,
+  NgbActiveModal,
+  NgbModalConfig,
+} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-courses',
@@ -9,10 +15,14 @@ import { ApiService } from 'src/service/api.service';
   styleUrls: ['./courses.component.css'],
 })
 export class CoursesComponent implements OnInit {
+  @ViewChild('content') content: any;
+
   public courses: any[] = [];
   public isLoading: Boolean = false;
   public courseCategories: any;
   public isLoadingCourseCategories: Boolean = false;
+  public adminToken: any = environment.adminToken;
+
   public paymentOptions: any[] = [
     { title: 'Free', id: 1 },
     { title: 'Not Free', id: 0 },
@@ -33,18 +43,30 @@ export class CoursesComponent implements OnInit {
   public selectedcertificate: any[] = [];
   public selectedCourseLength: any[] = [];
 
-  constructor(public service: ApiService, public router: Router) {}
+  constructor(
+    public service: ApiService,
+    public router: Router,
+    private modalService: NgbModal,
+    public activeModal: NgbActiveModal,
+    public config: NgbModalConfig
+  ) {
+    config.backdrop = 'static';
+    config.keyboard = false;
+  }
 
   ngOnInit(): void {
     if (this.service.loadedCourses) {
       this.courses = this.service.loadedCourses;
     } else {
       this.isLoading = true;
+
       const formData = new FormData();
 
       formData.append('wstoken', environment.adminToken);
       formData.append('wsfunction', 'core_course_get_courses_by_field');
       formData.append('moodlewsrestformat', 'json');
+
+      this.openModal();
 
       this.service.main(formData).subscribe((response: any) => {
         this.courses = response.courses;
@@ -52,6 +74,7 @@ export class CoursesComponent implements OnInit {
         this.service.loadedCourses = this.courses;
 
         this.isLoading = false;
+        this.closeModal();
       });
     }
 
@@ -60,6 +83,14 @@ export class CoursesComponent implements OnInit {
     } else {
       this.getCategories();
     }
+  }
+
+  openModal() {
+    const modalRef = this.modalService.open(NgbdModalContent);
+  }
+
+  closeModal() {
+    this.modalService.dismissAll();
   }
 
   getCategories() {
@@ -117,5 +148,30 @@ export class CoursesComponent implements OnInit {
       );
       this.selectedCourseLength.splice(index, 1);
     }
+  }
+}
+
+@Component({
+  selector: 'ngbd-modal-content',
+  template: `
+    <div class="modal-body">
+      <div>
+        <h2
+          style="color: gray;font-weight: lighter; text-align: center; margin-top: 12px;"
+        >
+          Loading Courses <i class="fa fa-spinner" aria-hidden="true"></i>
+        </h2>
+      </div>
+    </div>
+  `,
+})
+export class NgbdModalContent {
+  @Input() name: any;
+
+  constructor(public activeModal: NgbActiveModal, config: NgbModalConfig) {
+    config.backdrop = 'static';
+    config.keyboard = false;
+    config.centered = true;
+    config.size = 'md';
   }
 }

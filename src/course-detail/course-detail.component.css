@@ -42,3 +42,7 @@
     flex-direction: row;
     justify-content: center;
 }
+
+.cdk-overlay-pane{
+    margin-top: 87px !important;
+}

@@ -13,14 +13,18 @@ import {
   NgbModule,
 } from '@ng-bootstrap/ng-bootstrap';
 
+import { MatTabsModule } from '@angular/material/tabs';
+import { TimeStampPipe } from 'src/app/timestamp.pipe';
+
 @NgModule({
-  declarations: [HtmlSanitaizerPipe],
+  declarations: [HtmlSanitaizerPipe, TimeStampPipe],
   imports: [
     CommonModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     MatCheckboxModule,
+    MatTabsModule,
     NgbModule,
   ],
   exports: [
@@ -29,7 +33,9 @@ import {
     FormsModule,
     ReactiveFormsModule,
     MatCheckboxModule,
+    MatTabsModule,
     HtmlSanitaizerPipe,
+    TimeStampPipe,
     NgbModule,
   ],
   providers: [AuthGuard],
