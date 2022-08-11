@@ -1,38 +1,58 @@
 <div class="row">
     <div class="col-sm-12 col-md-3 col-lg-3"></div>
     <div class="col-sm-12 col-md-6 col-lg-6">
-        <div class="card" style="padding: 30px; margin-top: 86px;">
-            <h1 class="mb-4" class="gray">Login</h1>
-            <hr />
+        <div class="card" style="padding: 30px; margin-top: 86px; border-radius: 0px;">
+            <h1 class="mb-4" class="gray">Sign in to continue </h1>
+            <hr style="margin-bottom: 31px !important;" />
             <form [formGroup]="formGroup">
                 <div class="mb-4">
-                    <label>User name</label>
-                    <input class="form-control form-control-lg"  required formControlName="username">
+                    <label>User name or Email address</label>
+                    <input class="form-control form-control-lg" placeholder="someone@example.com" required formControlName="username">
                 </div>
                 <div class="mb-4">
                     <label>Password</label>
-                    <input class="form-control form-control-lg" 
+                    <input class="form-control form-control-lg" placeholder="******"
                     type="password" required formControlName="password">
                 </div>
 
-                <div class="row">
+                <div class="row" style="margin-bottom: 20px !important;  margin-top: 60px !important;">
                     <div class="col-sm-12 col-md-6 col-lg-6">
-                        <button *ngIf="!showLoading" type="submit" class="btn btn-primary btn-lg btn-block"
-                         (click)="Submit()" [disabled]="formGroup.invalid">
-                            Login
-                        </button>
-                        <div class="btn btn-primary btn-lg btn-block disabled" *ngIf="showLoading">
-                            Login <i class="fa fa-spinner ml-4" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 col-lg-6">
-                        <h3 style="float: right;">
-                            <a class="nav-link" [routerLink]="['/account/forget']" aria-current="page">
-                                Lost password ?
+                        <h3 style="float: left;">
+                            <a class="nav-link" [routerLink]="['/account/forget']" aria-current="page" 
+                            style="color: #0d6efd; font-size: 19px; font-weight: lighter;">
+                                Forgotten password ?
                             </a>
                         </h3>
                     </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <button *ngIf="!showLoading" type="submit" class="btn btn-primary btn-lg btn-block"
+                         (click)="Submit()" [disabled]="formGroup.invalid" 
+                            style="float: right; border-radius: 0px;">
+                            Sign in
+                        </button>
+                        <Button class="btn btn-primary btn-lg btn-block disabled" *ngIf="showLoading" 
+                            style="float: right; border-radius: 0px;">
+                            Sign in <i class="fa fa-spinner ml-4" aria-hidden="true"></i>
+                        </Button>
+                    </div>
                 </div>
+
+                <div>
+                    <hr class="mb-4" style="margin-top: 31px !important;"/>
+                    <p style="display: inline-flex !important;">
+                        <span style="margin-right: 10px;">
+                            Need an account? 
+                        </span>
+                        <span>
+                            <a class="nav-link" [routerLink]="['/account/signup']" aria-current="page" 
+                            style="color: #0d6efd;">
+                                Sign up here.
+                            </a>
+                        </span>
+                    </p>
+                </div>
+
+
             </form>
         </div>
     </div>
