@@ -48,7 +48,9 @@ export class CourseDetailComponent implements OnInit {
     this.id = this.actRoute.snapshot.paramMap.get('id');
     this.state = this.location.getState();
 
-    this.courseFeatures = this.state.customfields[2].valueraw.split(',');
+    if (this.state.customfields[2].value) {
+      this.courseFeatures = this.state.customfields[2].valueraw.split(',');
+    }
 
     if ('activities' in this.state) {
     } else {

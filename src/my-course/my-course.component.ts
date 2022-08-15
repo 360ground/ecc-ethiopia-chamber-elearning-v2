@@ -10,6 +10,8 @@ import { ApiService } from 'src/service/api.service';
 })
 export class MyCourseComponent implements OnInit {
   public courses: any[] = [];
+  public completed: any[] = [];
+
   public isLoading: Boolean = false;
   public adminToken: any = environment.adminToken;
 
@@ -30,9 +32,22 @@ export class MyCourseComponent implements OnInit {
       this.service.main(formData).subscribe((response: any) => {
         this.courses = response;
         this.service.myCourses = this.courses;
-
+        this.separate(this.courses);
         this.isLoading = false;
       });
     }
+  }
+
+  separate(data: any) {
+    data.forEach((element: any, index: any) => {
+      if (element.completed) {
+        this.completed.push(element);
+        this.courses.splice(index, 1);
+      }
+    });
+  }
+
+  navigate(data: any) {
+    this.router.navigate(['/learning'], { state: { course: data } });
   }
 }
