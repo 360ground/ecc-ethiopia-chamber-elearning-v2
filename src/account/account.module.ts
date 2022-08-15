@@ -7,6 +7,7 @@ import { SharedModule } from 'src/shared/shared.module';
 import { AuthGuard } from 'src/service/AuthGuard';
 import { NgbAlertConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'change-password',
+    component: ChangePasswordComponent,
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'forget',
     component: ForgetPasswordComponent,
   },
@@ -34,6 +40,7 @@ const routes: Routes = [
     SignupComponent,
     UpdateProfileComponent,
     ForgetPasswordComponent,
+    ChangePasswordComponent,
   ],
   imports: [SharedModule, RouterModule.forChild(routes)],
   providers: [NgbAlertConfig],
