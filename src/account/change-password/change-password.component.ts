@@ -47,7 +47,7 @@ export class ChangePasswordComponent implements OnInit {
 
         const formData = new FormData();
 
-        formData.append('users[0][id]', this.service.userData.userid);
+        formData.append('users[0][id]', this.service.userData.id);
         formData.append(
           'users[0][password]',
           this.getControls('password').value

@@ -1,0 +1,96 @@
+<div class="container" style="margin-top: 45px !important;">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <div class="card" style="margin-top: 0px; padding: 25px;">
+                <h1  class="mb-4 mt-4" style="color: #3c4043; font-weight:500;">
+                    My Educational Background
+                </h1>
+                <p class="mb-4">
+                    Keep track of all the previous educational history you've added. Let's get started!
+                </p>
+                <hr style="margin-top: 24px !important; margin-bottom: 24px !important; color: gray;" />
+                <p class="mb-4" *ngIf="!isOnEdit">
+                    <span style="float: right !important;">
+                        <button type="button" class="btn btn-primary" [disabled]="formGroup.invalid" (click)="addEducation();">
+                            <i class="fa fa-plus mr-4" aria-hidden="true"></i> Add Education
+                        </button>
+                    </span>
+                </p>
+                <p class="mb-4" *ngIf="isOnEdit">
+                    <span style="float: right !important;">
+                        <button type="button" class="btn btn-primary" [disabled]="formGroup.invalid" (click)="updateEducation();">
+                            <i class="fa fa-floppy-o mr-4" aria-hidden="true"></i> Update Education
+                        </button>
+                    </span>
+                </p>
+                <form [formGroup]="formGroup">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-3 col-lg-3 mb-4">
+                            <label>Institution Name</label>
+                            <input class="form-control form-control-lg"  formControlName="institutionName" />
+                        </div>
+                        <div class="col-sm-12 col-md-3 col-lg-3 mb-4">
+                            <label>Qualification</label>
+                            <select required class="form-control form-control-lg" placeholder="--select --"
+                                formControlName="qualification">
+                                <option [value]="quali.value" *ngFor="let quali of qualification; let i = index">{{ quali.title | titlecase }}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-3 col-lg-3 mb-4">
+                            <label>Field of study</label>
+                            <input class="form-control form-control-lg" formControlName="fieldOfStudy" />
+                        </div>
+                        <div class="col-sm-12 col-md-3 col-lg-3 mb-4">
+                            <label>Date of Completion</label>
+                            <input class="form-control form-control-lg"
+                            formControlName="dateOfCompletion" />
+                        </div>
+                    </div>
+                </form>
+                <hr style="margin-top: 24px !important; margin-bottom: 24px !important; color: gray;" />
+                <div class="row">
+                    <div class="col-sm-12 col-md-4 col-lg-4" *ngIf="!educationalBackground.length">
+                        <div class="card" style="padding: 24px !important;">
+                            <div class="empty-card">
+                               <h4 class="empty-card-title">You have not added education.</h4>
+                               <!-- <p class="empty-card-description mt-4">Get started by adding courses to your plan.</p> -->
+                               <h4 class="empty-card-button mt-4">
+                                <button class="btn btn-primary">
+                                   <i class="fa fa-plus mr-4" aria-hidden="true"></i> Add
+                                </button>
+                               </h4>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4 col-lg-4"  *ngFor="let eduBack of educationalBackground; let i = index;" >
+                        <div class="card" style="padding: 24px !important;">
+                            <div class="empty-card">
+                               <h4 class="empty-card-title">{{ eduBack?.institutionName }}</h4>
+                               <p class="empty-card-description">
+                                {{ eduBack?.fieldOfStudy | titlecase }}({{ eduBack?.qualification }})
+                               </p>
+                               <p class="empty-card-description">
+                                   <b>({{ eduBack?.dateOfCompletion }})</b> 
+                                </p>
+                               <h4 class="empty-card-button">
+                                <button class="btn btn-outline-primary" (click)="editEducation(i)" style="margin-right: 20px !important;">
+                                   <i class="fa fa-pencil mr-4" aria-hidden="true"></i> Edit
+                                </button>
+                                <button class="btn btn-outline-danger mr-4" (click)="removeEducation(i)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i> Remove
+                                 </button>
+                               </h4>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                <hr style="margin-top: 24px !important; margin-bottom: 24px !important; color: gray;" />
+                <p>
+                    <button class="btn btn-primary" (click)="Submit()">Submit
+                    </button>
+                </p>
+            </div>
+    
+        </div>
+    </div>
+</div>

@@ -31,10 +31,7 @@ export class SignupComponent implements OnInit {
         email: new FormControl(null, [Validators.required, Validators.email]),
         phonenumber: new FormControl(null, Validators.required),
         accountType: new FormControl('individual'),
-        password: new FormControl(null, [
-          Validators.required,
-          Validators.minLength(6),
-        ]),
+        password: new FormControl(null, [Validators.required]),
       }),
       company: new FormGroup({
         firstname: new FormControl(null, Validators.required),
@@ -42,18 +39,15 @@ export class SignupComponent implements OnInit {
         username: new FormControl(null, Validators.required),
         email: new FormControl(null, [Validators.required, Validators.email]),
         phonenumber: new FormControl(null, Validators.required),
-        password: new FormControl(null, [
-          Validators.required,
-          Validators.minLength(6),
-        ]),
+        password: new FormControl(null, [Validators.required]),
         organizationName: new FormControl(null, Validators.required),
         representativeFullName: new FormControl(null, Validators.required),
         representativeRole: new FormControl(null, Validators.required),
         sector: new FormControl(null, Validators.required),
         NoOfEmployee: new FormControl(null, Validators.required),
         isaMember: new FormControl(null),
-        membershipType: new FormControl(null),
-        memberId: new FormControl(null),
+        membershipType: new FormControl({ disabled: true, value: null }),
+        memberId: new FormControl({ disabled: true, value: null }),
         accountType: new FormControl('company'),
       }),
     });
@@ -136,6 +130,13 @@ export class SignupComponent implements OnInit {
   }
 
   isMemberCheck(value: any) {
-    console.log(value);
+    if (!value) {
+      this.getControls('company.membershipType').reset();
+      this.getControls('company.membershipType').disable();
+      this.getControls('company.memberId').disable();
+    } else {
+      this.getControls('company.membershipType').enable();
+      this.getControls('company.memberId').enable();
+    }
   }
 }

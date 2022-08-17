@@ -46,3 +46,10 @@
 .cdk-overlay-pane{
     margin-top: 87px !important;
 }
+
+.numbers{
+    border-radius: 50%; 
+    width:16%; 
+    height: 10%; 
+    font-size: 33px;
+}

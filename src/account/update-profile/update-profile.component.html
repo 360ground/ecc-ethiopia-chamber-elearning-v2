@@ -1,1 +1,166 @@
-<p>update-profile works!</p>
+<div class="container" style="margin-top: 45px !important;">
+    <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3"></div>
+    
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <form [formGroup]="formGroup" 
+                ngSubmit="isIndividual ? Submit('individual') : Submit('company')">
+                <p *ngIf="profileUpdateSuccess"  class="mt-4" style="margin-top: 53px !important;">
+                    <ngb-alert type="success">Profile Updated successfully. please relogin to see changes.</ngb-alert>
+                </p>
+                <div *ngIf="!profileUpdateSuccess" style="margin-top: 53px !important;">
+                    <div *ngFor="let alert of profileUpdateError">
+                        <ngb-alert type="danger" [dismissible]="false">{{ alert.message }}</ngb-alert>
+                    </div>
+                </div>
+                <div class="card" style="padding: 22px; margin-top: 23px;">
+                    <h1 class="mb-4" class="gray">User Profile Edit</h1>
+                    <hr class="mb-4 mt-4" />
+                    <div *ngIf="isIndividual" class="mb-4">
+                        <div formGroupName="individual" class="mb-4">
+                            <label>First Name</label>
+                            <input required class="form-control form-control-lg" formControlName="firstname" />
+                        </div>
+                        <div formGroupName="individual" class="mb-4">
+                            <label>Last Name</label>
+        
+                            <input required class="form-control form-control-lg" formControlName="lastname" />
+                        </div>
+                        <div formGroupName="individual" class="mb-4">
+                            <label>User Name</label>
+        
+                            <input required class="form-control form-control-lg" formControlName="username" />
+                        </div>
+                        <div formGroupName="individual" class="mb-4">
+                            <label>Email address</label>
+        
+                            <input required type="email" class="form-control form-control-lg" formControlName="email" />
+                        </div>
+                        <div formGroupName="individual" class="mb-4">
+                            <label>Phone Number</label>
+        
+                            <input required class="form-control form-control-lg" formControlName="phonenumber" />
+                        </div>
+                        <div formGroupName="individual" class="mb-4">
+                            <label>Age Range</label>
+                            <select required class="form-control form-control-lg" placeholder="--select --"
+                                formControlName="ageRange">
+                                <option value="1-15">18 - 25</option>
+                                <option value="16-50">26 - 30</option>
+                                <option value="50-200">31 - 40</option>
+                                <option value=">200"> 40+</option>
+                            </select>
+                        </div>
+                        <div formGroupName="individual" class="mb-4">
+                            <label>Organization Name</label>
+        
+                            <input required class="form-control form-control-lg" formControlName="organizationName" />
+                        </div>
+                        <div formGroupName="individual" class="mb-4">
+                            <label>Sector</label>
+        
+                            <input required class="form-control form-control-lg" formControlName="sector" />
+                        </div>
+                        <div formGroupName="individual" class="mb-4">
+                            <label>Current Position (Occupation)</label>
+        
+                            <input required class="form-control form-control-lg" formControlName="occupation" />
+                        </div>
+                        <div formGroupName="individual" class="mb-4">
+                            <label>Country</label>
+        
+                            <input required class="form-control form-control-lg" formControlName="country" />
+                        </div>
+                        <div formGroupName="individual" class="mb-4">
+                            <label>City</label>
+        
+                            <input required class="form-control form-control-lg" formControlName="city" />
+                        </div>
+                        <div formGroupName="individual" class="mb-4">
+                            <label>Year Of Exprience</label>
+        
+                            <input type="number" required class="form-control form-control-lg" formControlName="yearOfExperience" />
+                        </div>
+                    </div>
+                    <div *ngIf="!isIndividual" class="mb-4">
+                        <div formGroupName="company" class="mb-4">
+                            <label>First Name</label>
+                            <input required class="form-control form-control-lg" formControlName="firstname" />
+                        </div>
+                        <div formGroupName="company" class="mb-4">
+                            <label>Last Name</label>
+        
+                            <input required class="form-control form-control-lg" formControlName="lastname" />
+                        </div>
+                        <div formGroupName="company" class="mb-4">
+                            <label>Organization Name</label>
+                            <input required class="form-control form-control-lg" formControlName="organizationName" />
+                        </div>
+                        <div formGroupName="company" class="mb-4">
+                            <label>Representative FullName</label>
+                            <input required class="form-control form-control-lg" formControlName="representativeFullName" />
+                        </div>
+                        <div formGroupName="company" class="mb-4">
+                            <label>Representative Role</label>
+                            <input required class="form-control form-control-lg" formControlName="representativeRole" />
+                        </div>
+                        <div formGroupName="company" class="mb-4">
+                            <label>Contact Email address</label>
+                            <input required class="form-control form-control-lg" formControlName="email" />
+                        </div>
+                        <div formGroupName="company" class="mb-4">
+                            <label>Contact Phone Number</label>
+                            <input required class="form-control form-control-lg" formControlName="phonenumber" />
+                        </div>
+                        <div formGroupName="company" class="mb-4">
+                            <label>Sector</label>
+                            <input required class="form-control form-control-lg" formControlName="sector" />
+                        </div>
+                        <div formGroupName="company" class="mb-4">
+                            <label>Number of Employee</label>
+                            <select required class="form-control form-control-lg" placeholder="--select --"
+                                formControlName="NoOfEmployee">
+                                <option value="1-15">1 - 15</option>
+                                <option value="16-50">16 - 50</option>
+                                <option value="50-200">50 - 200</option>
+                                <option value=">200"> +200</option>
+                            </select>
+                        </div>
+                        <div formGroupName="company" class="mb-4">
+                            <mat-checkbox class="example-margin"
+                            formControlName="isaMember"
+                            color="primary"
+                            (change)="isMemberCheck($event.checked)">
+                            Are you a Member ?
+                            </mat-checkbox>
+                        </div>
+                        <div formGroupName="company" class="mb-4">
+                            <label>Membership type</label>
+                            <input class="form-control form-control-lg" formControlName="membershipType" />
+                        </div>
+                        <div formGroupName="company" class="mb-4">
+                            <label>If So, please attache the membership id here.</label>
+                            <input type="file" class="form-control form-control-lg" formControlName="memberId" />
+                        </div>
+                        <hr class="mb-4 mt-4"/>
+                        <div formGroupName="company" class="mb-4">
+                            <label>Username</label>
+                            <input required class="form-control form-control-lg" formControlName="username" />
+                        </div>
+                    </div>
+                    <Button type="submit" class="btn btn-primary btn-lg btn-block"  *ngIf="!disable"
+                        [disabled]="(isIndividual ? getControls('individual').invalid : getControls('company').invalid)"
+                        (click)="isIndividual ? Submit('individual') : Submit('company')"
+                    >
+                    Save Changes
+                </Button>
+                    <Button class="btn btn-primary btn-lg btn-block disabled"  *ngIf="disable">
+                        Save Changes <i class="fa fa-spinner ml-4" aria-hidden="true"></i>
+                    </Button>
+                </div>
+            </form> 
+        </div>
+    
+        <div class="col-sm-12 col-md-3 col-lg-3"></div>
+    </div>
+</div>

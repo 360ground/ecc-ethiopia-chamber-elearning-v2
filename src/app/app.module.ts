@@ -7,6 +7,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import {MatSelectModule} from '@angular/material/select';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,6 +19,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
+    MatSidenavModule,
+    MatSelectModule,
     NgbModule,
   ],
   providers: [ApiService],

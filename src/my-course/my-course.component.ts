@@ -27,7 +27,7 @@ export class MyCourseComponent implements OnInit {
       formData.append('wstoken', this.service.token);
       formData.append('wsfunction', 'core_enrol_get_users_courses');
       formData.append('moodlewsrestformat', 'json');
-      formData.append('userid', this.service.userData.userid);
+      formData.append('userid', this.service.userData.id);
 
       this.service.main(formData).subscribe((response: any) => {
         this.courses = response;

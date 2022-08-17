@@ -116,6 +116,10 @@
                             </mat-checkbox>
                         </div>
                         <div formGroupName="company" class="mb-4">
+                            <label>Membership type</label>
+                            <input required class="form-control form-control-lg" formControlName="membershipType" />
+                        </div>
+                        <div formGroupName="company" class="mb-4">
                             <label>If So, please attache the membership id here.</label>
                             <input type="file" class="form-control form-control-lg" formControlName="memberId" />
                         </div>
@@ -130,13 +134,15 @@
                             <input type="password" required class="form-control form-control-lg" formControlName="password" />
                         </div>
                     </div>
-                    <input type="submit" value="Create my new account" class="btn btn-primary btn-lg btn-block"  *ngIf="!disable"
+                    <Button type="submit" class="btn btn-primary btn-lg btn-block"  *ngIf="!disable"
                         [disabled]="(isIndividual ? getControls('individual').invalid : getControls('company').invalid)"
                         (click)="isIndividual ? Submit('individual') : Submit('company')"
-                    />
-                    <div class="btn btn-primary btn-lg btn-block disabled"  *ngIf="disable">
+                    >
+                    Create my new account
+                </Button>
+                    <Button class="btn btn-primary btn-lg btn-block disabled"  *ngIf="disable">
                         Create my new account
-                    </div>
+                    </Button>
                 </div>
             </form> 
         </div>

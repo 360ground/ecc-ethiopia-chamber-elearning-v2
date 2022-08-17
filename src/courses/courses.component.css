@@ -14,3 +14,37 @@
     font-weight: lighter;
     margin-left: 13px;
 }
+
+#wider {
+    display: block !important;
+}
+
+#smaller {
+    display: none !important;
+}
+
+@media only screen and (max-width: 760px) {
+    #wider {
+        display: none !important;
+    }
+
+    .container{
+        margin-top: 101px !important;
+    }
+    #smaller {
+        display: block !important;
+    }
+  }
+
+ 
+
+  .customSidebar {
+    width: 341px;
+    max-width: 341px !important;
+    padding-left: 31px !important;
+    font-weight: lighter;
+    font-size: medium;
+    height: 100%;
+    overflow: scroll;
+    padding-top: 20px;
+  }
