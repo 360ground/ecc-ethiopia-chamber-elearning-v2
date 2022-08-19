@@ -1,61 +1,97 @@
-<div class="container-fluid">
+<div class="container-fluid" style="margin-top: 66px !important;">
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12">
-            <div class="card">
-                <div>
-                    <span>
-                        PROMOTE A BUSINESS WITH ONLINE ADVERTISING: MODULE 1/5
-                    </span>
-                    <span>
-                        Deep dive into display advertising
-                    </span>
+          <!-- fullname: "Module 1 : Basics in family planning and Short acting family planning methods "
+          hiddenbynumsections: 0
+          id: 7
+          index: 0
+          modules: (2) [{…}, {…}]
+          name: "Trainee guide on how to use the eLearning platform"
+          section: 0
+          summary: "<p dir=\"ltr\" style=\"text-align: left;\"></p><h1 data-test-id=\"issue.views.issue-base.foundation.summary.heading\"></h1><h1 data-test-id=\"issue.views.issue-base.foundation.summary.heading\"><br></h1><p></p>"
+          summaryformat: 1
+          totalModules: 10
+          uservisible: true
+          visible: 1
+          [[Prototype]]: Object
+          navigationId: 6 -->
+            <div class="card" style="padding: 39px !important;">
+              <div class="row">
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                  <div>
+                      <p style="color: #80868b;">
+                          {{ detail?.fullname }}: MODULE {{ detail?.index+1 }}/{{detail?.totalModules}}
+                      </p>
+                      <h1 style="color: #3c4043; margin-top: 8px;">
+                          {{ detail?.name }}
+                      </h1>
+                  </div>
                 </div>
+                <div class="col-sm-12 col-md-1 col-lg-1">
+                  <button type="button" class="btn btn-light">
+                    <span style="color: #0d6efd; font-size: 21px !important;">
+                      <i class="fa fa-share-alt mr-4" aria-hidden="true"></i>
+                      SHARE
+                    </span>
+                  </button>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                  <button type="button" class="btn btn-light">
+                    <span style="color: #0d6efd; font-size: 21px !important;">
+                      <i class="fa fa-plus mr-4" aria-hidden="true"></i>
+                      REMOVE FROM MY LEARNING PLAN
+                    </span>
+                  </button>
+                </div>
+              </div>  
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="margin-top: 15px !important;">
         <div class="col-sm-12 col-md-4 col-lg-4">
-            <!-- <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
-                <ngb-panel title="Simple">
-                  <ng-template ngbPanelContent>
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
-                    aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-                    sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-                    craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-                    occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
-                    labore sustainable VHS.
-                  </ng-template>
-                </ngb-panel>
-                <ngb-panel>
-                  <ng-template ngbPanelTitle>
-                    <span>&#9733; <b>Fancy</b> title &#9733;</span>
-                  </ng-template>
-                  <ng-template ngbPanelContent>
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
-                    aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-                    sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-                    craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-                    occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
-                    labore sustainable VHS.
-                  </ng-template>
-                </ngb-panel>
-                <ngb-panel title="Disabled" [disabled]="true">
-                  <ng-template ngbPanelContent>
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
-                    aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-                    sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-                    craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-                    occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
-                    labore sustainable VHS.
-                  </ng-template>
-                </ngb-panel>
-              </ngb-accordion> -->
+          <div class="card" style="padding: 10px !important;">
+            <ul class="list-group">
+              <li class="list-group-item list-group-item-dark">
+                Module Overview
+              </li>  
+              <li class="list-group-item" style="margin-top: 18px;">
+                <P>
+                  <span>Lessons</span>
+                  <span style="float: right; margin-right: 10px !important;">
+                    {{ currentItemIndex}}/{{detail?.modules.length}}
+                  </span>
+                </P>
+              </li>
+             </ul>
+             <div  class="card" style="height: 350px !important; overflow-y: scroll !important;">
               <ul class="list-group">
-                <li class="list-group-item">An item</li>                
-              </ul>
-            </div>
+              <li class="list-group-item item-module" *ngFor="let det of detail.modules; let i = index">
+                <p (click)="openUrl(i,det)">
+                 <span class="mr-4">
+                  {{ i + 1 }}.
+                 </span> 
+                 <span>
+                   {{ det.name }}
+                 </span>
+                </p>
+              </li>                
+             </ul>
+             </div>
+             <li class="list-group-item" style="margin-top: 18px;">
+              <P>
+                <button type="button" class="btn btn-light">
+                  <i class="fa fa-step-forward mr-4" style="color: #0d6efd" aria-hidden="true"></i>
+                  Skip to quiz
+                </button>
+              </P>
+            </li>
+          </div>
+          </div>
         <div class="col-sm-12 col-md-8 col-lg-8">
-
+          <div class="card" style="padding: 20px !important;">
+            <iframe src="" *ngIf="currentItem" 
+            style="border:none; height: 500px !important;" [title]="currentItem?.name"></iframe>
+          </div>
         </div>
     </div>    
 

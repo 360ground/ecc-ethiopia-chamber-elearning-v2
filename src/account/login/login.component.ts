@@ -86,13 +86,15 @@ export class LoginComponent implements OnInit {
           (element: any) => element.name == 'accountType'
         );
 
-        profile.accountType =
-          profile.customfields[index].value == 'company'
-            ? 'company'
-            : 'individual';
+        if (index > -1) {
+          profile.accountType = profile.customfields[index].value;
+        } else {
+          profile.accountType = 'individual';
+        }
 
         this.service.userData = profile;
 
+        this.getEnrolledCourses();
         let state: any = this.location.getState();
 
         if (state) {
@@ -100,8 +102,38 @@ export class LoginComponent implements OnInit {
         } else {
           this.router.navigate(['/mycourse']);
         }
+
         this.showLoading = false;
       }
     });
+  }
+
+  getEnrolledCourses() {
+    const formData = new FormData();
+
+    formData.append('wstoken', this.service.token);
+    formData.append('wsfunction', 'core_enrol_get_users_courses');
+    formData.append('moodlewsrestformat', 'json');
+    formData.append('userid', this.service.userData.id);
+
+    this.service.main(formData).subscribe((response: any) => {
+      this.separate(response);
+    });
+  }
+
+  separate(data: any) {
+    let completed: any[] = [];
+    let inprogress: any[] = [];
+
+    data.forEach((element: any, index: any) => {
+      if (element.completed) {
+        completed.push(element);
+      } else {
+        inprogress.push(element);
+      }
+    });
+
+    this.service.myCourses.completed = completed;
+    this.service.myCourses.inprogress = inprogress;
   }
 }

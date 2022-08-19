@@ -149,6 +149,16 @@ export class CoursesComponent implements OnInit {
       this.selectedCourseLength.splice(index, 1);
     }
   }
+
+  getCustomeFieldValue(customFields: any[], name: any) {
+    let result = customFields.find((element) => element.shortname == name);
+
+    if (result) {
+      return result.value;
+    } else {
+      return 'N/A';
+    }
+  }
 }
 
 @Component({

@@ -25,6 +25,7 @@ export class CourseDetailComponent implements OnInit {
   public courseFeatures: any[] = [];
   public isModulesLoading: Boolean = false;
   public adminToken: any = environment.adminToken;
+  public isEnrolledForThisCourse: Boolean = false;
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
@@ -48,6 +49,17 @@ export class CourseDetailComponent implements OnInit {
     this.id = this.actRoute.snapshot.paramMap.get('id');
     this.state = this.location.getState();
 
+    if (this.service.userData) {
+      let inprogress = this.service.myCourses.inprogress;
+      let completed = this.service.myCourses.completed;
+
+      let merged = inprogress.concat(completed);
+
+      let index = merged.findIndex((ele: any) => ele.id == +this.id);
+
+      this.isEnrolledForThisCourse = index > -1 ? true : false;
+    }
+
     if (this.state.customfields[2].value) {
       this.courseFeatures = this.state.customfields[2].valueraw.split(',');
     }
@@ -58,26 +70,42 @@ export class CourseDetailComponent implements OnInit {
     }
   }
 
+  getCustomeFieldValue(customFields: any[], name: any) {
+    let result = customFields.find((element) => element.shortname == name);
+
+    if (result) {
+      return result.value;
+    } else {
+      return 'N/A';
+    }
+  }
+
   startLearning() {
     if (!this.service.userData) {
       this.router.navigate(['/account/login'], {
         state: { returnUrl: `/detail/${this.id}`, course: this.state },
       });
     } else {
-      if (this.state?.customfields[0]?.valueraw) {
-        // check the login status and call start enrolling
-        if (confirm(`are you sure want to start learning ?`)) {
-          this.enroll();
-        }
+      if (this.isEnrolledForThisCourse) {
+        this.router.navigateByUrl('/learning', {
+          state: this.state,
+        });
       } else {
-        // start calling the meda pay after confirmation
-        if (
-          confirm(
-            `this course is costs you ${this.state?.customfields[1]?.valueraw} ETB. would you like to continue ?`
-          )
-        ) {
-          // start calling mega pay
-          this.startPayment();
+        if (this.state?.customfields[0]?.valueraw) {
+          // check the login status and call start enrolling
+          if (confirm(`are you sure want to start learning ?`)) {
+            this.enroll();
+          }
+        } else {
+          // start calling the meda pay after confirmation
+          if (
+            confirm(
+              `this course is costs you ${this.state?.customfields[1]?.valueraw} ETB. would you like to continue ?`
+            )
+          ) {
+            // start calling mega pay
+            this.startPayment();
+          }
         }
       }
     }
@@ -94,10 +122,10 @@ export class CourseDetailComponent implements OnInit {
 
     this.service.main(formData).subscribe((response: any) => {
       if (response.status) {
-        this.openSnackBar('Course is added to learning plan', 'close');
+        this.openSnackBar('Course is added to learning plan', 'Dismiss');
         this.router.navigate(['/mycourse']);
       } else {
-        this.openSnackBar(response.warnings[0].message, 'close');
+        this.openSnackBar(response.warnings[0].message, 'Dismiss');
       }
     });
   }
@@ -111,10 +139,10 @@ export class CourseDetailComponent implements OnInit {
         description: `Payment For the course : ${this.state.fullname}`,
         amount: +this.state.customfields[1].valueraw,
         customerName: `${this.service.userData.fullname}`,
-        customerPhoneNumber: '0000000000',
+        customerPhoneNumber: this.service.userData.customfields[0].value,
       },
       redirectUrls: {
-        returnUrl: 'google.com',
+        returnUrl: `${window.location.origin}`,
         cancelUrl: 'google.com',
         callbackUrl: 'google.com',
       },
@@ -163,6 +191,25 @@ export class CourseDetailComponent implements OnInit {
       this.state.activities = response;
       this.service.loadedCourses[0].activities = response;
       this.isModulesLoading = false;
+      console.log(response);
     });
+  }
+
+  scroll(direction: any) {
+    let container: any = document.getElementById('moduleCardsContainer');
+
+    let scrollCompleted = 0;
+
+    var slideVar = setInterval(function () {
+      if (direction == 'left') {
+        container.scrollLeft -= 40;
+      } else {
+        container.scrollLeft += 40;
+      }
+      scrollCompleted += 40;
+      if (scrollCompleted >= 100) {
+        window.clearInterval(slideVar);
+      }
+    }, 50);
   }
 }

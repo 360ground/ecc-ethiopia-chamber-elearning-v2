@@ -86,19 +86,21 @@
                                     <span>
                                         <span><i class="icons1 fa fa-bars" aria-hidden="true"></i>
                                         </span>
-                                        <span>Modules : {{ course?.customfields[5]?.valueraw }}</span>
+                                        <span>Modules : {{ getCustomeFieldValue(course?.customfields,'total_number_of_topic') }}</span>
                                     </span>
     
                                     <span>
                                         <span><i class="icons1 fa fa-clock-o" aria-hidden="true"></i>
                                         </span>
-                                        <span>Estimated Hours : {{ course?.customfields[4]?.valueraw }}</span>
+                                        <span>Estimated Hours : {{ getCustomeFieldValue(course?.customfields,'eastimated_completion_hour') }}</span>
                                     </span>
                                 </p>
                                 <p>
-                                    <a routerLink="/detail/{{course?.id}}" [state]="course" style="float: right !important; color: #1a73e8 !important;">
-                                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                                    </a>
+                                    <span style="float: right !important; color: #1a73e8 !important; margin-right: 13px; margin-top: 14px;">
+                                        <a routerLink="/detail/{{course?.id}}" [state]="course">
+                                            <mat-icon>arrow_forward</mat-icon>
+                                        </a>     
+                                    </span>
                                 </p>
                             </div>
                         </div>
@@ -211,19 +213,21 @@
                                 <span>
                                     <span><i class="icons1 fa fa-bars" aria-hidden="true"></i>
                                     </span>
-                                    <span>Modules : {{ course?.customfields[5]?.valueraw }}</span>
+                                    <span>Modules : {{ getCustomeFieldValue(course?.customfields, 'total_number_of_topic') }}</span>
                                 </span>
 
                                 <span>
                                     <span><i class="icons1 fa fa-clock-o" aria-hidden="true"></i>
                                     </span>
-                                    <span>Estimated Hours : {{ course?.customfields[4]?.valueraw }}</span>
+                                    <span>Estimated Hours : {{ getCustomeFieldValue(course?.customfields, 'eastimated_completion_hour') }}</span>
                                 </span>
                             </p>
                             <p>
-                                <a routerLink="/detail/{{course?.id}}" [state]="course" style="float: right !important; color: #1a73e8 !important;">
-                                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                                </a>
+                                <span style="float: right !important; color: #1a73e8 !important; margin-right: 13px; margin-top: 14px;">
+                                    <a routerLink="/detail/{{course?.id}}" [state]="course">
+                                        <mat-icon>arrow_forward</mat-icon>
+                                    </a>     
+                                </span>
                             </p>
                         </div>
                     </div>

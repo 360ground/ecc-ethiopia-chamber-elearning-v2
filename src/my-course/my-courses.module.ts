@@ -4,6 +4,8 @@ import { MyCourseComponent } from './my-course.component';
 import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from 'src/shared/shared.module';
 import { AuthGuard } from 'src/service/AuthGuard';
+import { NgCircleProgressModule } from 'ng-circle-progress';
+import { MatIconModule } from '@angular/material/icon';
 
 const routes: Routes = [
   {
@@ -15,7 +17,29 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [MyCourseComponent],
-  imports: [SharedModule, RouterModule.forChild(routes)],
+  imports: [
+    SharedModule,
+    RouterModule.forChild(routes),
+    MatIconModule,
+    NgCircleProgressModule.forRoot({
+      radius: 10,
+      space: -7,
+      outerStrokeGradient: true,
+      outerStrokeWidth: 8,
+      outerStrokeColor: '#4882c2',
+      outerStrokeGradientStopColor: '#78C000',
+      innerStrokeColor: '#e7e8ea',
+      innerStrokeWidth: 8,
+      animateTitle: false,
+      animationDuration: 1000,
+      showUnits: false,
+      showBackground: false,
+      clockwise: false,
+      startFromZero: false,
+      lazy: true,
+      titleFontSize: '10',
+    }),
+  ],
   exports: [RouterModule],
 })
 export class MyCoursesModule {}

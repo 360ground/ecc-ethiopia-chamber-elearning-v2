@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class ApiService {
   public loadedCourses: any = null;
-  public myCourses: any = null;
+  public myCourses: any = {};
 
   public userData: any = null;
   public token: any = null;

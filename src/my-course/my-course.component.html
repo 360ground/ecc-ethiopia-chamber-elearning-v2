@@ -73,8 +73,8 @@
                 </p>
                 <hr style="margin-top: 24px !important; margin-bottom: 24px !important; color: gray;" />
                 <mat-tab-group>
-                    <mat-tab label="In progress ({{courses.length}})">
-                        <div class="card"  *ngIf="!courses.length" style="padding: 24px !important;">
+                    <mat-tab label="In progress ({{inprogress.length}})">
+                        <div class="card courseCard"  *ngIf="!inprogress.length" style="padding: 24px !important;">
                             <div class="empty-card">
                                <h4 class="empty-card-title">What would you like to learn?</h4>
                                <p class="empty-card-description mt-4">Get started by adding courses to your plan.</p>
@@ -86,47 +86,47 @@
                             </div> 
                         </div>
     
-                        <div class="row mt-4" *ngIf="courses.length">
-                            <div class="col-sm-12 col-md-4 col-lg-4 mb-4 mr-2" *ngFor="let course of courses; let i = index">
+                        <div class="row mt-4" *ngIf="inprogress.length">
+                            <div class="col-sm-12 col-md-3 col-lg-3 mb-4" *ngFor="let course of inprogress; let i = index">
                                 <div class="card">
                                     <img class="card-img-top" style="height: 220px !important" [src]="course?.overviewfiles[0]?.fileurl + '?token='+ adminToken"
                                         [alt]="course?.overviewfiles[0]?.filename" width="100%" height="100%">
             
                                     <div class="card-body">
-                                        <h5 class="card-title">
+                                        <h5 class="card-title mb-4">
                                             <a routerLink="/learning" [state]="course" 
                                                 style="font-size: 15px;color: #3c4043; font-weight: 500; text-decoration: none !important;">
                                                 {{course?.displayname}}
                                             </a>
                                         </h5>
-                                        <p class="mt-4" style="color: gray;">
-                                            <span>
-                                                <span><i class="icons1 fa fa-clock-o" aria-hidden="true"></i>
-                                                </span>
-                                                <span *ngIf="course?.lastaccess">Last access : 
-                                                    {{ course?.lastaccess | TimeStamp | date }}</span>
-                                                    <span *ngIf="!course?.lastaccess">Last access : 
-                                                        {{ course?.lastaccess | TimeStamp }}</span>
-                                            </span>
-            
-                                            <!-- <span>
-                                                <span><i class="icons1 fa fa-users" aria-hidden="true"></i>
-                                                </span>
-                                                <span>Student : {{ course?.enrolledusercount | number }}</span>
-                                            </span> -->
-                                            <Button class="btn btn-success" style="border-radius: 50%; float: right;">
-                                                {{ course?.completed ? 'complete' : 'Inprogress'  }}
-                                            </Button>
-                                        </p>
-                                        <p class="mt-4" style="color: gray;">
-                                            Progress :
-                                        </p>
                                         <p>
-                                            <ngb-progressbar type="success" textType="white" 
-                                                [value]="course?.progress" [showValue]="true">
-                                            </ngb-progressbar>
+                                            <span>
+                                                <circle-progress
+                                                [percent]="course?.progress"
+                                                [radius]="25"
+                                                [outerStrokeWidth]="5"
+                                                [innerStrokeWidth]="5"
+                                                [outerStrokeColor]="'#78C000'"
+                                                [innerStrokeColor]="'#e7e8ea'"
+                                                [showInnerStroke]="true"
+                                                [renderOnClick]="false"
+                                                [animation]="true"
+                                                [animationDuration]="300"
+                                                [space]="-4"
+                                                [showSubtitle]="false"
+                                                [showUnits]="true"
+                                                [startFromZero]="true"
+                                                [clockwise]="true"
+                                                titleFontSize='10'
+                                                ></circle-progress> 
+                                            </span>
+                                            <span style="float: right !important; color: #1a73e8 !important; margin-right: 34px;
+                                            margin-top: 14px;">
+                                                <a routerLink="/learning" [state]="course">
+                                                    <mat-icon>arrow_forward</mat-icon>
+                                                </a>     
+                                            </span>
                                         </p>
-    
                                         <!-- <p>
                                             <a routerLink="/detail/{{course?.id}}" [state]="course" style="float: right !important; color: #1a73e8 !important;">
                                                 <i class="fa fa-arrow-right" aria-hidden="true"></i>
@@ -149,8 +149,8 @@
                                </h4>
                             </div> 
                         </div>
-                        <div class="col-sm-12 col-md-4 col-lg-4 mb-4 mr-2" *ngFor="let course of completed; let i = index">
-                            <div class="card">
+                        <div class="col-sm-12 col-md-3 col-lg-3 mb-4" *ngFor="let course of completed; let i = index">
+                            <div class="card courseCard">
                                 <img class="card-img-top" style="height: 220px !important" [src]="course?.overviewfiles[0]?.fileurl + '?token='+ adminToken"
                                     [alt]="course?.overviewfiles[0]?.filename" width="100%" height="100%">
         
@@ -176,7 +176,7 @@
                                             </span>
                                             <span>Student : {{ course?.enrolledusercount | number }}</span>
                                         </span> -->
-                                        <Button class="btn btn-success" style="border-radius: 50%; float: right;">
+                                        <Button class="btn btn-primary" style="border-radius: 50%; float: right;">
                                             {{ course?.completed ? 'complete' : 'Inprogress'  }}
                                         </Button>
                                     </p>
@@ -184,7 +184,7 @@
                                         Progress :
                                     </p>
                                     <p>
-                                        <ngb-progressbar type="success" textType="white" 
+                                        <ngb-progressbar type="primary" textType="white" 
                                             [value]="course?.progress" [showValue]="true">
                                         </ngb-progressbar>
                                     </p>

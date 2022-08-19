@@ -27,12 +27,20 @@
 }
 
 .moduleCards {
-    padding: 25px !important; 
-    width: 600px !important;
+    padding: 28px !important;
     border-radius: 0px !important;
     margin-right: 20px !important;
-    display: inline !important;
-    /* width: 100% !important; */
+    height: auto !important;
+    margin-bottom: 25px;
+    text-align: left;
+    font-weight: lighter;
+    max-height: 359px !important;
+}
+
+
+.innerModuleCards{
+    overflow-y: scroll;
+    max-height: 300px !important;
 }
 
 #main {
@@ -52,4 +60,62 @@
     width:16%; 
     height: 10%; 
     font-size: 33px;
+}
+
+/* circular progress bar */
+#progress {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    float: left;
+    margin-top: 3px;
+    margin-right: 10px;
+}
+
+#progress-value {
+    display: block;
+    height: calc(100% - 4px);
+    width: calc(100% - 4px);
+    background-color: 
+    #ffffff;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.moduleCardsContainer{
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 10px 0;    
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+@media only screen and (max-width: 760px) {
+    .moduleCards {
+        width: 350px !important;
+    }
+  }
+
+.scrollButtonLeft {
+    margin-top: 214px;
+    margin-left: 59px;
+    color: gray;
+    font-size: x-large;
+    cursor: pointer;
+}  
+
+.scrollButtonRight {
+    margin-top: 214px;
+    margin-right: 59px;
+    color: gray;
+    font-size: x-large;
+    cursor: pointer;
 }

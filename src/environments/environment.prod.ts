@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  baseUrl: 'https://devengender.360ground.com/webservice/restful/server.php',
+  baseUrl: 'https://devengender.360ground.com/webservice/rest/server.php',
   loginUrl: 'https://devengender.360ground.com/login/token.php',
   medapayUrl: 'https://api.pay.meda.chat/v1/bills',
   adminToken: 'e466a3adcc463e1b0e7c5296288f6641',

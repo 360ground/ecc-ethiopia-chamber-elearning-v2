@@ -22,14 +22,22 @@ export class StartLearningComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    let index = 1;
     this.state = this.location.getState();
 
+    if ('activities' in this.state) {
+      this.courseDetail = this.state.activities;
+    } else {
+      this.getDetailModules();
+    }
+  }
+
+  getDetailModules() {
     this.isLoading = true;
+
     const formData = new FormData();
 
-    this.startProgressbar(this.state.progress);
-
-    formData.append('wstoken', this.service.token);
+    formData.append('wstoken', environment.adminToken);
     formData.append('wsfunction', 'core_course_get_contents');
     formData.append('moodlewsrestformat', 'json');
     formData.append('courseid', this.state.id);
@@ -40,11 +48,15 @@ export class StartLearningComponent implements OnInit {
     });
   }
 
-  startProgressbar(value: any) {
-    let scrollProgress: any = document.getElementById('progress');
-    scrollProgress.style.background = `conic-gradient(#008fff ${31}%, #f2f2f4 ${31}%)`;
+  navigate(data: any, index: any) {
+    data.fullname = this.state.fullname;
+    data.totalModules = this.courseDetail.length;
+    data.index = index;
+
+    this.router.navigateByUrl('/learning/modules', {
+      state: {
+        data: data,
+      },
+    });
   }
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   this.startProgressbar();
-  // }
 }
