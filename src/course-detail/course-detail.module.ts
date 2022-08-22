@@ -7,6 +7,7 @@ import { AuthGuard } from 'src/service/AuthGuard';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Overlay } from '@angular/cdk/overlay';
+import { MatIconModule } from '@angular/material/icon';
 
 const routes: Routes = [
   {
@@ -17,7 +18,12 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [CourseDetailComponent],
-  imports: [SharedModule, NgbModule, RouterModule.forChild(routes)],
+  imports: [
+    SharedModule,
+    MatIconModule,
+    NgbModule,
+    RouterModule.forChild(routes),
+  ],
   exports: [RouterModule],
   providers: [MatSnackBar, Overlay],
 })

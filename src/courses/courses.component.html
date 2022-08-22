@@ -1,10 +1,23 @@
+<div class="card top-header container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"></div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <h1 class="header_title">Online courses</h1>
+            <p class="header_subtitle">
+                Discover a range of free learning content designed to help your business or in your career. You can learn by selecting individual modules, or dive right in and take an entire course end-to-end.
+            </p>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+    </div>
+</div>
+
 <div class="container" style="margin-top: 112px !important;">
     <div id="wider" *ngIf="courses.length" style="margin-top: 64px !important;">
         <div class="row">
             <div class="col-sm-12 col-md-3 col-lg-3 mb-4 mr-2">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
-                        <h1 class="gray mb-4">CATEGORIES</h1>
+                        <h1 class="filter-header mb-4">CATEGORIES</h1>
                         <div style="color: gray; padding-left: 5px !important">
                             <p *ngFor="let categories of courseCategories; let i as index">
                                 <mat-checkbox color="primary" class="example-margin" 
@@ -15,7 +28,7 @@
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
-                        <h1 class="gray mb-4">FREE or WITH PAYMENT</h1>
+                        <h1 class="filter-header mb-4">FREE or WITH PAYMENT</h1>
                         <div style="color: gray; padding-left: 5px !important">
                             <p *ngFor="let option of paymentOptions">
                                 <mat-checkbox color="primary" class="example-margin" 
@@ -26,7 +39,7 @@
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
-                        <h1 class="gray mb-4">CERTIFICATION</h1>
+                        <h1 class="filter-header mb-4">CERTIFICATION</h1>
                         <div style="color: gray; padding-left: 5px !important">
                             <p *ngFor="let option of certificationOptions">
                                 <mat-checkbox color="primary" class="example-margin" 
@@ -37,7 +50,7 @@
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
-                        <h1 class="gray mb-4">COURSE LENGTH</h1>
+                        <h1 class="filter-header mb-4">COURSE LENGTH</h1>
                         <div style="color: gray; padding-left: 5px !important">
                             <p *ngFor="let option of courseLengthOptions">
                                 <mat-checkbox color="primary" class="example-margin" 
@@ -67,10 +80,10 @@
                 </div>
             </div>
             <div class="col-sm-12 col-md-9 col-lg-9 mb-4 mr-2">
-                <p class="gray wider">Results: {{ courses.length }} courses
+                <p class="course-counter mb-4 wider">Results: {{ courses.length }} courses
                 </p>
                 <div class="row">
-                    <div class="col-sm-12 col-md-5 col-lg-5 mb-4 mr-2" *ngFor="let course of courses; let i = index">
+                    <div class="col-sm-12 col-md-4 col-lg-4 mb-4 mr-2" *ngFor="let course of courses; let i = index">
                         <div class="card">
                             <img class="card-img-top" style="height: 220px !important" [src]="course?.overviewfiles[0]?.fileurl + '?token='+ adminToken"
                                 [alt]="course?.overviewfiles[0]?.filename" width="100%" height="30%">
@@ -92,7 +105,7 @@
                                     <span>
                                         <span><i class="icons1 fa fa-clock-o" aria-hidden="true"></i>
                                         </span>
-                                        <span>Estimated Hours : {{ getCustomeFieldValue(course?.customfields,'eastimated_completion_hour') }}</span>
+                                        <span>Hours : {{ getCustomeFieldValue(course?.customfields,'eastimated_completion_hour') }}</span>
                                     </span>
                                 </p>
                                 <p>

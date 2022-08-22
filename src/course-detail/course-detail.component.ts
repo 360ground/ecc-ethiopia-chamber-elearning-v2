@@ -30,6 +30,8 @@ export class CourseDetailComponent implements OnInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
 
+  public readmore: boolean = true;
+
   constructor(
     public service: ApiService,
     public actRoute: ActivatedRoute,
@@ -48,6 +50,8 @@ export class CourseDetailComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.actRoute.snapshot.paramMap.get('id');
     this.state = this.location.getState();
+
+    this.state.short = this.state.summary.substring(0, 400);
 
     if (this.service.userData) {
       let inprogress = this.service.myCourses.inprogress;
@@ -191,7 +195,6 @@ export class CourseDetailComponent implements OnInit {
       this.state.activities = response;
       this.service.loadedCourses[0].activities = response;
       this.isModulesLoading = false;
-      console.log(response);
     });
   }
 

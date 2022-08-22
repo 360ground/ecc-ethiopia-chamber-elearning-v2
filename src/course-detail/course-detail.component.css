@@ -30,13 +30,13 @@
     padding: 28px !important;
     border-radius: 0px !important;
     margin-right: 20px !important;
-    height: auto !important;
+    height: 350px !important;
     margin-bottom: 25px;
     text-align: left;
     font-weight: lighter;
     max-height: 359px !important;
+    width: 320px !important;
 }
-
 
 .innerModuleCards{
     overflow-y: scroll;
@@ -98,11 +98,15 @@
     display: none;
 }
 
-@media only screen and (max-width: 760px) {
-    .moduleCards {
-        width: 350px !important;
-    }
-  }
+.wider {
+    display: none !important;
+}
+
+.arrow{
+    color: #0d6efd !important;
+    font-size: 69px !important;
+    margin-top: -16px !important;
+}
 
 .scrollButtonLeft {
     margin-top: 214px;
@@ -119,3 +123,86 @@
     font-size: x-large;
     cursor: pointer;
 }
+
+.course-title {
+    color: #3c4043 !important;
+    font: 400 33px/50px Google Sans,Arial,sans-serif;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    text-transform: capitalize !important;
+    margin-top: 15px !important;
+}
+
+.course-subtitle {
+    color: #9aa0a6 !important;
+    font: 400 16px/26px Google Sans,Arial,sans-serif;
+    margin-bottom: 16px !important;
+    margin-bottom: 20px !important;
+}
+
+.second-card {
+    margin-top: 24px !important;
+}
+
+.lists {
+    color: #80868b !important;
+    font: 500 16px Google Sans,Arial,sans-serif;
+    letter-spacing: 1.25px;
+    margin-bottom: 40px !important;
+    /* text-transform: uppercase; */
+}
+
+.vr {
+    border-left: 1px solid #9aa0a6;
+    height: 248px;
+}
+
+.how-it-works {
+    text-align: center;
+    margin-top: 29px;
+    margin-bottom: 45px;
+}
+
+.mat-icon {
+    height: 47px !important;
+    width: 44px !important; 
+}
+.card {
+    /* border-bottom: 1px solid gray !important; */
+}
+.main-module-card-container {
+    background: #f8f9fa !important;
+    border-bottom: 1px solid #d3d3d3 !important;
+}
+
+@media only screen and (max-width: 760px) {
+    .moduleCards {
+        width: 350px !important;
+    }
+    .smaller {
+        display: none !important;
+    }
+
+    .wider {
+        display: block !important;
+    }
+
+    #first-vr {
+        display: none !important;
+    }
+
+    .arrow{
+        font-size: 64px !important;
+        margin-top: -10px !important;
+        margin-left: 41% !important;
+    }
+
+    .numbers {
+        width: 18% !important;
+    }
+
+    .course-title {
+        margin-top: -16px !important;
+    }
+
+  }
