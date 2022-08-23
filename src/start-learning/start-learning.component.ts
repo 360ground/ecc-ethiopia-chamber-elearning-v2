@@ -14,6 +14,7 @@ export class StartLearningComponent implements OnInit {
   public isLoading: Boolean = false;
   public adminToken: any = environment.adminToken;
   public state: any = null;
+  public pages: any;
 
   constructor(
     public service: ApiService,
@@ -44,6 +45,32 @@ export class StartLearningComponent implements OnInit {
 
     this.service.main(formData).subscribe((response: any) => {
       this.courseDetail = response;
+      this.getPageContent();
+    });
+  }
+
+  getPageContent() {
+    const formData = new FormData();
+
+    formData.append('wstoken', environment.adminToken);
+    formData.append('wsfunction', 'mod_page_get_pages_by_courses');
+    formData.append('moodlewsrestformat', 'json');
+    formData.append('courseids[0]', this.state.id);
+
+    this.service.main(formData).subscribe((response: any) => {
+      this.pages = response.pages;
+
+      this.courseDetail.forEach((activity) => {
+        activity.modules.forEach((topic: any, index: any) => {
+          if (topic.modname == 'page') {
+            let page = this.pages.find(
+              (ele: any) => ele.coursemodule == topic.id
+            );
+            topic.htmlContent = page.content;
+          }
+        });
+      });
+
       this.isLoading = false;
     });
   }

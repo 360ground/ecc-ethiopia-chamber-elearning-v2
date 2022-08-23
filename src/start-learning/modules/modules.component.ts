@@ -17,6 +17,7 @@ export class ModulesComponent implements OnInit {
   public detail: any;
   public currentItem: any = null;
   public currentItemIndex: any = 0;
+  public isCanOpen: Boolean = false;
 
   ngOnInit(): void {
     this.detail = this.location.getState();
@@ -24,13 +25,22 @@ export class ModulesComponent implements OnInit {
   }
 
   openUrl(index: any, data: any) {
+    this.currentItem = null;
     this.currentItem = data;
+    console.log(data);
+
+    let modnames = ['page', 'url'];
+
+    if (modnames.includes(data.modname)) {
+      this.isCanOpen = true;
+    } else {
+      this.isCanOpen = false;
+    }
+
     let url: any = data.url;
     // url = url.replace('?forcedownload=1', '');
-    url = `${url}&token=${this.service.token}`;
-
-    console.log(data);
-    this.currentItem.url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    // url = `${url}&token=${this.service.token}`;
+    // this.currentItem.url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     this.currentItemIndex = index + 1;
   }
 }

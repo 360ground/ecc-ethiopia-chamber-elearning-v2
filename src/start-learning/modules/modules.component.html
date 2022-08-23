@@ -51,7 +51,7 @@
         <div class="col-sm-12 col-md-4 col-lg-4">
           <div class="card" style="padding: 10px !important;">
             <ul class="list-group">
-              <li class="list-group-item list-group-item-dark">
+              <li class="list-group-item list-group-item-dark" >
                 Module Overview
               </li>  
               <li class="list-group-item" style="margin-top: 18px;">
@@ -71,13 +71,14 @@
                   {{ i + 1 }}.
                  </span> 
                  <span>
-                   {{ det.name }}
+                   {{ det.name }} (<small>{{ det.modplural }}</small>)
                  </span>
                 </p>
               </li>                
              </ul>
-             </div>
-             <li class="list-group-item" style="margin-top: 18px;">
+            </div>
+            <li class="list-group-item" style="margin-top: 18px;">
+              <hr class="mb-4 mt-4" />
               <P>
                 <button type="button" class="btn btn-light">
                   <i class="fa fa-step-forward mr-4" style="color: #0d6efd" aria-hidden="true"></i>
@@ -88,9 +89,26 @@
           </div>
           </div>
         <div class="col-sm-12 col-md-8 col-lg-8">
-          <div class="card" style="padding: 20px !important;">
-            <iframe src="../../assets/M2 Chapter 2/story.html" *ngIf="currentItem" 
-            style="border:none; height: 500px !important;" [title]="currentItem?.name"></iframe>
+          <div class="card contentPart">
+            <div *ngIf="!currentItem">
+              <p class="message">
+                Select topics to open
+              </p>
+            </div>
+            <div *ngIf="currentItem && isCanOpen">
+              <p *ngIf="currentItem?.modname == 'page'" [innerHTML]="currentItem?.htmlContent | htmlSanitaizer"></p>
+              <p *ngIf="currentItem?.modname == 'url'">
+                <a [href]="currentItem?.contents[0].fileurl" target="_blank">{{ currentItem?.name}}</a>
+              </p>
+            </div>
+            <div *ngIf="currentItem && !isCanOpen">
+              <p class="message">
+                unable to preview the content.
+              </p>
+            </div>
+          
+            <!-- <iframe src="../../assets/M2 Chapter 2/story.html" *ngIf="currentItem" 
+            style="border:none; height: 500px !important;" [title]="currentItem?.name"></iframe> -->
           </div>
         </div>
     </div>    
