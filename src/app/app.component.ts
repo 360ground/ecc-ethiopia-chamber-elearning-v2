@@ -12,7 +12,13 @@ export class AppComponent implements OnInit {
   public logoUrl: any = environment.logoUrl;
   constructor(public service: ApiService, public router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.service.sendMessage({ refNo: '001' });
+
+    this.service.getNewMessage().subscribe((message: any) => {
+      console.log(message);
+    });
+  }
 
   logout() {
     if (confirm('are you sure want to logout from the system ?')) {

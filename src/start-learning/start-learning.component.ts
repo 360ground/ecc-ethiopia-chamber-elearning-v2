@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/service/api.service';
 import { Location } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-start-learning',
@@ -15,11 +16,13 @@ export class StartLearningComponent implements OnInit {
   public adminToken: any = environment.adminToken;
   public state: any = null;
   public pages: any;
+  public resources: any;
 
   constructor(
     public service: ApiService,
     public router: Router,
-    public location: Location
+    public location: Location,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +49,7 @@ export class StartLearningComponent implements OnInit {
     this.service.main(formData).subscribe((response: any) => {
       this.courseDetail = response;
       this.getPageContent();
+      this.getResourceContent();
     });
   }
 
@@ -67,6 +71,30 @@ export class StartLearningComponent implements OnInit {
               (ele: any) => ele.coursemodule == topic.id
             );
             topic.htmlContent = page.content;
+          }
+        });
+      });
+    });
+  }
+
+  getResourceContent() {
+    const formData = new FormData();
+
+    formData.append('wstoken', environment.adminToken);
+    formData.append('wsfunction', 'mod_resource_get_resources_by_courses');
+    formData.append('moodlewsrestformat', 'json');
+    formData.append('courseids[0]', this.state.id);
+
+    this.service.main(formData).subscribe((response: any) => {
+      this.resources = response.resources;
+
+      this.courseDetail.forEach((activity) => {
+        activity.modules.forEach((topic: any, index: any) => {
+          if (topic.modname == 'resource') {
+            let resource = this.resources.find(
+              (ele: any) => ele.coursemodule == topic.id
+            );
+            topic.actualFileUrl = `${resource.contentfiles[0].fileurl}?token=${this.service.token}`;
           }
         });
       });

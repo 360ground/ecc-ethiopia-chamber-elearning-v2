@@ -1,20 +1,6 @@
 <div class="container-fluid" style="margin-top: 66px !important;">
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12">
-          <!-- fullname: "Module 1 : Basics in family planning and Short acting family planning methods "
-          hiddenbynumsections: 0
-          id: 7
-          index: 0
-          modules: (2) [{…}, {…}]
-          name: "Trainee guide on how to use the eLearning platform"
-          section: 0
-          summary: "<p dir=\"ltr\" style=\"text-align: left;\"></p><h1 data-test-id=\"issue.views.issue-base.foundation.summary.heading\"></h1><h1 data-test-id=\"issue.views.issue-base.foundation.summary.heading\"><br></h1><p></p>"
-          summaryformat: 1
-          totalModules: 10
-          uservisible: true
-          visible: 1
-          [[Prototype]]: Object
-          navigationId: 6 -->
             <div class="card" style="padding: 39px !important;">
               <div class="row">
                 <div class="col-sm-12 col-md-8 col-lg-8">
@@ -80,10 +66,10 @@
             <li class="list-group-item" style="margin-top: 18px;">
               <hr class="mb-4 mt-4" />
               <P>
-                <button type="button" class="btn btn-light">
+                <a type="button" class="btn btn-light" routerLink="/startquiz" [state]="detail">
                   <i class="fa fa-step-forward mr-4" style="color: #0d6efd" aria-hidden="true"></i>
                   Skip to quiz
-                </button>
+                </a>
               </P>
             </li>
           </div>
@@ -100,6 +86,12 @@
               <p *ngIf="currentItem?.modname == 'url'">
                 <a [href]="currentItem?.contents[0].fileurl" target="_blank">{{ currentItem?.name}}</a>
               </p>
+              <p  *ngIf="currentItem?.modname == 'resource'">
+                 <iframe 
+                   src="https://images.ctfassets.net/lzny33ho1g45/T5qqQQVznbZaNyxmHybDT/b76e0ff25a495e00647fa9fa6193a3c2/best-url-shorteners-00-hero.png?w=1520&fm=jpg&q=30&fit=thumb&h=760" 
+                   [title]="currentItem?.name">
+                  </iframe>
+              </p>
             </div>
             <div *ngIf="currentItem && !isCanOpen">
               <p class="message">
@@ -107,8 +99,7 @@
               </p>
             </div>
           
-            <!-- <iframe src="../../assets/M2 Chapter 2/story.html" *ngIf="currentItem" 
-            style="border:none; height: 500px !important;" [title]="currentItem?.name"></iframe> -->
+           
           </div>
         </div>
     </div>    

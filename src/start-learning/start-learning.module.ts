@@ -11,12 +11,12 @@ const routes: Routes = [
   {
     path: '',
     component: StartLearningComponent,
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'modules',
     component: ModulesComponent,
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
 ];
 

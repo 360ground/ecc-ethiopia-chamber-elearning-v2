@@ -40,6 +40,11 @@ export class LoginComponent implements OnInit {
 
       const formData = new FormData();
 
+      // let expression = /\S+@\S+\.\S+/;
+      // let isEmailAddress = expression.test(this.getControls('username').value)
+      //   ? true
+      //   : false;
+
       formData.append('username', this.getControls('username').value);
       formData.append('password', this.getControls('password').value);
       formData.append('service', 'moodle_mobile_app');

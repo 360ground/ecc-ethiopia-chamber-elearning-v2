@@ -7,7 +7,7 @@ export const environment = {
   baseUrl: 'https://devengender.360ground.com/webservice/rest/server.php',
   loginUrl: 'https://devengender.360ground.com/login/token.php',
   medapayUrl: 'https://api.pay.meda.chat/v1/bills',
-  adminToken: '6ffd1dba11545579c941bcaae59976fe',
+  adminToken: 'e466a3adcc463e1b0e7c5296288f6641',
   afterSignupRedirectUrl: 'http://www.google.com',
   logoUrl: '/assets/logo.png',
   medapayToken:

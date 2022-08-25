@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { MyEducationComponent } from './my-education/my-education.component';
 import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from 'src/shared/shared.module';
+import { AuthGuard } from 'src/service/AuthGuard';
 
 const routes: Routes = [
   {
     path: '',
     component: MyEducationComponent,
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
 ];
 

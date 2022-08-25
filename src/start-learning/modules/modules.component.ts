@@ -29,7 +29,7 @@ export class ModulesComponent implements OnInit {
     this.currentItem = data;
     console.log(data);
 
-    let modnames = ['page', 'url'];
+    let modnames = ['page', 'url', 'resource'];
 
     if (modnames.includes(data.modname)) {
       this.isCanOpen = true;
