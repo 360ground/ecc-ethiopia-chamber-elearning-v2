@@ -17,8 +17,10 @@ export class ApiService {
   public courseCategories: any;
 
   public message$: BehaviorSubject<string> = new BehaviorSubject('');
+  public isIndividual: Boolean = true;
 
-  constructor(public http: HttpClient) {}
+  constructor(public http: HttpClient) {
+  }
 
   // login to the moodle site
   login(data: any) {
@@ -43,16 +45,16 @@ export class ApiService {
   }
 
   //socket io
-  socket = io('http://localhost:4000');
+  // socket = io('http://localhost:4000');
 
   public sendMessage(message: any) {
-    this.socket.emit('message', message);
+    // this.socket.emit('message', message);
   }
 
   public getNewMessage = () => {
-    this.socket.on('message', (message) => {
-      this.message$.next(message);
-    });
+    // this.socket.on('message', (message) => {
+    //   this.message$.next(message);
+    // });
 
     return this.message$.asObservable();
   };

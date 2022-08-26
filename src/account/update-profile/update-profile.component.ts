@@ -66,6 +66,7 @@ export class UpdateProfileComponent implements OnInit {
     this.alertConfig.dismissible = true;
 
     this.getProfileDetail();
+    this.isMemberCheck(false);
   }
 
   getProfileDetail() {

@@ -93,6 +93,11 @@ export class LoginComponent implements OnInit {
 
         if (index > -1) {
           profile.accountType = profile.customfields[index].value;
+
+          if (profile.accountType == 'company') {
+            this.service.isIndividual = false;
+            console.log(this.service.isIndividual)
+          }
         } else {
           profile.accountType = 'individual';
         }

@@ -90,8 +90,6 @@ export class ForgetPasswordComponent implements OnInit {
             break;
         }
 
-        alert(this.backendError);
-
         this.formGroup.enable();
         this.showLoadingUsername = false;
         this.showLoadingEmail = false;

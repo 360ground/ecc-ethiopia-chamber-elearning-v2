@@ -16,7 +16,7 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
           <a class="nav-link white" [routerLink]="['/courses']" aria-current="page">Online Courses</a>
         </li>
         <li class="nav-item" *ngIf="service.userData">
-          <a class="nav-link white" [routerLink]="['/mycourse']">My Learning Plan</a>
+          <a class="nav-link white" [routerLink]="['/mycourse']" *ngIf="service.userData && service?.isIndividual">My Learning Plan</a>
         </li>
       </ul>
       
@@ -28,14 +28,14 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
                   welcome, {{ service.userData?.fullname }} 
               </span>
               <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <a ngbDropdownItem [routerLink]="['/mycourse']">My Learning Plan</a>
-                <a ngbDropdownItem [routerLink]="['/myeducation']">My Educational Background</a>
-                <a ngbDropdownItem href="#">My Certification</a>
+                <a ngbDropdownItem [routerLink]="['/mycourse']" *ngIf="service.userData && service?.isIndividual">My Learning Plan</a>
+                <a ngbDropdownItem [routerLink]="['/myeducation']" *ngIf="service.userData && service?.isIndividual">My Education</a>
+                <a ngbDropdownItem [routerLink]="['/']" *ngIf="service.userData && service?.isIndividual">My Certification</a>
                 <a ngbDropdownItem  [routerLink]="['/account/profile']">Update profile</a>
                 <a ngbDropdownItem  [routerLink]="['/account/change-password']">Change Password</a>
                 <div class="dropdown-divider"></div>
                 <a ngbDropdownItem href="#" (click)="logout()">
-                  <i class="fa fa-sign-out mr-4" aria-hidden="true" title="logout"></i>Sign out
+                  Sign out
                 </a>
               </div>
             </div>
@@ -77,14 +77,16 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
             <li class="list-group-item">
               <a class="nav-link white" [routerLink]="['/courses']" aria-current="page">Online Courses</a>
             </li>
-            <li class="list-group-item"  *ngIf="service.userData">
+            <li class="list-group-item"  *ngIf="service.userData && service?.isIndividual">
               <a class="nav-link white" [routerLink]="['/mycourse']">My Learning Plan</a>
             </li>
-            <li class="list-group-item" *ngIf="service.userData">
-              <a  class="nav-link white" [routerLink]="['/myeducation']">My Educational</a>
+            <li class="list-group-item" *ngIf="service.userData && service?.isIndividual">
+              <a  class="nav-link white" [routerLink]="['/myeducation']">My Education</a>
             </li>
             <li class="list-group-item">
-              <a class="nav-link white" [routerLink]="['/myeducation']">Certification</a>
+              <a class="nav-link white" [routerLink]="['/myeducation']" *ngIf="service.userData && service?.isIndividual">
+                Certification
+              </a>
             </li>
             <li class="list-group-item" *ngIf="service.userData">
               <a  class="nav-link white" [routerLink]="['/account/profile']">My profile</a>

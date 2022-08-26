@@ -13,6 +13,8 @@ export class AppComponent implements OnInit {
   constructor(public service: ApiService, public router: Router) {}
 
   ngOnInit(): void {
+    console.log(this.service.userData);
+
     this.service.sendMessage({ refNo: '001' });
 
     this.service.getNewMessage().subscribe((message: any) => {
