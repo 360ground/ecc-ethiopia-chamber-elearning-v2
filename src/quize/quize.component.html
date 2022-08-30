@@ -1,19 +1,32 @@
 <div class="container-fluid" style="margin-top: 66px !important;">
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12">
-            <div class="card" style="padding: 39px !important;">
+            <div id="uppercard" class="card">
               <div class="row">
                 <div class="col-sm-12 col-md-8 col-lg-8">
                   <div>
                       <p style="color: #80868b;">
+                        <span id="upperText">
                           {{ state?.fullname }}: MODULE {{ state?.index+1 }}/{{state?.totalModules}}
+                        </span>
+                        <span style="float: right !important;" class="smaller">
+                          <div ngbDropdown class="d-inline-block">
+                            <span type="button"  id="dropdownBasic1" ngbDropdownToggle>
+                                <!-- menu option button -->
+                            </span>
+                            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                              <span ngbDropdownItem>Update profile</span>
+                              <span ngbDropdownItem>REMOVE FROM MY LEARNING PLAN</span>
+                            </div>
+                          </div>
+                        </span>
                       </p>
                       <h1 style="color: #3c4043; margin-top: 8px;">
                           {{ state?.name }}
                       </h1>
                   </div>
                 </div>
-                <div class="col-sm-12 col-md-1 col-lg-1">
+                <div class="col-sm-12 col-md-1 col-lg-1 wider">
                   <button type="button" class="btn btn-light">
                     <span style="color: #0d6efd; font-size: 21px !important;">
                       <i class="fa fa-share-alt mr-4" aria-hidden="true"></i>
@@ -21,7 +34,7 @@
                     </span>
                   </button>
                 </div>
-                <div class="col-sm-12 col-md-3 col-lg-3">
+                <div class="col-sm-12 col-md-3 col-lg-3 wider">
                   <button type="button" class="btn btn-light">
                     <span style="color: #0d6efd; font-size: 21px !important;">
                       <i class="fa fa-plus mr-4" aria-hidden="true"></i>
@@ -44,16 +57,24 @@
             <div class="question-container">
                 <div  class="card question-body" *ngFor="let qui of quizes; let i = index">
                     <h2 class="question-number">Question - {{i+1}}</h2>
-                    <p class="question-text" [innerHTML]="qui?.questiontext | htmlSanitaizer"></p>
-                    <mat-radio-group aria-labelledby="example-radio-group-label">
-                    <ul class="list-group">
-                        <li class="list-group-item item-module" *ngFor="let ans of qui?.answers; let j = index">
-                                <mat-radio-button class="example-radio-button" [value]="ans.id">
-                                     <p [innerHTML]="ans?.answer | htmlSanitaizer"></p>
-                                </mat-radio-button>
-                            </li>
-                        </ul>  
-                    </mat-radio-group>
+                    <div class="question-text" [innerHTML]="qui?.html.questiontext | htmlSanitaizer"></div>
+                      <ul class="list-group list-group list-group-flush">
+                        <li class="list-group-item" [ngClass]="qui?.selectedAnswer == ans?.id ? 'selected-list-group-item' : 'not-list-group-item'"
+                          *ngFor="let ans of qui?.html.answers; let j = index" (click)="selectAnswer(i,ans?.id)">
+                           
+                          <div class="row">
+                              <div class="col-sm-1 col-md-1 col-lg-1">
+                                <span class="mr-4" [ngClass]="qui?.selectedAnswer == ans?.id ? 'SelectedIndex' : 'notSelectedIndex'">
+                                  {{ j+ 1 }}
+                                </span>
+                              </div>
+                              <div class="col-sm-11 col-md-11 col-lg-11" style="padding-top: 15px !important;">
+                                <span [innerHTML]="ans?.answer | htmlSanitaizer"></span>
+                              </div>
+                          </div>
+
+                        </li>
+                      </ul>  
                 </div>      
             </div>
         </div>

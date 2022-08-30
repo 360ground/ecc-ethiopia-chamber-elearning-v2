@@ -20,7 +20,6 @@ export class QuizeComponent implements OnInit {
 
   ngOnInit(): void {
     this.state = this.location.getState();
-    console.log(this.state);
     this.getGetQuizes();
   }
 
@@ -29,14 +28,32 @@ export class QuizeComponent implements OnInit {
 
     const formData = new FormData();
 
-    formData.append('wstoken', environment.adminToken);
-    formData.append('wsfunction', 'mod_quiz_get_questions_as_json');
+    formData.append('wstoken', this.service.token);
+    formData.append('wsfunction', 'mod_quiz_get_attempt_data');
     formData.append('moodlewsrestformat', 'json');
-    formData.append('courseid', this.state.id);
+    formData.append('attemptid', '48');
+    formData.append('page', '0');
 
     this.service.main(formData).subscribe((response: any) => {
       this.quizes = response.questions;
-      console.log(this.quizes);
+
+      this.quizes.forEach((element) => {
+        let settings = JSON.parse(element.settings);
+
+        element.html = JSON.parse(element.html);
+        element.html.answers = Object.values(element.html.answers);
+        element.selectedAnswer = null;
+
+        if (+settings.shuffleanswers) {
+          element.html.answers = element.html.answers.sort(
+            (a: any, b: any) => 0.5 - Math.random()
+          );
+        }
+      });
     });
+  }
+
+  selectAnswer(index: any, value: any) {
+    this.quizes[index].selectedAnswer = value;
   }
 }
