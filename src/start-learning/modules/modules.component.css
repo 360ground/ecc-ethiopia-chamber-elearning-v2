@@ -63,3 +63,74 @@
   height: 500px !important;
   
 }
+
+
+.card {
+  padding-top: 39px !important;
+  padding-bottom: 39px !important;
+}
+
+.smaller {
+  display: none !important;
+}
+.wider {
+  display: block !important;
+}
+
+@media only screen and (max-width: 760px) {
+  .wider {
+      display: none !important;
+  }
+
+  .smaller {
+      display: block !important;
+  }
+  
+  .card {
+    padding: 0px !important;
+  }
+
+  h1{
+    font: 300 1.5rem/2.1rem Google Sans,Arial,sans-serif !important;
+  }
+
+  #upperText {
+    color: #80868b;
+    font: 500 1.2rem/1.6rem Google Sans,Arial,sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    width: 80%;
+    font-size: 11px;
+    line-height: 5px;
+  }
+
+  .dropdown-item {
+    font-size: 15px !important;
+  }
+
+  #dropdownBasic1 {
+    border-radius: 0px !important;
+  }
+
+  .dropdown-toggle::after {
+    display: none !important;
+  }
+
+  .accordion-body {
+    padding: 0px !important;
+  }
+
+  ngb-accordion {
+    margin-bottom: 24px !important;
+  }
+
+  .accordion-button:not(.collapsed) {
+    background-color: transparent !important;
+    color: black !important;
+  }
+
+  Button:hover {
+    color: #3c4043 !important;
+  }
+}

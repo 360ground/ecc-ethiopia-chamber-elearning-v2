@@ -9,14 +9,15 @@
                         <span id="upperText">
                           {{ state?.fullname }}: MODULE {{ state?.index+1 }}/{{state?.totalModules}}
                         </span>
-                        <span style="float: right !important;" class="smaller">
+                        <span style="float: right !important; margin-top: -10px !important; font-size: 20px !important;" class="smaller">
                           <div ngbDropdown class="d-inline-block">
                             <span type="button"  id="dropdownBasic1" ngbDropdownToggle>
-                                <!-- menu option button -->
+                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                             </span>
                             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                              <span ngbDropdownItem>Update profile</span>
-                              <span ngbDropdownItem>REMOVE FROM MY LEARNING PLAN</span>
+                              <span ngbDropdownItem>remove from my learning plan</span>
+                              <div class="dropdown-divider"></div>
+                              <span ngbDropdownItem>Share</span>
                             </div>
                           </div>
                         </span>

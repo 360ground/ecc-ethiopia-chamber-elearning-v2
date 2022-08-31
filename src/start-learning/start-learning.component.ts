@@ -29,6 +29,8 @@ export class StartLearningComponent implements OnInit {
     let index = 1;
     this.state = this.location.getState();
 
+    console.log(this.state);
+
     if ('activities' in this.state) {
       this.courseDetail = this.state.activities;
     } else {
