@@ -38,7 +38,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'startquiz',
+    path: 'quizes',
     loadChildren: () =>
       import('../quize/quize.module').then((m) => m.QuizeModule),
   },

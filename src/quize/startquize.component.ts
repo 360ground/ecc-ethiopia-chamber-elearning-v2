@@ -4,11 +4,11 @@ import { ApiService } from 'src/service/api.service';
 import { Location } from '@angular/common';
 
 @Component({
-  selector: 'app-quize',
-  templateUrl: './quize.component.html',
-  styleUrls: ['./quize.component.css'],
+  selector: 'app-startquize',
+  templateUrl: './startquize.component.html',
+  styleUrls: ['./startquize.component.css'],
 })
-export class QuizeComponent implements OnInit {
+export class StartQuizeComponent implements OnInit {
   public quizes: any[] = [];
   public isLoading: Boolean = false;
   public adminToken: any = environment.adminToken;
@@ -20,6 +20,7 @@ export class QuizeComponent implements OnInit {
 
   ngOnInit(): void {
     this.state = this.location.getState();
+    this.state = this.state.data;
     this.getGetQuizes();
   }
 
@@ -31,7 +32,7 @@ export class QuizeComponent implements OnInit {
     formData.append('wstoken', this.service.token);
     formData.append('wsfunction', 'mod_quiz_get_attempt_data');
     formData.append('moodlewsrestformat', 'json');
-    formData.append('attemptid', '48');
+    formData.append('attemptid', this.state.attemptid);
     formData.append('page', '0');
 
     this.service.main(formData).subscribe((response: any) => {

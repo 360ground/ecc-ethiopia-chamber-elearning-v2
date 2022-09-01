@@ -27,7 +27,6 @@ export class ModulesComponent implements OnInit {
   openUrl(index: any, data: any) {
     this.currentItem = null;
     this.currentItem = data;
-    console.log(data);
 
     let modnames = ['page', 'url', 'resource'];
 

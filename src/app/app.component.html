@@ -75,24 +75,24 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
           <ul class="list-group list-group-flush" style="padding-left: 14PX;
           padding-right: 14px;">
             <li class="list-group-item">
-              <a class="nav-link white" [routerLink]="['/courses']" aria-current="page">Online Courses</a>
+              <a class="nav-link white" (click)="navigate('/courses')"  aria-current="page">Online Courses</a>
             </li>
             <li class="list-group-item"  *ngIf="service.userData && service?.isIndividual">
-              <a class="nav-link white" [routerLink]="['/mycourse']">My Learning Plan</a>
+              <a class="nav-link white" (click)="navigate('mycourse')">My Learning Plan</a>
             </li>
             <li class="list-group-item" *ngIf="service.userData && service?.isIndividual">
-              <a  class="nav-link white" [routerLink]="['/myeducation']">My Education</a>
+              <a  class="nav-link white" (click)="navigate('myeducation')">My Education</a>
             </li>
             <li class="list-group-item">
-              <a class="nav-link white" [routerLink]="['/myeducation']" *ngIf="service.userData && service?.isIndividual">
+              <a class="nav-link white" (click)="navigate('myeducation')" *ngIf="service.userData && service?.isIndividual">
                 Certification
               </a>
             </li>
             <li class="list-group-item" *ngIf="service.userData">
-              <a  class="nav-link white" [routerLink]="['/account/profile']">My profile</a>
+              <a  class="nav-link white" (click)="navigate('/account/profile')">My profile</a>
             </li>
             <li class="list-group-item" *ngIf="service.userData">
-              <a class="nav-link white" [routerLink]="['/account/change-password']">Change Password</a>
+              <a class="nav-link white" (click)="navigate('/account/change-password')">Change Password</a>
             </li>  
             <li class="list-group-item" *ngIf="service.userData">
               <a (click)="logout()">
@@ -100,10 +100,10 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
               </a>
             </li>
             <li class="list-group-item"  *ngIf="!service.userData">
-              <a class="nav-link white" [routerLink]="['/account/login']" aria-current="page">Login</a>
+              <a class="nav-link white" (click)="navigate('/account/login')" aria-current="page">Login</a>
             </li>
             <li class="list-group-item"  *ngIf="!service.userData">
-              <a class="nav-link btn btn-primary signupBtn" [routerLink]="['/account/signup']" aria-current="page">Sign up</a>
+              <a class="nav-link btn btn-primary signupBtn" (click)="navigate('/account/signup')" aria-current="page">Sign up</a>
             </li>
           </ul>
         </div>

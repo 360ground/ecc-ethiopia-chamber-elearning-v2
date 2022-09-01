@@ -27,4 +27,13 @@ export class MyCourseComponent implements OnInit {
   navigate(data: any) {
     this.router.navigate(['/learning'], { state: { course: data } });
   }
+
+  removeCourse(course: any) {
+    if (
+      confirm(
+        `are you sure want to ${course.displayname} from your learning plan ?`
+      )
+    ) {
+    }
+  }
 }

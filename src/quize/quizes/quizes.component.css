@@ -1,0 +1,99 @@
+    /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 10px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(156, 153, 153); 
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: gray; 
+  }
+
+.list-group {
+    border-radius: 0px !important;
+}
+
+  .smaller {
+    display: none !important;
+  }
+  .wider {
+    display: block !important;
+  }
+
+  .card {
+    padding-top: 39px !important;
+    padding-bottom: 39px !important;
+
+  }
+
+  @media only screen and (max-width: 760px) {
+    .wider {
+        display: none !important;
+    }
+
+    .smaller {
+        display: block !important;
+    }
+
+    .question-body {
+      padding: 10px !important;
+    }
+
+    .question-text{
+      font-size: 18px !important;
+      line-height: 1.8rem !important;
+    }
+
+    .upperSubText{
+      font: 300 1.5rem/2.1rem Google Sans,Arial,sans-serif !important;
+    }
+
+    .card{
+      padding: 15px !important;
+    }
+
+    #upperText {
+      color: #80868b;
+      font: 500 1.2rem/1.6rem Google Sans,Arial,sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      width: 80%;
+      font-size: 11px;
+      line-height: 5px;
+    }
+
+    .dropdown-item {
+      font-size: 15px !important;
+    }
+
+    #dropdownBasic1 {
+      border-radius: 0px !important;
+    }
+
+    .dropdown-toggle::after {
+      display: none !important;
+    }
+
+  
+  }
+
+  mat-icon {
+    cursor: pointer !important;
+  }
+
+  .loadingText {
+    text-align: center !important; 
+    font-weight: lighter !important;
+    color: #80868b !important;
+  }
+
+  .lowercard {
+    margin-top: -40px !important;
+  }

@@ -3,27 +3,32 @@ import { MatOptionModule } from '@angular/material/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from 'src/service/AuthGuard';
 import { SharedModule } from 'src/shared/shared.module';
-import { QuizeComponent } from './quize.component';
-import {MatRadioModule} from '@angular/material/radio';
-
+import { StartQuizeComponent } from './startquize.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { QuizesComponent } from './quizes/quizes.component';
+import { MatIconModule } from '@angular/material/icon';
 
 const routes: Routes = [
   {
     path: '',
-    component: QuizeComponent,
-    canActivate: [AuthGuard]
+    component: QuizesComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'start',
+    component: StartQuizeComponent,
+    canActivate: [AuthGuard],
   },
 ];
 
 @NgModule({
-  declarations: [
-    QuizeComponent
-  ],
+  declarations: [StartQuizeComponent, QuizesComponent],
   imports: [
     SharedModule,
-    MatRadioModule,
-    RouterModule.forChild(routes)
+    MatExpansionModule,
+    MatIconModule,
+    RouterModule.forChild(routes),
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class QuizeModule { }
+export class QuizeModule {}

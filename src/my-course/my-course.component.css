@@ -1,7 +1,7 @@
 .empty-card{
     padding: 24px;
     background-color: aliceblue;
-    width: 443px;
+    width: 450px !important;
     text-align: center;
     color: gray;
     font-weight: 400;
@@ -41,4 +41,61 @@
     transition: transform .2s,filter .2s,box-shadow .4s;
     width: 100%;
     z-index: 1;
+    padding-top: 10px !important;
 }
+
+.upperCard {
+    border-bottom: 1px solid #e8eaed !important;
+}
+
+.lowerCard {
+    /* margin-top: 0px !important; */
+    padding: 25px !important;
+    min-height: 500px !important;
+    height: 500px !important
+}
+
+.upperText {
+    color: #3c4043;
+    font: normal 2.8rem/3.8rem Google Sans,Arial,sans-serif;
+    margin: 0;
+    padding-bottom: 0px;
+}
+
+.lowerText {
+    color: #5f6368;
+    font: normal 20px/2.6rem Google Sans,Arial,sans-serif;
+    padding: 0;
+}
+
+.removeButton {
+    right: 13px;
+    background: none;
+    border: 0;
+    margin: 0;
+    outline: 0;
+    padding: 0;
+    position: absolute;
+    top: 16px;
+    z-index: 3;
+    cursor: pointer !important;
+    color: #80868b;
+    font-size: 20px !important;
+    opacity: .6;
+    transition: color .35s ease;
+}
+
+.removeButton:hover{
+    color: #0b5ed7 !important;
+    border-color: #0b5ed7 !important;
+}
+
+@media only screen and (max-width: 760px) {
+    .upperText {
+        font: normal 31px/24px Google Sans,Arial,sans-serif !important;
+    }
+
+    .empty-card {
+      width: 278px !important;
+    }
+}    
