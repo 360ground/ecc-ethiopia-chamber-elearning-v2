@@ -8,6 +8,8 @@ import { AuthGuard } from 'src/service/AuthGuard';
 import { NgbAlertConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ConfirmComponent } from './confirm/confirm.component';
+import { NewPasswordComponent } from './new-password/new-password.component';
 
 const routes: Routes = [
   {
@@ -32,6 +34,14 @@ const routes: Routes = [
     path: 'forget',
     component: ForgetPasswordComponent,
   },
+  {
+    path: 'confirm/:secret/:username',
+    component: ConfirmComponent,
+  },
+  {
+    path: 'setnewpassword/:token/:id',
+    component: NewPasswordComponent,
+  },
 ];
 
 @NgModule({
@@ -41,6 +51,8 @@ const routes: Routes = [
     UpdateProfileComponent,
     ForgetPasswordComponent,
     ChangePasswordComponent,
+    ConfirmComponent,
+    NewPasswordComponent,
   ],
   imports: [SharedModule, RouterModule.forChild(routes)],
   providers: [NgbAlertConfig],

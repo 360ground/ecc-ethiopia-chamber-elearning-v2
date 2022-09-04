@@ -1,0 +1,16 @@
+<div *ngIf="!confirmationErrors.length">
+    <p *ngIf="isLoading" style="text-align: center !important;">
+        <span>confirming ...</span>
+    </p>
+    <p *ngIf="!isLoading">
+        <span>
+            Thank you {{ successData?.fullname }}. your account is now activated.
+        </span>
+    </p>
+</div>
+
+<div *ngIf="confirmationErrors.length" class="mt-4"  style="margin-top: 74px !important;">
+    <p *ngFor="let errors of confirmationErrors">
+        <ngb-alert type="warning">{{ errors.message }}</ngb-alert>
+    </p>
+</div>
