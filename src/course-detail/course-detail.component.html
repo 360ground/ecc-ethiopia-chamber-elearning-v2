@@ -4,26 +4,37 @@
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
-                    <h1 class="course-title">{{state?.fullname}}</h1>
-                    <p class="course-subtitle">{{state?.shortname}}</p>
+                    <h1 class="course-title">{{state?.name}}</h1>
+                    <p class="course-subtitle">{{state?.course_code}}</p>
                     <!-- <p class="gray mb-4">Presented By : {{state?.contacts[0]?.fullname}}</p> -->
                     <p class="mt-4">
-                        <button type="button" *ngIf="!isEnrolledForThisCourse" class="btn btn-primary" style="border-radius: 0px; width: 200px;
-                        padding: 14px;"  [disabled]="disabled" (click)="startLearning()">
-                            <i class="fa fa-spinner" aria-hidden="true" *ngIf="disabled"></i>
-                            <span style="font-weight: 500;">Start  free course</span>
-                        </button>
-    
-                        <button type="button" *ngIf="isEnrolledForThisCourse" class="btn btn-primary" style="border-radius: 0px; width: 200px;
-                        padding: 14px;"  [disabled]="disabled" (click)="startLearning()">
-                            <i class="fa fa-spinner" aria-hidden="true" *ngIf="disabled"></i>
-                            <span style="font-weight: 500;">Continue learing</span>
-                        </button>
+                        <span *ngIf="!isEnrolledForThisCourse">
+                            <button type="button" *ngIf="state?.extraInfo" class="btn btn-primary" style="border-radius: 0px; width: 200px;
+                            padding: 14px;"  [disabled]="enrolling" (click)="startLearning()">
+                                <i class="fa fa-spinner" style="margin-right: 10px !important;" aria-hidden="true" *ngIf="disabled"></i>
+                                <span style="font-weight: 500;">Start this course</span>
+                            </button>
+                            <span style="font-weight: 500; width: 200px;" *ngIf="!state?.extraInfo"
+                            class="btn btn-primary disabled_button disabled">Start this course</span>
+                        </span>
+
+                        <span *ngIf="isEnrolledForThisCourse">
+                            <button type="button" class="btn btn-primary" *ngIf="state?.extraInfo" style="border-radius: 0px; width: 200px;
+                            padding: 14px;"  [disabled]="enrolling" (click)="startLearning()">
+                                <i class="fa fa-spinner" style="margin-right: 10px !important;" 
+                                aria-hidden="true" *ngIf="enrolling"></i>
+                                <span style="font-weight: 500;">Continue learing</span>
+                            </button>
+                            <span style="font-weight: 500; width: 200px;" class="btn btn-primary disabled_button disabled"
+                             *ngIf="!state?.extraInfo">Continue learing</span>
+                        </span>
                     </p>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 smaller">
-                    <img class="card-img-top" [src]="state?.overviewfiles[0]?.fileurl + '?token='+ adminToken" [alt]="state?.overviewfiles[0]?.filename"
-                    width="100%" height="100%">
+                    <!-- <img class="card-img-top" [ngStyle]="{'background-image': 'url(' + state?.image_download_url + ')'}"> -->
+                    <img class="card-img-top" style="height: 220px !important;"
+                    [ngStyle]="{'background-image': 'url(' + state.image_download_url + ')'}"
+                    alt="" width="100%" height="30%">
                 </div>
             </div>
         </div>
@@ -36,7 +47,7 @@
     
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" *ngIf="state?.extraInfo?.attributes">
                         <div class="row">
                             <div class="col-sm-1 col-md-1 col-lg-1 smaller">
                                 <div class="vr"></div>
@@ -45,28 +56,34 @@
                                 <p class="lists">
                                     <span><i class="icons1 fa fa-bars" aria-hidden="true"></i>
                                     </span>
-                                    <span>Modules : {{ getCustomeFieldValue(state?.customfields, 'total_number_of_topic') }}</span>
+                                    <span>Modules : {{ state?.extraInfo?.attributes.total_number_of_topic }}</span>
                                 </p>
                                 <p class="lists">
                                     <span><i class="icons1 fa fa-clock-o" aria-hidden="true"></i>
                                     </span>
-                                    <span>Estimated Hours : {{ getCustomeFieldValue(state?.customfields, 'eastimated_completion_hour') }}</span>
+                                    <span>Estimated Hours : {{ state?.extraInfo?.attributes.eastimated_completion_hour }}</span>
                                 </p>
                                 <p class="lists">
                                     <span><i class="icons1 fa fa-user" aria-hidden="true"></i>
                                     </span>
-                                    <span>{{ state?.customfields[3]?.valueraw }}</span>
+                                    <span>{{ state?.extraInfo?.attributes.course_belongs_to }}</span>
                                 </p>
                                 <p class="lists">
                                     <span><i class="icons1 fa fa-money" aria-hidden="true"></i>
                                     </span>
-                                    <span>{{ getCustomeFieldValue(state?.customfields, 'isfree') ? 'Free' :  getCustomeFieldValue(state?.customfields, 'price')}}</span>
+                                    <span *ngIf="state?.extraInfo?.attributes.course_fee == 'Free'">
+                                        Free
+                                    </span>
+
+                                    <span *ngIf="state?.extraInfo?.attributes.course_fee !== 'Free'">
+                                        {{ state?.extraInfo?.attributes.course_fee | number }} ETB
+                                    </span>
                                 </p>
                             </div>
                         </div>    
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" *ngIf="courseFeatures">
-                        <div *ngFor="let feature of courseFeatures">
+                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" *ngIf="state?.extraInfo?.features">
+                        <div *ngFor="let feature of state?.extraInfo?.features; let i = index;">
                             <p class="lists">
                                 <span>
                                     <i class="icons2 fa fa-check-circle" aria-hidden="true"></i>
@@ -77,17 +94,16 @@
                             </p>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="col-xs-12 col-sm-12" [ngClass]="state?.extraInfo ? 'col-md-6 col-lg-6' : 'col-md-12 col-lg-12'">
                         <div class="row">
                             <div class="col-sm-1 col-md-1 col-lg-1 smaller">
                                 <div class="vr"></div>
                             </div>
                             <hr class="mt-4 mb-4 wider" />
-
                             <div class="col-sm-11 col-md-11 col-lg-11">
                                 <h1 class="mb-4" style="font-weight: lighter;">About this Course</h1>
                                 <p style="color: #9aa0a6; margin-top: 10px !important; font-size: 22px;line-height: 32px;" 
-                                [innerHTML]="readmore ? (state?.short | htmlSanitaizer) : (state?.summary | htmlSanitaizer)">
+                                [innerHTML]="readmore ? (state?.short | htmlSanitaizer) : (state?.public_description | htmlSanitaizer)">
                                 </p>
                                 <p>
                                     <button type="button" class="btn btn-light" (click)="readmore = !readmore"> 
@@ -119,7 +135,7 @@
                        </p>
                        <div class="steps row">
                             <div class="col-sm-11 col-xs-11 col-md-10 col-lg-10">
-                                Learn all the Lessons in this course and earn the required skills.
+                                Register by providing the necessary information. If you already have registered, login by using your credentials.
                             </div>
                             <div class="col-sm-12 col-xs-12 col-md-2 col-lg-2">
                                 <mat-icon aria-hidden="false" aria-label="" class="arrow smaller" fontIcon="arrow_right">
@@ -139,7 +155,7 @@
                        </p>
                        <div class="steps row">
                             <div class="col-sm-11 col-xs-11 col-md-10 col-lg-10">
-                                Pass the final 40-question exam and get certified.
+                                Find the course you are interested in taking and enroll
                             </div>
                             <div class="col-sm-12 col-xs-12 col-md-2 col-lg-2">
                                 <mat-icon aria-hidden="false" aria-label="" class="arrow smaller" fontIcon="arrow_right">
@@ -158,7 +174,7 @@
                            </span>
                        </p>
                        <p class="steps">
-                           Download and showcase your new qualification on LinkedIn and your CV.
+                        Complete all the course materials, Quizzes and assessments to achieve your certifications
                        </p>
                    </div>
                 </div> 
@@ -199,13 +215,18 @@
                                     text-transform: capitalize;">{{activity.name}}</p>
                                     <p style="color: #3c4043;
                                     font: 300 14px/18px Roboto,Arial,Helvetica,serif;
-                                    margin-bottom: 10px;">{{ activity?.modules.length }} LESSONS</p>
+                                    margin-bottom: 10px;">{{ activity?.items.length }} LESSONS</p>
                                     <hr class="mb-4" />
                                     <div class="innerModuleCards">
-                                        <p *ngFor="let subActivity of activity?.modules; let i = index" 
-                                        style="color: #1a73e8;font: 400 14px/22px Google Sans,Arial,sans-serif; margin-bottom: 16px;transition: color .25s ease; cursor: pointer;">
-                                            {{ subActivity?.name }}
-                                        </p>
+                                        
+                                            <a *ngFor="let subActivity of activity?.items; let i = index" target="_blank" [href]="subActivity.html_url"
+                                            style="color: #1a73e8;font: 400 14px/22px Google Sans,Arial,sans-serif; 
+                                                margin-bottom: 16px;transition: color .25s ease; cursor: pointer;text-decoration: none !important;">
+                                                <p>
+                                                    {{ subActivity?.title }}
+                                                </p>
+                                            </a>
+                                        
                                     </div>
                                 </div>
                             </div>

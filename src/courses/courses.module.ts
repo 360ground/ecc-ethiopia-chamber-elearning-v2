@@ -11,6 +11,7 @@ import {
   NgbModalConfig,
 } from '@ng-bootstrap/ng-bootstrap';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { CommonModule } from '@angular/common';
 
 const routes: Routes = [
   {
@@ -23,6 +24,7 @@ const routes: Routes = [
   declarations: [CoursesComponent],
   imports: [
     SharedModule,
+    CommonModule,
     MatIconModule,
     MatSidenavModule,
     RouterModule.forChild(routes),

@@ -8,7 +8,7 @@
                 <div class="card" style="padding: 22px; margin-top: 86px;">
                     <div *ngIf="backendSignupError.length">
                         <div *ngFor="let alert of backendSignupError">
-                            <ngb-alert type="danger" [dismissible]="false">{{ alert.message }}</ngb-alert>
+                            <ngb-alert type="danger" [dismissible]="false">{{ alert }}</ngb-alert>
                         </div>
                         <hr class="mb-4 mt-4" />
                     </div>

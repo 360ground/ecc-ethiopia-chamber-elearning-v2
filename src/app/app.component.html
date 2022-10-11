@@ -25,14 +25,14 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
             <div ngbDropdown class="d-inline-block">
               <span type="button"  id="dropdownBasic1" ngbDropdownToggle>
                   <img [src]="service.userData?.profileimageurl" style="width: 29px; height: 30px;border-radius: 50%;margin-right: 5px;" />
-                  welcome, {{ service.userData?.fullname }} 
+                  welcome, {{ service.userData?.name }} 
               </span>
               <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                 <a ngbDropdownItem [routerLink]="['/mycourse']" *ngIf="service.userData && service?.isIndividual">My Learning Plan</a>
-                <a ngbDropdownItem [routerLink]="['/myeducation']" *ngIf="service.userData && service?.isIndividual">My Education</a>
+                <!-- <a ngbDropdownItem [routerLink]="['/myeducation']" *ngIf="service.userData && service?.isIndividual">My Education</a>
                 <a ngbDropdownItem [routerLink]="['/']" *ngIf="service.userData && service?.isIndividual">My Certification</a>
                 <a ngbDropdownItem  [routerLink]="['/account/profile']">Update profile</a>
-                <a ngbDropdownItem  [routerLink]="['/account/change-password']">Change Password</a>
+                <a ngbDropdownItem  [routerLink]="['/account/change-password']">Change Password</a> -->
                 <div class="dropdown-divider"></div>
                 <a ngbDropdownItem href="#" (click)="logout()">
                   Sign out
@@ -42,7 +42,9 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
         </span>
 
         <span *ngIf="!service.userData">
-          <a class="nav-link white" [routerLink]="['/account/login']" aria-current="page">Login</a>
+          <a class="nav-link white"
+          href="{{variables.canvasUrl}}/login/oauth2/auth?client_id={{variables.canvasClient_id}}&response_type=code&redirect_uri={{variables.redirectUrlAfterLoginIncanvas}}" aria-current="page">Login</a>
+          <!-- [routerLink]="['/account/login']" -->
         </span>
       </span>
       <span class="navbar-text" style="margin-right: 32px;">

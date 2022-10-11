@@ -19,8 +19,7 @@ export class ApiService {
   public message$: BehaviorSubject<string> = new BehaviorSubject('');
   public isIndividual: Boolean = true;
 
-  constructor(public http: HttpClient) {
-  }
+  constructor(public http: HttpClient) {}
 
   // login to the moodle site
   login(data: any) {
@@ -42,6 +41,18 @@ export class ApiService {
   // this function is used for main request sending  for the rest of moodle
   main(data: any) {
     return this.http.post(environment.baseUrl, data);
+  }
+
+  mainCanvas(endpoint: any, method: any, data: any): any {
+    if (method == 'get') {
+      return this.http.get(`${environment.baseUrlBackend}/${endpoint}`);
+    } else if (method == 'post') {
+      return this.http.post(`${environment.baseUrlBackend}/${endpoint}`, data);
+    } else if (method == 'delete') {
+      return this.http.delete(`${environment.baseUrlBackend}/${endpoint}`);
+    } else {
+      console.log('lala');
+    }
   }
 
   //socket io

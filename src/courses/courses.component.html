@@ -19,12 +19,12 @@
                     <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
                         <h1 class="filter-header mb-4">CATEGORIES</h1>
                         <div style="color: gray; padding-left: 5px !important">
-                            <p *ngFor="let categories of courseCategories; let i as index">
+                            <span *ngFor="let categories of courseCategories; let i as index">
                                 <mat-checkbox color="primary" class="example-margin" 
                                     (change)="setFilterCategories($event.checked,categories.id)">
                                     {{categories.name}}
                                 </mat-checkbox>
-                            </p>
+                            </span>
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
@@ -85,32 +85,33 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-4 col-lg-4 mb-4 mr-2" *ngFor="let course of courses; let i = index">
                         <div class="card">
-                            <img class="card-img-top" style="height: 220px !important" [src]="course?.overviewfiles[0]?.fileurl + '?token='+ adminToken"
-                                [alt]="course?.overviewfiles[0]?.filename" width="100%" height="30%">
+                            <img class="card-img-top" style="height: 220px !important;"
+                                [ngStyle]="{'background-image': 'url(' + course.image_download_url + ')'}"
+                                alt="" width="100%" height="30%">
     
                             <div class="card-body">
                                 <h5 class="card-title">
-                                    <a routerLink="/detail/{{course?.id}}" [state]="course" 
+                                    <a routerLink="/detail/{{course?.id}}/{{i}}" [state]="course" 
                                         style="font-size: 15px;color: #3c4043; font-weight: 500; text-decoration: none !important;">
-                                        {{course?.displayname}}
+                                        {{course?.name}}
                                     </a>
                                 </h5>
-                                <p class="mt-4" style="color: gray;">
+                                <p class="mt-4" style="color: gray; font-size: 11px;">
                                     <span>
                                         <span><i class="icons1 fa fa-bars" aria-hidden="true"></i>
                                         </span>
-                                        <span>Modules : {{ getCustomeFieldValue(course?.customfields,'total_number_of_topic') }}</span>
+                                        <span>Code : {{ course.course_code }}</span>
                                     </span>
     
                                     <span>
                                         <span><i class="icons1 fa fa-clock-o" aria-hidden="true"></i>
                                         </span>
-                                        <span>Hours : {{ getCustomeFieldValue(course?.customfields,'eastimated_completion_hour') }}</span>
+                                        <span>Format : {{ course.course_format | uppercase }}</span>
                                     </span>
                                 </p>
                                 <p>
                                     <span style="float: right !important; color: #1a73e8 !important; margin-right: 13px; margin-top: 14px;">
-                                        <a routerLink="/detail/{{course?.id}}" [state]="course">
+                                        <a routerLink="/detail/{{course?.id}}/{{i}}" [state]="course">
                                             <mat-icon>arrow_forward</mat-icon>
                                         </a>     
                                     </span>
@@ -132,12 +133,12 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
                     <h1 class="gray mb-4">CATEGORIES</h1>
                     <div style="color: gray; padding-left: 5px !important">
-                        <p *ngFor="let categories of courseCategories; let i as index">
+                        <span *ngFor="let categories of courseCategories; let i as index">
                             <mat-checkbox color="primary" class="example-margin" 
                                 (change)="setFilterCategories($event.checked,categories.id)">
                                 {{categories.name}}
                             </mat-checkbox>
-                        </p>
+                        </span>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-12 col-lg-12 mb-4 mb-4">
@@ -212,17 +213,19 @@
             <div class="row">
                 <div class="col-sm-12 col-md-5 col-lg-5 mb-4 mr-2" *ngFor="let course of courses; let i = index">
                     <div class="card">
-                        <img class="card-img-top" style="height: 220px !important" [src]="course?.overviewfiles[0]?.fileurl + '?token='+ adminToken"
-                            [alt]="course?.overviewfiles[0]?.filename" width="100%" height="30%">
-
+                        <!-- <img class="card-img-top" style="height: 220px !important" [src]="course?.overviewfiles[0]?.fileurl + '?token='+ adminToken"
+                            [alt]="course?.overviewfiles[0]?.filename" width="100%" height="30%"> -->
+                        <img class="card-img-top" style="height: 220px !important;"
+                            [ngStyle]="{'background-image': 'url(' + course.image_download_url + ')'}"
+                            alt="{course?.name}">    
                         <div class="card-body">
                             <h5 class="card-title">
                                 <a routerLink="/detail/{{course?.id}}" [state]="course" 
                                     style="font-size: 15px;color: #3c4043; font-weight: 500; text-decoration: none !important;">
-                                    {{course?.displayname}}
+                                    {{course?.name}}
                                 </a>
                             </h5>
-                            <p class="mt-4" style="color: gray;">
+                            <!-- <p class="mt-4" style="color: gray;">
                                 <span>
                                     <span><i class="icons1 fa fa-bars" aria-hidden="true"></i>
                                     </span>
@@ -234,7 +237,7 @@
                                     </span>
                                     <span>Estimated Hours : {{ getCustomeFieldValue(course?.customfields, 'eastimated_completion_hour') }}</span>
                                 </span>
-                            </p>
+                            </p> -->
                             <p>
                                 <span style="float: right !important; color: #1a73e8 !important; margin-right: 13px; margin-top: 14px;">
                                     <a routerLink="/detail/{{course?.id}}" [state]="course">

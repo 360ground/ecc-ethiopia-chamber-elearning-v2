@@ -5,6 +5,8 @@ import { NgbAlertConfig } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/service/api.service';
 
+import jsonToFormData from '@ajoelp/json-to-formdata';
+
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -69,16 +71,21 @@ export class SignupComponent implements OnInit {
       this.disable = true;
       let payload = this.getPayload(name);
 
-      this.service.main(payload).subscribe((response: any) => {
-        if (response.success) {
-          // this.router.navigate(['/courses']);
-          this.registrationSuccess = true;
-        } else {
-          this.backendSignupError = [];
-          this.backendSignupError = response.warnings;
-        }
-        this.disable = false;
-      });
+      // payload = jsonToFormData(payload);
+
+      this.service
+        .mainCanvas('register', 'post', payload)
+        .subscribe((response: any) => {
+          if (response.status) {
+            // this.router.navigate(['/courses']);
+            this.registrationSuccess = true;
+            this.disable = false;
+          } else {
+            this.backendSignupError = [];
+            this.backendSignupError = response.message;
+            this.disable = false;
+          }
+        });
     }
   }
 
@@ -95,38 +102,117 @@ export class SignupComponent implements OnInit {
   getPayload(name: any) {
     const formData = new FormData();
 
-    formData.append('wstoken', environment.adminToken);
-    formData.append('wsfunction', 'auth_email_signup_user');
-    formData.append('moodlewsrestformat', 'json');
-    // formData.append('redirect', environment.afterSignupRedirectUrl);
+    // formData.append('wstoken', environment.adminToken);
+    // formData.append('wsfunction', 'auth_email_signup_user');
+    // formData.append('moodlewsrestformat', 'json');
+    // // formData.append('redirect', environment.afterSignupRedirectUrl);
+    // let keys = Object.keys(this.getControls(name).value);
+    // let values = Object.values(this.getControls(name).value);
+    // let outerIndex = 0;
 
-    let keys = Object.keys(this.getControls(name).value);
-    let values = Object.values(this.getControls(name).value);
-    let outerIndex = 0;
+    // let exclude = ['username', 'firstname', 'lastname', 'email', 'password'];
 
-    let exclude = ['username', 'firstname', 'lastname', 'email', 'password'];
+    // keys.forEach((element, index) => {
+    //   if (exclude.includes(element)) {
+    //     formData.append(element, String(values[index]));
+    //   } else {
+    //     if (values[index]) {
+    //       formData.append(`customprofilefields[${outerIndex}][type]`, 'string');
+    //       formData.append(
+    //         `customprofilefields[${outerIndex}][name]`,
+    //         `profile_field_${element}`
+    //       );
+    //       formData.append(
+    //         `customprofilefields[${outerIndex}][value]`,
+    //         String(values[index])
+    //       );
 
-    keys.forEach((element, index) => {
-      if (exclude.includes(element)) {
-        formData.append(element, String(values[index]));
-      } else {
-        if (values[index]) {
-          formData.append(`customprofilefields[${outerIndex}][type]`, 'string');
-          formData.append(
-            `customprofilefields[${outerIndex}][name]`,
-            `profile_field_${element}`
-          );
-          formData.append(
-            `customprofilefields[${outerIndex}][value]`,
-            String(values[index])
-          );
+    //       outerIndex++;
+    //     }
+    //   }
+    // });
 
-          outerIndex++;
-        }
-      }
-    });
+    // return formData;
 
-    return formData;
+    if (name == 'individual') {
+      let payload = {
+        user: {
+          name:
+            this.getControls(`${name}.firstname`).value +
+            ' ' +
+            this.getControls(`${name}.lastname`).value,
+          short_name: this.getControls(`${name}.username`).value,
+          sortable_name:
+            this.getControls(`${name}.firstname`).value +
+            ' ' +
+            this.getControls(`${name}.lastname`).value,
+          skip_registration: true,
+        },
+        pseudonym: {
+          unique_id: this.getControls(`${name}.email`).value,
+          password: this.getControls(`${name}.password`).value,
+          send_confirmation: true,
+        },
+        communication_channel: {
+          type: 'email',
+          address: this.getControls(`${name}.email`).value,
+          skip_confirmation: true,
+        },
+        custom_data: {
+          data: {
+            phonenumber: this.getControls(`${name}.phonenumber`).value,
+            accountType: 'individual',
+          },
+        },
+      };
+
+      return payload;
+    } else {
+      let payload = {
+        user: {
+          name:
+            this.getControls(`${name}.firstname`).value +
+            ' ' +
+            this.getControls(`${name}.lastname`).value,
+          short_name: this.getControls(`${name}.username`).value,
+          sortable_name:
+            this.getControls(`${name}.firstname`).value +
+            ' ' +
+            this.getControls(`${name}.lastname`).value,
+          skip_registration: true,
+        },
+        pseudonym: {
+          unique_id: this.getControls(`${name}.email`).value,
+          password: this.getControls(`${name}.password`).value,
+          send_confirmation: true,
+        },
+        communication_channel: {
+          type: 'email',
+          address: this.getControls(`${name}.email`).value,
+          skip_confirmation: true,
+        },
+        custom_data: {
+          data: {
+            phonenumber: this.getControls(`${name}.phonenumber`).value,
+            organizationName: this.getControls(`${name}.organizationName`)
+              .value,
+            representativeFullName: this.getControls(
+              `${name}.representativeFullName`
+            ).value,
+            representativeRole: this.getControls(`${name}.representativeRole`)
+              .value,
+            sector: this.getControls(`${name}.sector`).value,
+            NoOfEmployee: this.getControls(`${name}.NoOfEmployee`).value,
+            isaMember: this.getControls(`${name}.isaMember`).value,
+            membershipType: this.getControls(`${name}.membershipType`).value,
+            memberId: this.getControls(`${name}.memberId`).value,
+            accountType: 'company',
+          },
+        },
+      };
+
+      return payload;
+    }
   }
 
   isMemberCheck(value: any) {

@@ -68,21 +68,22 @@ export class CoursesComponent implements OnInit {
 
       this.openModal();
 
-      this.service.main(formData).subscribe((response: any) => {
-        this.courses = response.courses;
-        this.courses.shift();
-        this.service.loadedCourses = this.courses;
-
-        this.isLoading = false;
-        this.closeModal();
-      });
+      this.service
+        .mainCanvas('getAllCourses', 'get', null)
+        .subscribe((response: any) => {
+          this.courses = response;
+          // this.courses.shift();
+          this.service.loadedCourses = this.courses;
+          this.isLoading = false;
+          this.closeModal();
+        });
     }
 
-    if (this.service.courseCategories) {
-      this.courseCategories = this.service.courseCategories;
-    } else {
-      this.getCategories();
-    }
+    // if (this.service.courseCategories) {
+    //   this.courseCategories = this.service.courseCategories;
+    // } else {
+    //   this.getCategories();
+    // }
   }
 
   openModal() {

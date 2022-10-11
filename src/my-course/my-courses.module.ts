@@ -6,6 +6,8 @@ import { SharedModule } from 'src/shared/shared.module';
 import { AuthGuard } from 'src/service/AuthGuard';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { MatIconModule } from '@angular/material/icon';
+import { Overlay } from '@angular/cdk/overlay';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 const routes: Routes = [
   {
@@ -41,5 +43,6 @@ const routes: Routes = [
     }),
   ],
   exports: [RouterModule],
+  providers: [MatSnackBar, Overlay],
 })
 export class MyCoursesModule {}

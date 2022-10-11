@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { ApiService } from 'src/service/api.service';
 import { environment } from 'src/environments/environment';
@@ -11,14 +11,19 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
+  public queryParam: any;
+
   public formGroup: FormGroup;
   public formSubmitted = false;
   public showLoading: boolean = false;
 
+  public loginRedirectUrl: any = `${environment.canvasUrl}/login/oauth2/auth?client_id=${environment.canvasClient_id}&response_type=code&redirect_uri=${environment.redirectUrlAfterLoginIncanvas}`;
+
   constructor(
     public service: ApiService,
     private router: Router,
-    public location: Location
+    public location: Location,
+    public actRoute: ActivatedRoute
   ) {
     this.formGroup = new FormGroup({
       username: new FormControl(null, Validators.required),
@@ -26,7 +31,15 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.queryParam = this.actRoute.snapshot.queryParams;
+
+    if ('code' in this.queryParam) {
+      this.getToken(this.queryParam.code);
+    } else {
+      window.location.replace(this.loginRedirectUrl);
+    }
+  }
 
   public getControls(name: any): FormControl {
     return this.formGroup.get(name) as FormControl;
@@ -52,7 +65,7 @@ export class LoginComponent implements OnInit {
       this.service.login(formData).subscribe((response: any) => {
         if ('token' in response) {
           this.service.token = response.token;
-          this.getUserId(response.token);
+          // this.getUserId(response.token);
         } else {
           alert(response.error);
           this.showLoading = false;
@@ -61,73 +74,80 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  getUserId(token: any) {
-    const formData = new FormData();
+  getToken(code: any) {
+    let data: any = {
+      grant_type: 'authorization_code',
+      client_id: environment.canvasClient_id,
+      client_secret: environment.canvasClient_secret,
+      code: code,
+    };
 
-    formData.append('wstoken', token);
-    formData.append('wsfunction', 'core_webservice_get_site_info');
-    formData.append('moodlewsrestformat', 'json');
+    this.service
+      .mainCanvas('getToken', 'post', data)
+      .subscribe((response: any) => {
+        this.service.token = response.access_token;
+        this.getProfileDetail(response.user.id);
+      });
+  }
 
-    this.service.main(formData).subscribe((response: any) => {
-      this.getProfileDetail(response.userid);
-    });
+  getCustomData(profile: any) {
+    this.service
+      .mainCanvas(`getUserCustomData/${profile.id}`, 'get', {})
+      .subscribe((response: any) => {
+        let customData: any = response.data;
+
+        if (customData.accountType == 'company') {
+          this.service.isIndividual = false;
+        }
+        profile = { ...profile, ...customData };
+        this.service.userData = profile;
+
+        this.getEnrolledCourses(profile.id);
+
+        let state: any = this.location.getState();
+        if (!state) {
+          this.router.navigateByUrl(state.returnUrl, {
+            state: state.course,
+          });
+        } else {
+          this.router.navigate(['/']);
+        }
+      });
   }
 
   getProfileDetail(userId: any) {
-    const formData = new FormData();
-
-    formData.append('wstoken', environment.adminToken);
-    formData.append('wsfunction', 'core_user_get_users_by_field');
-    formData.append('moodlewsrestformat', 'json');
-
-    formData.append('field', 'id');
-    formData.append('values[0]', userId);
-
-    this.service.main(formData).subscribe((response: any) => {
-      if (response.length) {
-        let profile = response[0];
-
-        let index = profile.customfields.findIndex(
-          (element: any) => element.name == 'accountType'
-        );
-
-        if (index > -1) {
-          profile.accountType = profile.customfields[index].value;
-
-          if (profile.accountType == 'company') {
-            this.service.isIndividual = false;
-          }
-        } else {
-          profile.accountType = 'individual';
-        }
-
-        this.service.userData = profile;
-
-        this.getEnrolledCourses();
-        let state: any = this.location.getState();
-
-        if (state) {
-          this.router.navigateByUrl(state.returnUrl, { state: state.course });
-        } else {
-          this.router.navigate(['/mycourse']);
-        }
-
-        this.showLoading = false;
-      }
-    });
+    this.service
+      .mainCanvas(`getUserDetail/${userId}`, 'get', {})
+      .subscribe((response: any) => {
+        this.getCustomData(response);
+        // this.showLoading = false;
+      });
   }
 
-  getEnrolledCourses() {
-    const formData = new FormData();
+  getEnrolledCourses(userId: any) {
+    let extractedCourses: any[] = [];
 
-    formData.append('wstoken', this.service.token);
-    formData.append('wsfunction', 'core_enrol_get_users_courses');
-    formData.append('moodlewsrestformat', 'json');
-    formData.append('userid', this.service.userData.id);
+    this.service
+      .mainCanvas(`getUserEnrollment/${userId}`, 'get', {})
+      .subscribe((enrollments: any[]) => {
+        this.service
+          .mainCanvas(`getAllEnrolledCourses/${userId}`, 'get', {})
+          .subscribe((courses: any[]) => {
+            enrollments.forEach((enrollment: any) => {
+              courses.forEach((course: any) => {
+                if (
+                  enrollment.course_id == course.id &&
+                  enrollment.type == 'StudentEnrollment'
+                ) {
+                  course.enrollment_id = enrollment.id;
+                  extractedCourses.push(course);
+                }
+              });
+            });
 
-    this.service.main(formData).subscribe((response: any) => {
-      this.separate(response);
-    });
+            this.separate(extractedCourses);
+          });
+      });
   }
 
   separate(data: any) {
@@ -135,9 +155,23 @@ export class LoginComponent implements OnInit {
     let inprogress: any[] = [];
 
     data.forEach((element: any, index: any) => {
-      if (element.completed) {
-        completed.push(element);
+      let progress = element.course_progress;
+
+      if ('requirement_count' in progress) {
+        element.percentage =
+          (progress.requirement_completed_count / progress.requirement_count) *
+          100;
+        element.modules_published = true;
+        if (
+          progress.requirement_count == progress.requirement_completed_count
+        ) {
+          completed.push(element);
+        } else {
+          inprogress.push(element);
+        }
       } else {
+        element.percentage = 0;
+        element.modules_published = false;
         inprogress.push(element);
       }
     });

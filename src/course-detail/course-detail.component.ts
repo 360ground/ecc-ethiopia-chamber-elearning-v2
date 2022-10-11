@@ -19,7 +19,8 @@ export class CourseDetailComponent implements OnInit {
   public detail: any;
   public state: any;
   public id: any;
-  public paymentReferenceNumber: any;
+  public index: any;
+  public billReferenceNumber: any;
 
   public disabled: Boolean = false;
   public courseFeatures: any[] = [];
@@ -31,6 +32,11 @@ export class CourseDetailComponent implements OnInit {
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
 
   public readmore: boolean = true;
+  public isExtraInfoLoading: boolean = false;
+  public course_fee: any;
+  queryParam: any;
+  paymentId: any;
+  public enrolling: boolean = false;
 
   constructor(
     public service: ApiService,
@@ -49,10 +55,13 @@ export class CourseDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.actRoute.snapshot.paramMap.get('id');
+    this.index = this.actRoute.snapshot.paramMap.get('index');
+    this.queryParam = this.actRoute.snapshot.queryParams;
+
     this.state = this.location.getState();
+    this.state.short = this.state.public_description.substring(0, 200);
 
-    this.state.short = this.state.summary.substring(0, 400);
-
+    // load user enrolled courses
     if (this.service.userData) {
       let inprogress = this.service.myCourses.inprogress;
       let completed = this.service.myCourses.completed;
@@ -64,13 +73,19 @@ export class CourseDetailComponent implements OnInit {
       this.isEnrolledForThisCourse = index > -1 ? true : false;
     }
 
-    if (this.state.customfields[2].value) {
-      this.courseFeatures = this.state.customfields[2].valueraw.split(',');
-    }
-
     if ('activities' in this.state) {
     } else {
       this.getDetailModules();
+    }
+    if ('extraInfo' in this.state) {
+    } else {
+      this.getExtraInfo();
+    }
+
+    if ('paymentId' in this.queryParam) {
+      // payment is success so call update method
+      this.getPaymentSideEffect(this.queryParam.paymentId);
+      this.paymentId = this.queryParam.paymentId;
     }
   }
 
@@ -91,11 +106,15 @@ export class CourseDetailComponent implements OnInit {
       });
     } else {
       if (this.isEnrolledForThisCourse) {
-        this.router.navigateByUrl('/learning', {
-          state: this.state,
-        });
+        // this.router.navigateByUrl('/learning', {
+        //   state: this.state,
+        // });
+        window.open(`${environment.canvasUrl}/courses/${this.id}`, '_blank');
       } else {
-        if (this.state?.customfields[0]?.valueraw) {
+        this.course_fee = this.state.extraInfo.attributes.course_fee;
+        this.course_fee = this.course_fee == 'Free' ? 0 : +this.course_fee;
+
+        if (this.course_fee == 0) {
           // check the login status and call start enrolling
           if (confirm(`are you sure want to start learning ?`)) {
             this.enroll();
@@ -104,55 +123,137 @@ export class CourseDetailComponent implements OnInit {
           // start calling the meda pay after confirmation
           if (
             confirm(
-              `this course is costs you ${this.state?.customfields[1]?.valueraw} ETB. would you like to continue ?`
+              `this course is costs you ${this.course_fee} ETB. would you like to continue ?`
             )
           ) {
             // start calling mega pay
-            this.startPayment();
+            this.savePaymentSideEffect();
           }
         }
       }
     }
   }
 
+  /* This is the code for enrolling the user to the course. */
   enroll() {
-    /* This is the code for enrolling the user to the course. */
-    const formData = new FormData();
+    let data: any = {
+      enrollment: {
+        user_id: this.service.userData.id,
+        type: 'StudentEnrollment',
+        enrollment_state: 'active',
+        notify: true,
+        self_enrolled: true,
+      },
+    };
 
-    formData.append('wstoken', this.service.token);
-    formData.append('wsfunction', 'enrol_self_enrol_user');
-    formData.append('moodlewsrestformat', 'json');
-    formData.append('courseid', this.id);
+    this.enrolling = true;
 
-    this.service.main(formData).subscribe((response: any) => {
-      if (response.status) {
-        this.openSnackBar('Course is added to learning plan', 'Dismiss');
-        this.router.navigate(['/mycourse']);
-      } else {
-        this.openSnackBar(response.warnings[0].message, 'Dismiss');
-      }
-    });
+    this.service
+      .mainCanvas(`selfEnroll/${this.id}`, 'post', data)
+      .subscribe((response: any) => {
+        if (response.status) {
+          // add course to local variable
+          this.state.percentage = 0;
+          this.state.modules_published = true;
+          this.service.myCourses.inprogress.push(this.state);
+          this.router.navigate(['/mycourse']);
+          this.openSnackBar(response.message, 'Dismiss');
+        } else {
+          this.openSnackBar(response.message, 'Dismiss');
+        }
+
+        this.enrolling = false;
+      });
   }
 
-  startPayment() {
+  savePaymentSideEffect() {
+    let data = {
+      student_id: this.service.userData.id,
+      course_id: this.id,
+      course_title: this.state.name,
+      course_code: this.state.course_code,
+      status: 'pending',
+    };
+
+    this.service
+      .mainCanvas(`createPaymentSideeffect`, 'post', data)
+      .subscribe((response: any) => {
+        if (response.status) {
+          this.startPayment(response.message.id);
+        }
+      });
+  }
+
+  updatePaymentSideEffect(data: any, message: any = null) {
+    this.service
+      .mainCanvas(`createPaymentSideeffect`, 'post', data)
+      .subscribe((response: any) => {
+        if (response.status) {
+          message ? alert(message) : null;
+        }
+      });
+  }
+
+  getPaymentSideEffect(paymentId: any) {
+    this.service
+      .mainCanvas(`getPaymentSideeffect/${paymentId}`, 'get', {})
+      .subscribe((response: any) => {
+        this.checkBillOnMedaPay(response[0].billReferenceNumber);
+      });
+  }
+
+  checkBillOnMedaPay(billReferenceNumber: any) {
+    let url: any = `${environment.medapayUrl}/${billReferenceNumber}`;
+
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${environment.medapayToken}`,
+      },
+      referrer: '',
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.status == 'completed') {
+          let message: any = 'payment succesfull.';
+
+          let data = {
+            status: response.status,
+            id: this.paymentId,
+          };
+          this.updatePaymentSideEffect(data, message);
+        } else {
+          alert(
+            'payment is not complete. whether you are not pay successfully or something happen. tray again.'
+          );
+          this.disabled = false;
+        }
+      })
+      .catch((error) => {
+        this.disabled = false;
+      });
+  }
+
+  startPayment(paymentId: any) {
     this.disabled = true;
 
     let data = {
       purchaseDetails: {
         orderId: 'Not Required',
-        description: `Payment For the course : ${this.state.fullname}`,
-        amount: +this.state.customfields[1].valueraw,
-        customerName: `${this.service.userData.fullname}`,
-        customerPhoneNumber: this.service.userData.customfields[0].value,
+        description: `Payment For the course : ${this.state.name}`,
+        amount: +this.course_fee,
+        customerName: this.service.userData.name,
+        customerPhoneNumber: this.service.userData.phonenumber,
       },
       redirectUrls: {
-        returnUrl: `${window.location.origin}`,
-        cancelUrl: 'google.com',
-        callbackUrl: 'google.com',
+        returnUrl: `${window.location.origin}//detail/${this.id}/${this.index}?paymentId=${paymentId}`,
+        cancelUrl: `${window.location.origin}/detail/${this.id}/${this.index}`,
+        callbackUrl: environment.callBackUrlAfterPayment,
       },
       metaData: {
-        'student name': `${this.service.userData.fullname}`,
-        course_name: `${this.state.fullname}`,
+        student_name: this.service.userData.name,
+        course_name: this.state.name,
       },
     };
 
@@ -167,35 +268,46 @@ export class CourseDetailComponent implements OnInit {
     })
       .then((response) => response.json())
       .then((response) => {
-        this.paymentReferenceNumber = response;
+        let data = {
+          billReferenceNumber: response.billReferenceNumber,
+          id: paymentId,
+        };
+        this.updatePaymentSideEffect(data);
 
         if (response.status == 'created') {
-          window.open(response.link.href, '_blank');
+          window.open(response.link.href);
         } else {
-          alert('unable to process the payment now.please try again later.');
+          alert('unable to process the payment now. please try again later.');
           this.disabled = false;
         }
       })
       .catch((error) => {
         this.disabled = false;
+        console.log(error);
       });
   }
 
   getDetailModules() {
     this.isModulesLoading = true;
+    this.service
+      .mainCanvas(`getAllModules/${this.id}`, 'get', null)
+      .subscribe((response: any) => {
+        this.state.activities = response;
+        this.service.loadedCourses[this.index].activities = response;
+        this.isModulesLoading = false;
+      });
+  }
 
-    const formData = new FormData();
-
-    formData.append('wstoken', environment.adminToken);
-    formData.append('wsfunction', 'core_course_get_contents');
-    formData.append('moodlewsrestformat', 'json');
-    formData.append('courseid', this.id);
-
-    this.service.main(formData).subscribe((response: any) => {
-      this.state.activities = response;
-      this.service.loadedCourses[0].activities = response;
-      this.isModulesLoading = false;
-    });
+  getExtraInfo() {
+    this.isExtraInfoLoading = true;
+    this.service
+      .mainCanvas(`getCourseExtraInfo/${this.id}`, 'get', null)
+      .subscribe((response: any) => {
+        response.features = Object.values(response.features);
+        this.state.extraInfo = response;
+        this.service.loadedCourses[this.index].extraInfo = response;
+        this.isExtraInfoLoading = false;
+      });
   }
 
   scroll(direction: any) {

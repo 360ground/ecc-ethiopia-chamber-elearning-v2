@@ -10,6 +10,7 @@ import { ApiService } from 'src/service/api.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
+  public variables = environment;
   public isSidnavShown: boolean = false;
 
   public logoUrl: any = environment.logoUrl;

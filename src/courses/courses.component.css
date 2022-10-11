@@ -102,3 +102,9 @@
     line-height: 35px !important;
 
   }
+
+  .card-img-top {
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+  }

@@ -20,10 +20,10 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12">
-            <div class="card lowerCard">
+            <div class="card lowerCard" >
                 <mat-tab-group>
-                    <mat-tab label="In progress ({{inprogress.length}})">
-                        <div class="row mb-4" *ngIf="!inprogress.length" style="width: 100% !important;">
+                    <mat-tab label="In progress ({{service.myCourses.inprogress ? service.myCourses.inprogress.length : 0}})">
+                        <div class="row mb-4" *ngIf="!service.myCourses.inprogress.length" style="width: 100% !important;">
                             <div class="col-sm-12 col-md-3 col-lg-3 mb-4">
                                 <div class="card courseCard" style="padding: 24px !important;">
                                     <div class="empty-card">
@@ -39,24 +39,30 @@
                             </div>
                         </div>
     
-                        <div class="row mt-4" style="width: 100% !important;" *ngIf="inprogress.length">
-                            <div class="col-sm-12 col-md-4 col-lg-4 mb-4" *ngFor="let course of inprogress; let i = index">
+                        <div class="row mt-4" style="width: 100% !important;">
+                            <div class="col-sm-12 col-md-4 col-lg-4 mb-4" *ngFor="let course of service.myCourses.inprogress; let i = index">
                                 <div class="card">
-                                    <mat-icon class="removeButton" (click)="removeCourse(course);">delete_forever</mat-icon>
-                                    <img class="card-img-top" style="height: 220px !important" [src]="course?.overviewfiles[0]?.fileurl + '?token='+ adminToken"
-                                        [alt]="course?.overviewfiles[0]?.filename" width="100%" height="100%">
+                                    <mat-icon class="removeButton" (click)="removeCourse(course,i,'inprogress');">delete_forever</mat-icon>
+                                        <img class="card-img-top" style="height: 220px !important;"
+                                        [ngStyle]="{'background-image': 'url(' + course.image_download_url + ')'}"
+                                        alt="" width="100%" height="30%">
             
                                     <div class="card-body">
                                         <h5 class="card-title mb-4">
-                                            <a routerLink="/learning" [state]="course" 
-                                                style="font-size: 15px;color: #3c4043; font-weight: 500; text-decoration: none !important;">
-                                                {{course?.displayname}}
-                                            </a>
+                                            <a href="{{variables.canvasUrl}}/courses/{{course.id}}" target="_blank" 
+                                            style="font-size: 15px;color: #3c4043; font-weight: 500; text-decoration: none !important;">
+                                                {{course?.name}}
+                                            </a><br />
+                                                <span *ngIf="!course?.modules_published">
+                                                    <small title="You don't to see any module. please contact administrator to publish." style="color: gray;text-transform: uppercase;">
+                                                        (Modules Unpublished)
+                                                    </small>
+                                                </span>
                                         </h5>
                                         <p>
                                             <span>
                                                 <circle-progress
-                                                [percent]="course?.progress"
+                                                [percent]="course?.percentage"
                                                 [radius]="25"
                                                 [outerStrokeWidth]="5"
                                                 [innerStrokeWidth]="5"
@@ -76,7 +82,8 @@
                                             </span>
                                             <span style="float: right !important; color: #1a73e8 !important; margin-right: 34px;
                                             margin-top: 14px;">
-                                                <a routerLink="/learning" [state]="course">
+                                            <!-- routerLink="/learning" [state]="course" -->
+                                                <a href="{{variables.canvasUrl}}/courses/{{course.id}}" target="_blank">
                                                     <mat-icon>arrow_forward</mat-icon>
                                                 </a>     
                                             </span>
@@ -91,9 +98,9 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Completed ({{completed.length}})">
-                        <div class="card lowercard" *ngIf="!completed.length" style="padding: 24px !important;">
-                            <div class="empty-card" *ngIf="true">
+                    <mat-tab label="Completed ({{service.myCourses.completed ? service.myCourses.completed.length : 0}})">
+                        <div class="card lowercard" *ngIf="!service.myCourses.completed.length" style="padding: 24px !important;">
+                            <div class="empty-card">
                                <h4 class="empty-card-title">What would you like to learn?</h4>
                                <p class="empty-card-description mt-4">Go back to your courses in progress.</p>
                                <h4 class="empty-card-button mt-4">
@@ -103,23 +110,24 @@
                                </h4>
                             </div> 
                         </div>
-                        <div class="col-sm-12 col-md-3 col-lg-3 mb-4" *ngFor="let course of completed; let i = index">
+                        <div class="col-sm-12 col-md-3 col-lg-3 mb-4" *ngFor="let course of service.myCourses.completed; let j = index">
                             <div class="card courseCard">
-                                <mat-icon class="removeButton"  (click)="removeCourse(course);">delete_forever</mat-icon>
-                                <img class="card-img-top" style="height: 220px !important" [src]="course?.overviewfiles[0]?.fileurl + '?token='+ adminToken"
-                                    [alt]="course?.overviewfiles[0]?.filename" width="100%" height="100%">
-        
+                                <mat-icon class="removeButton"  (click)="removeCourse(course,j,'completed');">delete_forever</mat-icon>
+                                <img class="card-img-top" style="height: 220px !important;"
+                                [ngStyle]="{'background-image': 'url(' + course.image_download_url + ')'}"
+                                alt="" width="100%" height="30%">
                                 <div class="card-body">
                                     <h5 class="card-title mb-4">
-                                        <a routerLink="/learning" [state]="course" 
+                                        <!-- routerLink="/learning" [state]="course" -->
+                                        <a href="{{variables.canvasUrl}}/courses/{{course.id}}" target="_blank"
                                             style="font-size: 15px;color: #3c4043; font-weight: 500; text-decoration: none !important;">
-                                            {{course?.displayname}}
+                                            {{course?.name}}
                                         </a>
                                     </h5>
                                     <p>
                                         <span>
                                             <circle-progress
-                                            [percent]="course?.progress"
+                                            [percent]="course?.percentage"
                                             [radius]="25"
                                             [outerStrokeWidth]="5"
                                             [innerStrokeWidth]="5"
@@ -139,7 +147,8 @@
                                         </span>
                                         <span style="float: right !important; color: #1a73e8 !important; margin-right: 34px;
                                         margin-top: 14px;">
-                                            <a routerLink="/learning" [state]="course">
+                                        <!-- routerLink="/learning" [state]="course"  -->
+                                            <a href="{{variables.canvasUrl}}/courses/{{course.id}}" target="_blank">
                                                 <mat-icon>arrow_forward</mat-icon>
                                             </a>     
                                         </span>
