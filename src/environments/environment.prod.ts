@@ -1,13 +1,13 @@
 export const environment = {
   production: true,
   logoUrl: `${window.location.origin}/eccNew/assets/logo.png`,
-
+  usericonUrl: `${window.location.origin}/eccNew/assets/user_icon.png`,
   baseUrlCanvas: 'http://3.122.238.52/api/v1/',
   canvasUrl: 'http://3.122.238.52',
   canvasClient_id: '10000000000004',
   canvasClient_secret:
     'a1tqQmIaA6RWluysJGVhePsU7ZEz9Du7i33jWttYfHIXl77lAQqDmKPmcJ8XbMrf',
-  redirectUrlAfterLoginIncanvas: `${window.location.origin}/eccNew/account/login`,
+  redirectUrlAfterLoginIncanvas: `${window.location.origin}/eccNew/redirect.html`,
   tokenCanvas:
     'S2E9x9n0gzg6in9Nn5eRumHrUftJSX6Rttu8dPl4cCNeJ2pyyT9SNOVyXVHM7asK',
 

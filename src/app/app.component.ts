@@ -14,6 +14,8 @@ export class AppComponent implements OnInit {
   public isSidnavShown: boolean = false;
 
   public logoUrl: any = environment.logoUrl;
+  public usericonUrl: any = environment.usericonUrl;
+
   constructor(public service: ApiService, public router: Router) {}
 
   ngOnInit(): void {
@@ -25,12 +27,17 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    if (confirm('are you sure want to logout from the system ?')) {
-      this.service.userData = null;
-      this.service.myCourses = null;
-      this.service.token = null;
-
-      this.router.navigateByUrl('/courses');
+    if (
+      confirm(`${this.service.userData.name} are you sure want to logout ?`)
+    ) {
+      this.service
+        .mainCanvas(`logout/${this.service.userData.id}/`, 'delete', null)
+        .subscribe((response: any) => {
+          this.service.userData = null;
+          this.service.myCourses = null;
+          this.service.token = null;
+          this.router.navigateByUrl('/courses');
+        });
     }
   }
 

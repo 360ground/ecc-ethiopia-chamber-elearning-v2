@@ -19,6 +19,7 @@ export class SignupComponent implements OnInit {
   public isIndividual: Boolean = true;
   public backendSignupError: any[] = [];
   public registrationSuccess: Boolean = false;
+  public payload = new FormData();
 
   constructor(
     private service: ApiService,
@@ -26,6 +27,7 @@ export class SignupComponent implements OnInit {
     public alertConfig: NgbAlertConfig
   ) {
     this.formGroup = new FormGroup({
+      type: new FormControl(null, Validators.required),
       individual: new FormGroup({
         firstname: new FormControl(null, Validators.required),
         lastname: new FormControl(null, Validators.required),
@@ -69,12 +71,14 @@ export class SignupComponent implements OnInit {
       return;
     } else {
       this.disable = true;
-      let payload = this.getPayload(name);
+      let payload: any = jsonToFormData(this.getPayload(name));
 
-      // payload = jsonToFormData(payload);
+      for (const element of payload.entries()) {
+        this.payload.append(element[0], element[1]);
+      }
 
       this.service
-        .mainCanvas('register', 'post', payload)
+        .mainCanvas('register', 'post', this.payload)
         .subscribe((response: any) => {
           if (response.status) {
             // this.router.navigate(['/courses']);
@@ -89,8 +93,14 @@ export class SignupComponent implements OnInit {
     }
   }
 
-  changeType(isIndividualType: Boolean) {
-    if (isIndividualType) {
+  onFileUpload($event: any) {
+    if (!this.isIndividual) {
+      this.payload.append('memberId', $event.target.files[0]);
+    }
+  }
+
+  changeType() {
+    if (this.getControls('type').value == 'individual') {
       this.getControls('company').reset();
       this.isIndividual = true;
     } else {
@@ -205,7 +215,6 @@ export class SignupComponent implements OnInit {
             NoOfEmployee: this.getControls(`${name}.NoOfEmployee`).value,
             isaMember: this.getControls(`${name}.isaMember`).value,
             membershipType: this.getControls(`${name}.membershipType`).value,
-            memberId: this.getControls(`${name}.memberId`).value,
             accountType: 'company',
           },
         },
@@ -216,13 +225,20 @@ export class SignupComponent implements OnInit {
   }
 
   isMemberCheck(value: any) {
+    this.payload.delete('memberId');
+
     if (!value) {
       this.getControls('company.membershipType').reset();
       this.getControls('company.membershipType').disable();
+      this.getControls('company.memberId').reset();
       this.getControls('company.memberId').disable();
     } else {
       this.getControls('company.membershipType').enable();
       this.getControls('company.memberId').enable();
     }
+  }
+
+  removeMemberId() {
+    this.getControls('company.memberId').reset();
   }
 }

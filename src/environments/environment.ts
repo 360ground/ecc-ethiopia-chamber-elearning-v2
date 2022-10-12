@@ -6,7 +6,7 @@ export const environment = {
   // general
   production: false,
   logoUrl: '/assets/logo.png',
-
+  usericonUrl: '/assets/user_icon.png',
   baseUrlCanvas: 'http://3.122.238.52/api/v1/',
   canvasUrl: 'http://3.122.238.52',
   canvasClient_id: '10000000000004',

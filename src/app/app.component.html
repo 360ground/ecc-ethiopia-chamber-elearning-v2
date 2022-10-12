@@ -24,7 +24,7 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
         <span *ngIf="service.userData" class="white">
             <div ngbDropdown class="d-inline-block">
               <span type="button"  id="dropdownBasic1" ngbDropdownToggle>
-                  <img [src]="service.userData?.profileimageurl" style="width: 29px; height: 30px;border-radius: 50%;margin-right: 5px;" />
+                  <img [src]="usericonUrl" style="width: 29px; height: 30px;border-radius: 50%;margin-right: 5px;" />
                   welcome, {{ service.userData?.name }} 
               </span>
               <div ngbDropdownMenu aria-labelledby="dropdownBasic1">

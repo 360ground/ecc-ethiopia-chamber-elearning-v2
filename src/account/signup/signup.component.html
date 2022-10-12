@@ -12,27 +12,18 @@
                         </div>
                         <hr class="mb-4 mt-4" />
                     </div>
-                    <h1 class="mb-4" class="gray">Register</h1>
-                    <p class="mb-4">
-                        <span class="gray">
-                            <button class="btn btn-light btn-lg btn-block gray" (click)="changeType(true)">
-                                <!-- <span>
-                                    <i class="fa fa-user mr-4" aria-hidden="true"></i>
-                                </span> -->
-                                As Individual</button>
-                        </span>
-                        <span style="margin-left: 140px; font-weight: bolder;">
-                            Or 
-                        </span>
-                        <span style="float: right !important;" class="gray">
-                            <button class="btn btn-light btn-lg btn-block gray" (click)="changeType(false)">
-                                <!-- <span>
-                                    <i class="fa fa-building mr-4" aria-hidden="true"></i>
-                                </span> -->
-                                As Company
-                            </button>
-                        </span>
-                    </p>
+                    <h1 class="mb-4" class="singuptext">Sign Up</h1>
+                    <h3 class="singupsubtext">It's Quick and easy.</h3>
+                    <hr class="hr mb-4" /> 
+                    <div class="mb-4">
+                        <label>Who are you ?</label>
+                        <select formControlName="type" required class="form-control form-control-lg" (click)="changeType()" 
+                            placeholder="--select --">
+                            <option value="individual">Student : register for Enrolling My Self.</option>
+                            <option value="company">Company : register for Enrolling other Student only. </option>
+                        </select>
+                    </div>
+
                     <div *ngIf="isIndividual" class="mb-4">
                         <div formGroupName="individual" class="mb-4">
                             <label>First Name</label>
@@ -119,9 +110,18 @@
                             <label>Membership type</label>
                             <input required class="form-control form-control-lg" formControlName="membershipType" />
                         </div>
-                        <div formGroupName="company" class="mb-4">
-                            <label>If So, please attache the membership id here.</label>
-                            <input type="file" class="form-control form-control-lg" formControlName="memberId" />
+                        <div formGroupName="company" class="mb-4 row">
+                            <div class="col-sm-12" [ngClass]="getControls('company.memberId').value ? 'col-md-11 col-lg-11' : 'col-md-12 col-lg-12'">
+                                <label>If So, please attache the membership id here.</label>
+                                <input type="file" class="form-control form-control-lg" (change)="onFileUpload($event)" 
+                                accept="image/*" formControlName="memberId" />
+                            </div>
+                            <div class="col-sm-12 col-md-1 col-lg-1" *ngIf="getControls('company.memberId').value">
+                                <label></label>
+                                <span (click)="removeMemberId()" title="remove member id attachment">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                </span>
+                            </div>
                         </div>
         
                         <hr class="mb-4 mt-4"/>

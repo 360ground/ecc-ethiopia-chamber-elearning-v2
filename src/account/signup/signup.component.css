@@ -1,6 +1,10 @@
-.gray{
+.singuptext{
+    color: black !important;
+    font-weight: bold !important;
+    font-size: 24px !important;
+}
+.singupsubtext {
     color: gray !important;
-    font-weight: lighter;
 }
 
 label{
@@ -17,4 +21,16 @@ Button {
     border-radius: 0px !important;
     font-size: 15px !important;
     font-weight: lighter !important;
+}
+
+.hr {
+    color: gray !important;
+}
+
+.fa-trash-o {
+    margin-top: 44px !important;
+    font-size: 22px !important;
+    color: red !important;
+    font-weight: 200 !important;
+    cursor: pointer !important;
 }
