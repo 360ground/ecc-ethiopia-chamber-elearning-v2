@@ -21,6 +21,8 @@ export class SignupComponent implements OnInit {
   public registrationSuccess: Boolean = false;
   public payload = new FormData();
 
+  public base64Image: any = null;
+
   constructor(
     private service: ApiService,
     private router: Router,
@@ -71,14 +73,13 @@ export class SignupComponent implements OnInit {
       return;
     } else {
       this.disable = true;
-      let payload: any = jsonToFormData(this.getPayload(name));
-
-      for (const element of payload.entries()) {
-        this.payload.append(element[0], element[1]);
-      }
+      // let payload: any = jsonToFormData(this.getPayload(name));
+      // for (const element of payload.entries()) {
+      //   this.payload.append(element[0], element[1]);
+      // }
 
       this.service
-        .mainCanvas('register', 'post', this.payload)
+        .mainCanvas('register', 'post', this.getPayload(name))
         .subscribe((response: any) => {
           if (response.status) {
             // this.router.navigate(['/courses']);
@@ -95,7 +96,14 @@ export class SignupComponent implements OnInit {
 
   onFileUpload($event: any) {
     if (!this.isIndividual) {
-      this.payload.append('memberId', $event.target.files[0]);
+      let file = $event.target.files[0];
+
+      const reader: any = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        this.base64Image = reader.result.toString();
+      };
     }
   }
 
@@ -110,40 +118,6 @@ export class SignupComponent implements OnInit {
   }
 
   getPayload(name: any) {
-    const formData = new FormData();
-
-    // formData.append('wstoken', environment.adminToken);
-    // formData.append('wsfunction', 'auth_email_signup_user');
-    // formData.append('moodlewsrestformat', 'json');
-    // // formData.append('redirect', environment.afterSignupRedirectUrl);
-    // let keys = Object.keys(this.getControls(name).value);
-    // let values = Object.values(this.getControls(name).value);
-    // let outerIndex = 0;
-
-    // let exclude = ['username', 'firstname', 'lastname', 'email', 'password'];
-
-    // keys.forEach((element, index) => {
-    //   if (exclude.includes(element)) {
-    //     formData.append(element, String(values[index]));
-    //   } else {
-    //     if (values[index]) {
-    //       formData.append(`customprofilefields[${outerIndex}][type]`, 'string');
-    //       formData.append(
-    //         `customprofilefields[${outerIndex}][name]`,
-    //         `profile_field_${element}`
-    //       );
-    //       formData.append(
-    //         `customprofilefields[${outerIndex}][value]`,
-    //         String(values[index])
-    //       );
-
-    //       outerIndex++;
-    //     }
-    //   }
-    // });
-
-    // return formData;
-
     if (name == 'individual') {
       let payload = {
         user: {
@@ -218,6 +192,7 @@ export class SignupComponent implements OnInit {
             accountType: 'company',
           },
         },
+        memberId: this.base64Image,
       };
 
       return payload;
@@ -240,5 +215,6 @@ export class SignupComponent implements OnInit {
 
   removeMemberId() {
     this.getControls('company.memberId').reset();
+    this.base64Image = null;
   }
 }
