@@ -19,8 +19,12 @@
                         <label>Who are you ?</label>
                         <select formControlName="type" required class="form-control form-control-lg" (click)="changeType()" 
                             placeholder="--select --">
-                            <option value="individual">Student : register for Enrolling My Self.</option>
-                            <option value="company">Company : register for Enrolling other Student only. </option>
+                            <option value="individual">
+                                <small>Student : register for Enrolling My Self.</small>
+                            </option>
+                            <option value="company">
+                                <small>Company : register for Enrolling other Student only. </small>
+                            </option>
                         </select>
                     </div>
 
@@ -28,66 +32,109 @@
                         <div formGroupName="individual" class="mb-4">
                             <label>First Name</label>
                             <input required class="form-control form-control-lg" formControlName="firstname" />
+                            <p *ngIf="formSubmitted && getControls('individual.firstname').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+    
                         </div>
                         <div formGroupName="individual" class="mb-4">
                             <label>Last Name</label>
         
                             <input required class="form-control form-control-lg" formControlName="lastname" />
+                            <p *ngIf="formSubmitted && getControls('individual.lastname').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                         <div formGroupName="individual" class="mb-4">
                             <label>User Name</label>
         
                             <input required class="form-control form-control-lg" formControlName="username" />
+                            <p *ngIf="formSubmitted && getControls('individual.username').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                         <div formGroupName="individual" class="mb-4">
                             <label>Email address</label>
         
                             <input required type="email" class="form-control form-control-lg" formControlName="email" />
+                            <p *ngIf="formSubmitted && getControls('individual.email').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                         <div formGroupName="individual" class="mb-4">
                             <label>Phone Number</label>
         
                             <input required class="form-control form-control-lg" formControlName="phonenumber" />
+                            <p *ngIf="formSubmitted && getControls('individual.phonenumber').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                         <div formGroupName="individual" class="mb-4">
                             <label>Password</label>
         
                             <input required type="password" class="form-control form-control-lg" formControlName="password" />
+                            <p *ngIf="formSubmitted && getControls('individual.password').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                     </div>
                     <div *ngIf="!isIndividual" class="mb-4">
                         <div formGroupName="company" class="mb-4">
                             <label>First Name</label>
                             <input required class="form-control form-control-lg" formControlName="firstname" />
+                            <p *ngIf="formSubmitted && getControls('company.firstname').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                         <div formGroupName="company" class="mb-4">
                             <label>Last Name</label>
         
                             <input required class="form-control form-control-lg" formControlName="lastname" />
+                            <p *ngIf="formSubmitted && getControls('company.lastname').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                         <div formGroupName="company" class="mb-4">
                             <label>Organization Name</label>
                             <input required class="form-control form-control-lg" formControlName="organizationName" />
+                            <p *ngIf="formSubmitted && getControls('company.organizationName').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                         <div formGroupName="company" class="mb-4">
                             <label>Representative FullName</label>
                             <input required class="form-control form-control-lg" formControlName="representativeFullName" />
+                            <p *ngIf="formSubmitted && getControls('company.representativeFullName').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                         <div formGroupName="company" class="mb-4">
                             <label>Representative Role</label>
                             <input required class="form-control form-control-lg" formControlName="representativeRole" />
+                            <p *ngIf="formSubmitted && getControls('company.representativeRole').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                         <div formGroupName="company" class="mb-4">
                             <label>Contact Email address</label>
                             <input required class="form-control form-control-lg" formControlName="email" />
+                            <p *ngIf="formSubmitted && getControls('company.email').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                         <div formGroupName="company" class="mb-4">
                             <label>Contact Phone Number</label>
                             <input required class="form-control form-control-lg" formControlName="phonenumber" />
+                            <p *ngIf="formSubmitted && getControls('company.phonenumber').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                         <div formGroupName="company" class="mb-4">
                             <label>Sector</label>
                             <input required class="form-control form-control-lg" formControlName="sector" />
+                            <p *ngIf="formSubmitted && getControls('company.sector').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                         <div formGroupName="company" class="mb-4">
                             <label>Number of Employee</label>
@@ -98,6 +145,9 @@
                                 <option value="50-200">50 - 200</option>
                                 <option value=">200"> +200</option>
                             </select>
+                            <p *ngIf="formSubmitted && getControls('company.NoOfEmployee').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                         <div formGroupName="company" class="mb-4">
                             <mat-checkbox class="example-margin"
@@ -128,18 +178,25 @@
                         <div formGroupName="company" class="mb-4">
                             <label>Username</label>
                             <input required class="form-control form-control-lg" formControlName="username" />
+                            <p *ngIf="formSubmitted && getControls('company.username').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                         <div formGroupName="company" class="mb-4">
                             <label>Password</label>
                             <input type="password" required class="form-control form-control-lg" formControlName="password" />
+                            <p *ngIf="formSubmitted && getControls('company.password').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                     </div>
                     <Button type="submit" class="btn btn-primary btn-lg btn-block"  *ngIf="!disable"
-                        [disabled]="(isIndividual ? getControls('individual').invalid : getControls('company').invalid)"
                         (click)="isIndividual ? Submit('individual') : Submit('company')"
                     >
                     Create my new account
                 </Button>
+                <!-- [disabled]="(isIndividual ? getControls('individual').invalid : getControls('company').invalid)" -->
+
                     <Button class="btn btn-primary btn-lg btn-block disabled"  *ngIf="disable">
                         Create my new account
                     </Button>

@@ -7,7 +7,7 @@
                     <h1 class="course-title">{{state?.name}}</h1>
                     <p class="course-subtitle">{{state?.course_code}}</p>
                     <!-- <p class="gray mb-4">Presented By : {{state?.contacts[0]?.fullname}}</p> -->
-                    <p class="mt-4">
+                    <p class="mt-4" *ngIf="service?.isIndividual">
                         <span *ngIf="!isEnrolledForThisCourse">
                             <button type="button" *ngIf="state?.extraInfo" class="btn btn-primary" style="border-radius: 0px; width: 200px;
                             padding: 14px;"  [disabled]="enrolling" (click)="startLearning()">

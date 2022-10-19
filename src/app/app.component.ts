@@ -21,9 +21,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.service.sendMessage({ refNo: '001' });
 
-    this.service.getNewMessage().subscribe((message: any) => {
-      console.log(message);
-    });
+    this.service.getNewMessage().subscribe((message: any) => {});
   }
 
   logout() {
@@ -31,7 +29,11 @@ export class AppComponent implements OnInit {
       confirm(`${this.service.userData.name} are you sure want to logout ?`)
     ) {
       this.service
-        .mainCanvas(`logout/${this.service.userData.id}/`, 'delete', null)
+        .mainCanvas(
+          `logout/${this.service.userData.id}/${this.service.userData.id}`,
+          'delete',
+          null
+        )
         .subscribe((response: any) => {
           this.service.userData = null;
           this.service.myCourses = null;

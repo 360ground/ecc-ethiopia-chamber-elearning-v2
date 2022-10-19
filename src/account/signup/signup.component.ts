@@ -73,10 +73,6 @@ export class SignupComponent implements OnInit {
       return;
     } else {
       this.disable = true;
-      // let payload: any = jsonToFormData(this.getPayload(name));
-      // for (const element of payload.entries()) {
-      //   this.payload.append(element[0], element[1]);
-      // }
 
       this.service
         .mainCanvas('register', 'post', this.getPayload(name))

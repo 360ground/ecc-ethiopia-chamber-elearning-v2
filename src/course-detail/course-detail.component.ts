@@ -247,7 +247,7 @@ export class CourseDetailComponent implements OnInit {
         customerPhoneNumber: this.service.userData.phonenumber,
       },
       redirectUrls: {
-        returnUrl: `${window.location.origin}//detail/${this.id}/${this.index}?paymentId=${paymentId}`,
+        returnUrl: `${window.location.origin}/detail/${this.id}/${this.index}?paymentId=${paymentId}`,
         cancelUrl: `${window.location.origin}/detail/${this.id}/${this.index}`,
         callbackUrl: environment.callBackUrlAfterPayment,
       },
