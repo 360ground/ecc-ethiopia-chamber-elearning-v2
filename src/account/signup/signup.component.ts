@@ -41,7 +41,7 @@ export class SignupComponent implements OnInit {
           Validators.minLength(10),
           Validators.maxLength(10),
           CustomValidators.patternValidator(
-            new RegExp('(?=.[0-9]{4}-[0-9]{6})'),
+            new RegExp('(?=.[09]*[0-9]{2}-*[0-9]{6})'),
             {
               requiresMobileNumber: true,
             }
@@ -76,7 +76,7 @@ export class SignupComponent implements OnInit {
           Validators.minLength(10),
           Validators.maxLength(10),
           CustomValidators.patternValidator(
-            new RegExp('(?=.[0-9]{4}-[0-9]{6})'),
+            new RegExp('(?=.[09]*[0-9]{2}-*[0-9]{6})'),
             {
               requiresMobileNumber: true,
             }
