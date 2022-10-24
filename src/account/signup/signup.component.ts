@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/service/api.service';
 
 import jsonToFormData from '@ajoelp/json-to-formdata';
+import { CustomValidators } from './password-validators';
 
 @Component({
   selector: 'app-signup',
@@ -35,17 +36,69 @@ export class SignupComponent implements OnInit {
         lastname: new FormControl(null, Validators.required),
         username: new FormControl(null, Validators.required),
         email: new FormControl(null, [Validators.required, Validators.email]),
-        phonenumber: new FormControl(null, Validators.required),
+        phonenumber: new FormControl(null, [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(10),
+          CustomValidators.patternValidator(
+            new RegExp('(?=.[0-9]{4}-[0-9]{6})'),
+            {
+              requiresMobileNumber: true,
+            }
+          ),
+        ]),
         accountType: new FormControl('individual'),
-        password: new FormControl(null, [Validators.required]),
+        password: new FormControl(null, [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(10),
+          CustomValidators.patternValidator(new RegExp('(?=.*[0-9])'), {
+            requiresDigit: true,
+          }),
+          CustomValidators.patternValidator(new RegExp('(?=.*[A-Z])'), {
+            requiresUppercase: true,
+          }),
+          CustomValidators.patternValidator(new RegExp('(?=.*[a-z])'), {
+            requiresLowercase: true,
+          }),
+          CustomValidators.patternValidator(new RegExp('(?=.*[$@^!%*?&])'), {
+            requiresSpecialChars: true,
+          }),
+        ]),
       }),
       company: new FormGroup({
         firstname: new FormControl(null, Validators.required),
         lastname: new FormControl(null, Validators.required),
         username: new FormControl(null, Validators.required),
         email: new FormControl(null, [Validators.required, Validators.email]),
-        phonenumber: new FormControl(null, Validators.required),
-        password: new FormControl(null, [Validators.required]),
+        phonenumber: new FormControl(null, [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(10),
+          CustomValidators.patternValidator(
+            new RegExp('(?=.[0-9]{4}-[0-9]{6})'),
+            {
+              requiresMobileNumber: true,
+            }
+          ),
+        ]),
+        password: new FormControl(null, [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(10),
+          CustomValidators.patternValidator(new RegExp('(?=.*[0-9])'), {
+            requiresDigit: true,
+          }),
+          CustomValidators.patternValidator(new RegExp('(?=.*[A-Z])'), {
+            requiresUppercase: true,
+          }),
+          CustomValidators.patternValidator(new RegExp('(?=.*[a-z])'), {
+            requiresLowercase: true,
+          }),
+          CustomValidators.patternValidator(new RegExp('(?=.*[$@^!%*?&])'), {
+            requiresSpecialChars: true,
+          }),
+        ]),
         organizationName: new FormControl(null, Validators.required),
         representativeFullName: new FormControl(null, Validators.required),
         representativeRole: new FormControl(null, Validators.required),

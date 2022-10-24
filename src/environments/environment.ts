@@ -14,7 +14,7 @@ export const environment = {
     'a1tqQmIaA6RWluysJGVhePsU7ZEz9Du7i33jWttYfHIXl77lAQqDmKPmcJ8XbMrf',
   redirectUrlAfterLoginIncanvas: 'http://localhost:4200/account/login',
   tokenCanvas:
-    'S2E9x9n0gzg6in9Nn5eRumHrUftJSX6Rttu8dPl4cCNeJ2pyyT9SNOVyXVHM7asK',
+    'N7nn2Vp9QEeubZYx1Ywy5fhPOaJPqSEfpkFsoA9qA82gCAbdefSKlT4sNSkaeisO',
 
   // backend express
   baseUrlBackend: 'http://localhost:4000',

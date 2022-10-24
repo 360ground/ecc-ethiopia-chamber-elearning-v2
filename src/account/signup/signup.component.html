@@ -60,21 +60,50 @@
                             <p *ngIf="formSubmitted && getControls('individual.email').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
+                            <p *ngIf="formSubmitted && getControls('individual.email').hasError('email')" class="error">
+                                <small> * invalid email</small>
+                            </p>
                         </div>
                         <div formGroupName="individual" class="mb-4">
-                            <label>Phone Number</label>
-        
+                            <label>Mobile Phone number</label>
                             <input required class="form-control form-control-lg" formControlName="phonenumber" />
                             <p *ngIf="formSubmitted && getControls('individual.phonenumber').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
+                            <p *ngIf="formSubmitted && getControls('individual.phonenumber').hasError('minlength')" class="error">
+                                <small> * Must atleast 10 characters long </small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('individual.phonenumber').hasError('maxlength')" class="error">
+                                <small> * Can't exceed 10 characters</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('individual.phonenumber').hasError('requiresMobileNumber')" class="error">
+                                <small> * Invalid. mobile number must begin with 09**-******</small>
+                            </p>
                         </div>
                         <div formGroupName="individual" class="mb-4">
                             <label>Password</label>
-        
+    
                             <input required type="password" class="form-control form-control-lg" formControlName="password" />
                             <p *ngIf="formSubmitted && getControls('individual.password').hasError('required')" class="error">
                                 <small> * required</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('individual.password').hasError('minlength')" class="error">
+                                <small> * Must atleast 8 characters long</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('individual.password').hasError('maxlength')" class="error">
+                                <small> * Can't exceed 8 characters</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('individual.password').hasError('requiresDigit')" class="error">
+                                <small> * Must contain at least 1 digit</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('individual.password').hasError('requiresUppercase')" class="error">
+                                <small> * Must contain at least 1 uppercase character</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('individual.password').hasError('requiresLowercase')" class="error">
+                                <small> * Must contain at least 1 lowercase character</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('individual.password').hasError('requiresSpecialChars')" class="error">
+                                <small> * Must contain at least 1 special character</small>
                             </p>
                         </div>
                     </div>
@@ -121,12 +150,24 @@
                             <p *ngIf="formSubmitted && getControls('company.email').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
+                            <p *ngIf="formSubmitted && getControls('company.email').hasError('email')" class="error">
+                                <small> * invalid email</small>
+                            </p>
                         </div>
                         <div formGroupName="company" class="mb-4">
-                            <label>Contact Phone Number</label>
+                            <label>Contact Mobile Phone number</label>
                             <input required class="form-control form-control-lg" formControlName="phonenumber" />
                             <p *ngIf="formSubmitted && getControls('company.phonenumber').hasError('required')" class="error">
                                 <small> * required</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('company.phonenumber').hasError('minlength')" class="error">
+                                <small> * Must atleast 10 digit </small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('company.phonenumber').hasError('maxlength')" class="error">
+                                <small> * Can't exceed than 10 character</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('company.phonenumber').hasError('requiresMobileNumber')" class="error">
+                                <small> * Invalid. Mobile number must begin with 09**-******</small>
                             </p>
                         </div>
                         <div formGroupName="company" class="mb-4">
@@ -187,6 +228,24 @@
                             <input type="password" required class="form-control form-control-lg" formControlName="password" />
                             <p *ngIf="formSubmitted && getControls('company.password').hasError('required')" class="error">
                                 <small> * required</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('company.password').hasError('minlength')" class="error">
+                                <small> * Must atleast 8 digit</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('company.password').hasError('maxlength')" class="error">
+                                <small> * Can't exceed 8 characters</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('company.password').hasError('requiresDigit')" class="error">
+                                <small> * Must contain at least 1 digit</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('company.password').hasError('requiresUppercase')" class="error">
+                                <small> * Must contain at least 1 uppercase character</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('company.password').hasError('requiresLowercase')" class="error">
+                                <small> * Must contain at least 1 lowercase character</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('company.password').hasError('requiresSpecialChars')" class="error">
+                                <small> * Must contain at least 1 special character</small>
                             </p>
                         </div>
                     </div>
