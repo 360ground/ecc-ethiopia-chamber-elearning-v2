@@ -34,7 +34,7 @@ export class SignupComponent implements OnInit {
       individual: new FormGroup({
         firstname: new FormControl(null, Validators.required),
         lastname: new FormControl(null, Validators.required),
-        username: new FormControl(null, Validators.required),
+        // username: new FormControl(null, Validators.required),
         email: new FormControl(null, [Validators.required, Validators.email]),
         phonenumber: new FormControl(null, [
           Validators.required,
@@ -67,9 +67,9 @@ export class SignupComponent implements OnInit {
         ]),
       }),
       company: new FormGroup({
-        firstname: new FormControl(null, Validators.required),
-        lastname: new FormControl(null, Validators.required),
-        username: new FormControl(null, Validators.required),
+        firstname: new FormControl('', Validators.required),
+        lastname: new FormControl('', Validators.required),
+        // username: new FormControl(null, Validators.required),
         email: new FormControl(null, [Validators.required, Validators.email]),
         phonenumber: new FormControl(null, [
           Validators.required,
@@ -100,7 +100,10 @@ export class SignupComponent implements OnInit {
           }),
         ]),
         organizationName: new FormControl(null, Validators.required),
-        representativeFullName: new FormControl(null, Validators.required),
+        representativeFullName: new FormControl(
+          { value: null, disabled: true },
+          Validators.required
+        ),
         representativeRole: new FormControl(null, Validators.required),
         sector: new FormControl(null, Validators.required),
         NoOfEmployee: new FormControl(null, Validators.required),

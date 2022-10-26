@@ -45,14 +45,14 @@
                                 <small> * required</small>
                             </p>
                         </div>
-                        <div formGroupName="individual" class="mb-4">
+                        <!-- <div formGroupName="individual" class="mb-4">
                             <label>User Name</label>
         
                             <input required class="form-control form-control-lg" formControlName="username" />
                             <p *ngIf="formSubmitted && getControls('individual.username').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
-                        </div>
+                        </div> -->
                         <div formGroupName="individual" class="mb-4">
                             <label>Email address</label>
         
@@ -135,7 +135,9 @@
                         </div>
                         <div formGroupName="company" class="mb-4">
                             <label>Representative FullName</label>
-                            <input required class="form-control form-control-lg" formControlName="representativeFullName" />
+                            <input required class="form-control form-control-lg" formControlName="representativeFullName" 
+                                [value]="getControls('company.firstname').value  + ' ' + getControls('company.lastname').value"
+                            readonly />
                             <p *ngIf="formSubmitted && getControls('company.representativeFullName').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
@@ -222,13 +224,13 @@
                         </div>
         
                         <hr class="mb-4 mt-4"/>
-                        <div formGroupName="company" class="mb-4">
+                        <!-- <div formGroupName="company" class="mb-4">
                             <label>Username</label>
                             <input required class="form-control form-control-lg" formControlName="username" />
                             <p *ngIf="formSubmitted && getControls('company.username').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
-                        </div>
+                        </div> -->
                         <div formGroupName="company" class="mb-4">
                             <label>Password</label>
                             <input type="password" required class="form-control form-control-lg" formControlName="password" />
