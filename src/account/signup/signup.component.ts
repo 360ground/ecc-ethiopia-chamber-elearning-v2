@@ -177,7 +177,10 @@ export class SignupComponent implements OnInit {
             this.getControls(`${name}.firstname`).value +
             ' ' +
             this.getControls(`${name}.lastname`).value,
-          short_name: this.getControls(`${name}.username`).value,
+          short_name:
+            this.getControls(`${name}.firstname`).value +
+            ' ' +
+            this.getControls(`${name}.lastname`).value,
           sortable_name:
             this.getControls(`${name}.firstname`).value +
             ' ' +
@@ -210,7 +213,10 @@ export class SignupComponent implements OnInit {
             this.getControls(`${name}.firstname`).value +
             ' ' +
             this.getControls(`${name}.lastname`).value,
-          short_name: this.getControls(`${name}.username`).value,
+          short_name:
+            this.getControls(`${name}.firstname`).value +
+            ' ' +
+            this.getControls(`${name}.lastname`).value,
           sortable_name:
             this.getControls(`${name}.firstname`).value +
             ' ' +
