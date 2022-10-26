@@ -9,7 +9,7 @@ export const environment = {
     'a1tqQmIaA6RWluysJGVhePsU7ZEz9Du7i33jWttYfHIXl77lAQqDmKPmcJ8XbMrf',
   redirectUrlAfterLoginIncanvas: `${window.location.origin}/eccNew/redirect.html`,
   tokenCanvas:
-    'N7nn2Vp9QEeubZYx1Ywy5fhPOaJPqSEfpkFsoA9qA82gCAbdefSKlT4sNSkaeisO',
+    'hE4zb714iUtLDvgqXQrUtnbMlU8yT4gFaFykeAC8mrQ6E5QdpfjKSEboljgDAaSV',
 
   // back end
   baseUrlBackend: 'http://3.125.158.58:4000',

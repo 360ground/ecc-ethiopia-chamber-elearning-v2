@@ -24,10 +24,10 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
         <span *ngIf="service.userData" class="white">
             <div ngbDropdown class="d-inline-block">
               <span type="button"  id="dropdownBasic1" ngbDropdownToggle>
-                  <img [src]="usericonUrl" style="width: 29px; height: 30px;border-radius: 50%;margin-right: 5px;" />
+                  <img [src]="service.userData?.avatar_url" style="width: 29px; height: 30px;border-radius: 50%;margin-right: 5px;" />
                   welcome, {{ service.userData?.name }} 
               </span>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1" *ngIf="service.userData?.sis_user_id !== 'admin'">
                 <a ngbDropdownItem [routerLink]="['/mycourse']" *ngIf="service.userData && service?.isIndividual">My Learning Plan</a>
                 <!-- <a ngbDropdownItem [routerLink]="['/myeducation']" *ngIf="service.userData && service?.isIndividual">My Education</a>
                 <a ngbDropdownItem [routerLink]="['/']" *ngIf="service.userData && service?.isIndividual">My Certification</a>
@@ -35,7 +35,7 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
                 <a ngbDropdownItem  [routerLink]="['/account/change-password']">Change Password</a> -->
                 <div class="dropdown-divider"></div>
                 <a ngbDropdownItem href="#" (click)="logout()">
-                  Sign out
+                  Logout
                 </a>
               </div>
             </div>

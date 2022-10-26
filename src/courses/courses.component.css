@@ -108,3 +108,7 @@
     background-position: center center !important;
     background-repeat: no-repeat !important;
   }
+
+  .card-body{
+    min-height: 171px !important;
+  }

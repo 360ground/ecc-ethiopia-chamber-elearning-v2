@@ -76,8 +76,11 @@
                             <p *ngIf="formSubmitted && getControls('individual.phonenumber').hasError('maxlength')" class="error">
                                 <small> * Can't exceed 10 characters</small>
                             </p>
-                            <p *ngIf="formSubmitted && getControls('individual.phonenumber').hasError('requiresMobileNumber')" class="error">
-                                <small> * Invalid. mobile number must begin with 09**-******</small>
+                            <p *ngIf="formSubmitted && getControls('individual.phonenumber').hasError('validMobileNumberFormat')" class="error">
+                                <small> * Invalid. mobile number must begin with 09 or 07 then **-**-**-**</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('individual.phonenumber').hasError('MobileNumberMustBeNumber')" class="error">
+                                <small> * mobile number must be a number</small>
                             </p>
                         </div>
                         <div formGroupName="individual" class="mb-4">
@@ -166,8 +169,11 @@
                             <p *ngIf="formSubmitted && getControls('company.phonenumber').hasError('maxlength')" class="error">
                                 <small> * Can't exceed than 10 character</small>
                             </p>
-                            <p *ngIf="formSubmitted && getControls('company.phonenumber').hasError('requiresMobileNumber')" class="error">
-                                <small> * Invalid. Mobile number must begin with 09**-******</small>
+                            <p *ngIf="formSubmitted && getControls('company.phonenumber').hasError('validMobileNumberFormat')" class="error">
+                                <small> * Invalid. Mobile number must begin with 09 or 07 then **-**-**-**</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('company.phonenumber').hasError('MobileNumberMustBeNumber')" class="error">
+                                <small> * mobile number must be a number</small>
                             </p>
                         </div>
                         <div formGroupName="company" class="mb-4">

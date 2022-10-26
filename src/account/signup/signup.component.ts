@@ -40,12 +40,12 @@ export class SignupComponent implements OnInit {
           Validators.required,
           Validators.minLength(10),
           Validators.maxLength(10),
-          CustomValidators.patternValidator(
-            new RegExp('(?=.[09]*[0-9]{2}-*[0-9]{6})'),
-            {
-              requiresMobileNumber: true,
-            }
-          ),
+          CustomValidators.patternValidator(new RegExp('^[09|^07]{2}'), {
+            validMobileNumberFormat: true,
+          }),
+          CustomValidators.patternValidator(new RegExp('^[0-9]+$'), {
+            MobileNumberMustBeNumber: true,
+          }),
         ]),
         accountType: new FormControl('individual'),
         password: new FormControl(null, [
@@ -75,12 +75,12 @@ export class SignupComponent implements OnInit {
           Validators.required,
           Validators.minLength(10),
           Validators.maxLength(10),
-          CustomValidators.patternValidator(
-            new RegExp('(?=.[09]*[0-9]{2}-*[0-9]{6})'),
-            {
-              requiresMobileNumber: true,
-            }
-          ),
+          CustomValidators.patternValidator(new RegExp('^[09|^07]{2}'), {
+            validMobileNumberFormat: true,
+          }),
+          CustomValidators.patternValidator(new RegExp('^[0-9]+$'), {
+            MobileNumberMustBeNumber: true,
+          }),
         ]),
         password: new FormControl(null, [
           Validators.required,
