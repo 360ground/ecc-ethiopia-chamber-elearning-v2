@@ -31,10 +31,14 @@ export class AppComponent implements OnInit {
       this.service
         .mainCanvas(`logout/${this.service.userData.id}`, 'delete', null)
         .subscribe((response: any) => {
-          this.service.userData = null;
-          this.service.myCourses = null;
-          this.service.token = null;
-          this.router.navigateByUrl('/courses');
+          if (response.status) {
+            this.service.userData = null;
+            this.service.myCourses = null;
+            this.service.token = null;
+            this.router.navigateByUrl('/courses');
+          } else {
+            alert(response.message);
+          }
         });
     }
   }

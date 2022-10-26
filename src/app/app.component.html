@@ -34,9 +34,9 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
                 <a ngbDropdownItem  [routerLink]="['/account/profile']">Update profile</a>
                 <a ngbDropdownItem  [routerLink]="['/account/change-password']">Change Password</a> -->
                 <div class="dropdown-divider"></div>
-                <a ngbDropdownItem href="#" (click)="logout()">
+                <span ngbDropdownItem href="#" (click)="logout()" style="cursor: pointer !important;">
                   Logout
-                </a>
+                </span>
               </div>
             </div>
         </span>
