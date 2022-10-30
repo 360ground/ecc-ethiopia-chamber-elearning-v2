@@ -19,9 +19,10 @@ export class AppComponent implements OnInit {
   constructor(public service: ApiService, public router: Router) {}
 
   ngOnInit(): void {
-    this.service.sendMessage({ refNo: '001' });
+    // this.service.sendMessage({ refNo: '001' });
+    // this.service.getNewMessage().subscribe((message: any) => {});
 
-    this.service.getNewMessage().subscribe((message: any) => {});
+    this.isLoggedIn();
   }
 
   logout() {
@@ -47,4 +48,21 @@ export class AppComponent implements OnInit {
     this.isSidnavShown = false;
     this.router.navigateByUrl(url);
   }
+
+  isLoggedIn(){
+    this.service
+    .mainCanvas('isLoggedIn', 'post', {})
+    .subscribe((response: any) => {
+      this.service.token = response.access_token;
+
+      if (response.accountType == 'company') {
+        this.service.isIndividual = false;
+      }
+
+      this.service.userData = response;
+      this.service.getEnrolledCourses(response.id);
+
+    });
+  }
+
 }

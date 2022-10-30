@@ -18,6 +18,8 @@ export class ApiService {
 
   public message$: BehaviorSubject<string> = new BehaviorSubject('');
   public isIndividual: Boolean = true;
+  public isAuthenticating: Boolean = false;
+
 
   constructor(public http: HttpClient) {}
 
@@ -69,4 +71,61 @@ export class ApiService {
 
     return this.message$.asObservable();
   };
+
+  getEnrolledCourses(userId: any) {
+    let extractedCourses: any[] = [];
+
+    this
+      .mainCanvas(`getUserEnrollment/${userId}`, 'get', {})
+      .subscribe((enrollments: any[]) => {
+        this
+          .mainCanvas(`getAllEnrolledCourses/${userId}`, 'get', {})
+          .subscribe((courses: any[]) => {
+            enrollments.forEach((enrollment: any) => {
+              courses.forEach((course: any) => {
+                if (
+                  enrollment.course_id == course.id &&
+                  enrollment.type == 'StudentEnrollment'
+                ) {
+                  course.enrollment_id = enrollment.id;
+                  extractedCourses.push(course);
+                }
+              });
+            });
+
+            this.separate(extractedCourses);
+          });
+      });
+  }
+
+  separate(data: any) {
+    let completed: any[] = [];
+    let inprogress: any[] = [];
+
+    data.forEach((element: any, index: any) => {
+      let progress = element.course_progress;
+
+      if ('requirement_count' in progress) {
+        element.percentage =
+          (progress.requirement_completed_count / progress.requirement_count) *
+          100;
+        element.modules_published = true;
+        if (
+          progress.requirement_count == progress.requirement_completed_count
+        ) {
+          completed.push(element);
+        } else {
+          inprogress.push(element);
+        }
+      } else {
+        element.percentage = 0;
+        element.modules_published = false;
+        inprogress.push(element);
+      }
+    });
+
+    this.myCourses.completed = completed;
+    this.myCourses.inprogress = inprogress;
+  }
+
 }

@@ -93,3 +93,8 @@
     text-transform: capitalize;
   }
 
+  .isAuthenticating {
+    color: gray !important;
+    text-align: center !important;
+    font-weight: bolder !important;
+  }

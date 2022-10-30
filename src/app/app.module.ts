@@ -11,6 +11,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSelectModule } from '@angular/material/select';
 import { InterceptorService } from 'src/service/interceptor.service';
 
+import { ToastrModule } from 'ngx-toastr';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -22,6 +24,7 @@ import { InterceptorService } from 'src/service/interceptor.service';
     MatSidenavModule,
     MatSelectModule,
     NgbModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     ApiService,

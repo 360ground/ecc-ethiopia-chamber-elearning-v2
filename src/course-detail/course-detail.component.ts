@@ -10,6 +10,8 @@ import {
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
 
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-course-detail',
   templateUrl: './course-detail.component.html',
@@ -43,7 +45,8 @@ export class CourseDetailComponent implements OnInit {
     public actRoute: ActivatedRoute,
     public location: Location,
     public router: Router,
-    private _snackBar: MatSnackBar
+    public _snackBar: MatSnackBar,
+    public toastr: ToastrService
   ) {}
 
   openSnackBar(message: any, btnText: any) {
@@ -84,7 +87,7 @@ export class CourseDetailComponent implements OnInit {
 
     if ('paymentId' in this.queryParam) {
       // payment is success so call update method
-      this.getPaymentSideEffect(this.queryParam.paymentId);
+      this.checkBill(this.queryParam.paymentId);
       this.paymentId = this.queryParam.paymentId;
     }
   }
@@ -106,9 +109,6 @@ export class CourseDetailComponent implements OnInit {
       });
     } else {
       if (this.isEnrolledForThisCourse) {
-        // this.router.navigateByUrl('/learning', {
-        //   state: this.state,
-        // });
         window.open(`${environment.canvasUrl}/courses/${this.id}`, '_blank');
       } else {
         this.course_fee = this.state.extraInfo.attributes.course_fee;
@@ -121,13 +121,13 @@ export class CourseDetailComponent implements OnInit {
           }
         } else {
           // start calling the meda pay after confirmation
+          let message = `this course is costs you ${this.course_fee} ETB. would you like to continue ?`;
+          
           if (
-            confirm(
-              `this course is costs you ${this.course_fee} ETB. would you like to continue ?`
-            )
+            confirm(message)
           ) {
             // start calling mega pay
-            this.savePaymentSideEffect();
+            this.createPaymentSideEffect();
           }
         }
       }
@@ -166,7 +166,7 @@ export class CourseDetailComponent implements OnInit {
       });
   }
 
-  savePaymentSideEffect() {
+  createPaymentSideEffect() {
     let data = {
       student_id: this.service.userData.id,
       course_id: this.id,
@@ -179,66 +179,39 @@ export class CourseDetailComponent implements OnInit {
       .mainCanvas(`createPaymentSideeffect`, 'post', data)
       .subscribe((response: any) => {
         if (response.status) {
-          this.startPayment(response.message.id);
+          this.createPaymentReference(response.message.id);
+        } else {
+          this.toastr.error(response.message, 'Error');
+          this.disabled = false;
         }
       });
   }
 
-  updatePaymentSideEffect(data: any, message: any = null) {
-    this.service
-      .mainCanvas(`createPaymentSideeffect`, 'post', data)
-      .subscribe((response: any) => {
-        if (response.status) {
-          message ? alert(message) : null;
-        }
-      });
-  }
-
-  getPaymentSideEffect(paymentId: any) {
+  checkBill(paymentId: any) {
     this.service
       .mainCanvas(`getPaymentSideeffect/${paymentId}`, 'get', {})
       .subscribe((response: any) => {
-        this.checkBillOnMedaPay(response[0].billReferenceNumber);
+        let billReferenceNumber = response[0].billReferenceNumber;
+
+        this.service
+          .mainCanvas(`verifayPayment/${billReferenceNumber}/${paymentId}`, 'get', {})
+          .subscribe((response: any) => {
+            if(response.status){
+              // call to enroll
+              this.enroll();
+    
+            } else {
+              this.toastr.error(response.message, 'Error');
+              this.disabled = false;
+            }
+          });
       });
   }
 
-  checkBillOnMedaPay(billReferenceNumber: any) {
-    let url: any = `${environment.medapayUrl}/${billReferenceNumber}`;
-
-    fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${environment.medapayToken}`,
-      },
-      referrer: '',
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.status == 'completed') {
-          let message: any = 'payment succesfull.';
-
-          let data = {
-            status: response.status,
-            id: this.paymentId,
-          };
-          this.updatePaymentSideEffect(data, message);
-        } else {
-          alert(
-            'payment is not complete. whether you are not pay successfully or something happen. tray again.'
-          );
-          this.disabled = false;
-        }
-      })
-      .catch((error) => {
-        this.disabled = false;
-      });
-  }
-
-  startPayment(paymentId: any) {
+  createPaymentReference(paymentId: any) {
     this.disabled = true;
 
-    let data = {
+    let payload = {
       purchaseDetails: {
         orderId: 'Not Required',
         description: `Payment For the course : ${this.state.name}`,
@@ -254,36 +227,20 @@ export class CourseDetailComponent implements OnInit {
       metaData: {
         student_name: this.service.userData.name,
         course_name: this.state.name,
+        paymentId: paymentId
       },
     };
 
-    fetch(environment.medapayUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${environment.medapayToken}`,
-      },
-      body: JSON.stringify(data),
-      referrer: '',
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        let data = {
-          billReferenceNumber: response.billReferenceNumber,
-          id: paymentId,
-        };
-        this.updatePaymentSideEffect(data);
-
-        if (response.status == 'created') {
-          window.open(response.link.href);
+    this.service
+      .mainCanvas(`createPaymentReference`, 'post', payload)
+      .subscribe((response: any) => {
+        if(response.status){
+          window.open(response.message.link.href);
+            
         } else {
-          alert('unable to process the payment now. please try again later.');
+          this.toastr.error(response.message, 'Error');
           this.disabled = false;
         }
-      })
-      .catch((error) => {
-        this.disabled = false;
-        console.log(error);
       });
   }
 
