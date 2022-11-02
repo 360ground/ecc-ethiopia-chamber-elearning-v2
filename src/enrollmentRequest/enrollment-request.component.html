@@ -1,0 +1,86 @@
+<div class="container" style="margin-top: 45px !important;">
+    <div class="row">
+        <div class="col-sm-12 col-md-2 col-lg-2"></div>
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <form [formGroup]="formGroup" ngSubmit="Submit()">
+                        <div class="mb-4">
+                            <label>Course</label>
+                            <select class="form-control form-control-lg" formControlName="course_id">
+                                <option *ngFor="let course of courses; let i as index" [value]="course.id" 
+                                    (click)="selectCourse(course)">
+                                    {{ course.name | titlecase }}
+                                </option>
+                            </select>
+                            <p *ngIf="formSubmitted && getControls('course_id').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div>
+                        <hr class="mb-4" />
+                        <p><h1>Add trainee's</h1></p>
+                        <p>search the trainee by their email address ...</p>
+                        <div class="mb-4">
+                            <input type="email" required class="form-control form-control-lg" formControlName="email"
+                            (keydown)="search()" />
+                        </div>
+                        <div class="mb-4">
+                            <div>
+                                {{ studentDetail | json }}
+                            </div>
+                        </div>    
+                        <div class="mb-4">
+                            <ul class="list-group" *ngIf="students.length">
+                                <li class="list-group-item" *ngFor="let student of students; let i as index">
+                                    <p>
+                                        <span>
+                                            {{ student.name | titlecase }}
+                                        </span>
+                                        <span>
+                                            <mat-icon class="removeButton"  (click)="removeStudent(i);">delete_forever</mat-icon>
+                                        </span>
+                                    </p>
+                                </li>
+                              </ul>
+                              <p *ngIf="!students.length">-- no student selected --</p>
+                              <p *ngIf="formSubmitted && !students.length" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                            <label>Date</label>
+                            <input type="date" class="form-control form-control-lg" formControlName="date" />
+                            <p *ngIf="formSubmitted && getControls('date').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                            <label>Remarks</label>
+                            <textarea rows="3" class="form-control form-control-lg" formControlName="remark"></textarea>
+                        </div>
+                        <div class="mb-4 row">
+                            <div class="col-sm-12" [ngClass]="files.length ? 'col-md-11 col-lg-11' : 'col-md-12 col-lg-12'">
+                                <label>please attache the slip here.</label>
+                                <input type="file" class="form-control form-control-lg" (change)="onFileUpload($event)" 
+                                accept="image/*" />
+                            </div>
+                            <div class="col-sm-12 col-md-1 col-lg-1" *ngIf="files.length">
+                                <label></label>
+                                <span (click)="removeAttatchment()" title="remove attachment">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div> 
+                        <div class="mb-4 row">
+                            <Button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="disable">
+                                Submit
+                            </Button>
+                        </div>   
+                        </form>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-2 col-lg-2"></div>
+    </div>
+</div>
