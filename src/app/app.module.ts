@@ -12,9 +12,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { InterceptorService } from 'src/service/interceptor.service';
 
 import { ToastrModule } from 'ngx-toastr';
+import { AboutUsComponent } from './about-us/about-us.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
+import { FaqComponent } from './faq/faq.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, AboutUsComponent, ContactUsComponent, FaqComponent],
   imports: [
     BrowserModule,
     CommonModule,
@@ -23,6 +27,8 @@ import { ToastrModule } from 'ngx-toastr';
     AppRoutingModule,
     MatSidenavModule,
     MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule,
     NgbModule,
     ToastrModule.forRoot()
   ],

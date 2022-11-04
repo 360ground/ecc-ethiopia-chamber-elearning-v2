@@ -8,6 +8,7 @@ import {
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-my-course',
@@ -28,7 +29,9 @@ export class MyCourseComponent implements OnInit {
   constructor(
     public service: ApiService,
     public router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    public toastr: ToastrService
+
   ) {}
 
   openSnackBar(message: any, btnText: any) {
@@ -74,4 +77,55 @@ export class MyCourseComponent implements OnInit {
         });
     }
   }
+
+
+  GenerateCertificate(data: any, index: any){
+    let payload = {
+      courseCode: data.courseCode,
+      courseName: data.name,
+      studentName: this.service.userData.name,
+      studentId: this.service.userData.id,
+      email: this.service.userData.email
+    };
+
+    this.service
+    .mainCanvas(
+      `generateCertificate/`,
+      'post',
+      payload
+    )
+    .subscribe((response: any) => {
+      if (response.status) {
+        this.toastr.success(response.message, 'Success');
+        this.service.myCourses.completed[index].canViewCertificate = true;
+        this.service.myCourses.completed[index].certificateId = response.message.id;
+
+
+      } else {
+        this.toastr.error(response.message, 'Error');
+
+      }
+    });
+  }
+
+  viewCertificate(id: any){
+
+    this.service
+    .mainCanvas(
+      `viewCertificate/${id}`,
+      'get',
+      {}
+    )
+    .subscribe((response: any) => {
+      if (response.status) {
+        this.toastr.success('you can view the certificate later.', 'Success');
+
+      } else {
+        this.toastr.error(response.message, 'Error');
+
+      }
+    });
+  }
+
+
 }

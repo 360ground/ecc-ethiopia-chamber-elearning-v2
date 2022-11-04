@@ -1,0 +1,24 @@
+.container {
+    margin-top: 25px !important;
+    text-align: center;
+    background: #fff;
+    box-shadow: 0 2px 15px 0px rgb(0 0 0 / 15%);
+    padding: 50px;
+}
+
+.heading {
+    color: #06357a !important;
+    font-size: 35px !important;
+    text-align: left !important;
+    font-weight: bold !important;
+}
+
+.body {
+    font-size: 18px !important;
+    color: gray !important;
+    text-align: left !important;
+    margin-bottom: 46px !important;
+    margin-top: 25px !important;
+    line-height: 27px !important;
+
+}

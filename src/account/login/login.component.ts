@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
   public showLoading: boolean = false;
 
   public loginRedirectUrl: any = `${environment.canvasUrl}/login/oauth2/auth?client_id=${environment.canvasClient_id}&response_type=code&redirect_uri=${environment.redirectUrlAfterLoginIncanvas}`;
+  public code: boolean = false;;
 
   constructor(
     public service: ApiService,
@@ -33,12 +34,16 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.queryParam = this.actRoute.snapshot.queryParams;
+    this.code = this.queryParam.code;
 
     if ('code' in this.queryParam) {
-      this.service.isAuthenticating = true;
-      this.login(this.queryParam.code);
+        this.service.isAuthenticating = true;
+        this.login(this.queryParam.code);
+      
     } else {
       window.location.replace(this.loginRedirectUrl);
+      // this.router.navigate(['/']);
+
     }
   }
 
@@ -54,36 +59,39 @@ export class LoginComponent implements OnInit {
       code: code,
     };
 
-    this.service
-      .mainCanvas('login', 'post', data)
-      .subscribe((response: any) => {
-
-        this.service.token = response.access_token;
-
-        if (response.accountType == 'company') {
-          this.service.isIndividual = false;
-        }
-
-        this.service.userData = response;
-
-        this.service.getEnrolledCourses(response.id);
-
-        // check if the redirection
-        let state: any = this.location.getState();
-
-        if (!state) {
-          // start from other page that require the login 
-          this.router.navigateByUrl(state.returnUrl, {
-            state: state.course,
-          });
-        } else {
-          // or from login button
-          this.router.navigate(['/']);
-        }
-
-        this.service.isAuthenticating = false;
-     
-      });
+    if(!this.service.userData){
+      this.service
+        .mainCanvas('login', 'post', data)
+        .subscribe((response: any) => {
+  
+          this.service.token = response.message.access_token;
+  
+          if (response.message.accountType == 'company') {
+            this.service.isIndividual = false;
+          }
+  
+          this.service.userData = response.message;
+  
+          this.service.getEnrolledCourses(response.message.id);
+  
+          // check if the redirection
+          let state: any = this.location.getState();
+  
+          if (!state) {
+            // start from other page that require the login 
+            this.router.navigateByUrl(state.returnUrl, {
+              state: state.course,
+            });
+          } else {
+            // or from login button
+            this.router.navigate(['/']);
+          }
+  
+          
+        });
+        
+      }
+      this.service.isAuthenticating = false;
   }
 
 

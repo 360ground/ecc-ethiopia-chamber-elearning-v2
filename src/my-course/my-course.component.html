@@ -153,6 +153,17 @@
                                             </a>     
                                         </span>
                                     </p>
+                                    <p>
+                                        <Button class="btn btn-primary btn-lg btn-block" *ngIf="!course.canViewCertificate" 
+                                        (click)="GenerateCertificate(course,j)">
+                                            Generate Certificate
+                                        </Button>
+                                        <Button class="btn btn-primary btn-lg btn-block" *ngIf="course.canViewCertificate" 
+                                         (click)="viewCertificate(course.certificateId)">
+                                            View Certificate
+                                        </Button>
+                                        
+                                    </p>
                                 </div>
                             </div>
                         </div>

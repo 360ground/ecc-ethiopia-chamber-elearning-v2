@@ -19,9 +19,6 @@ export class AppComponent implements OnInit {
   constructor(public service: ApiService, public router: Router) {}
 
   ngOnInit(): void {
-    // this.service.sendMessage({ refNo: '001' });
-    // this.service.getNewMessage().subscribe((message: any) => {});
-
     this.isLoggedIn();
   }
 
@@ -30,7 +27,7 @@ export class AppComponent implements OnInit {
       confirm(`${this.service.userData.name} are you sure want to logout ?`)
     ) {
       this.service
-        .mainCanvas(`logout/${this.service.userData.id}`, 'delete', null)
+        .mainCanvas(`logout/${this.service.userData.id}/${this.service.token}`, 'delete', null)
         .subscribe((response: any) => {
           if (response.status) {
             this.service.userData = null;
@@ -50,19 +47,22 @@ export class AppComponent implements OnInit {
   }
 
   isLoggedIn(){
-    this.service
-    .mainCanvas('isLoggedIn', 'post', {})
-    .subscribe((response: any) => {
-      this.service.token = response.access_token;
+    // this.service
+    // .mainCanvas('isLoggedIn', 'post', {
+    //   access_token: localStorage.getItem('access_token') ?? "nokey"
+    // })
+    // .subscribe((response: any) => {
+    //   // if(response.status){
+    //   //   this.service.token = response.message.access_token;
 
-      if (response.accountType == 'company') {
-        this.service.isIndividual = false;
-      }
-
-      this.service.userData = response;
-      this.service.getEnrolledCourses(response.id);
-
-    });
+    //   //   if (response.message.accountType == 'company') {
+    //   //     this.service.isIndividual = false;
+    //   //   }
+  
+    //   //   this.service.userData = response.message;
+    //   //   this.service.getEnrolledCourses(response.message.id);
+    //   // }
+    // });
   }
 
 }

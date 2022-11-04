@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ApiService } from 'src/service/api.service';
+import { AboutUsComponent } from './about-us/about-us.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
+import { FaqComponent } from './faq/faq.component';
 
 const routes: Routes = [
   {
@@ -48,6 +51,25 @@ const routes: Routes = [
       import('../start-learning/start-learning.module').then(
         (m) => m.StartLearningModule
       ),
+  },
+  {
+    path: 'enrollment',
+    loadChildren: () =>
+      import('../enrollment-request/enrollment-request.module').then(
+        (m) => m.EnrollmentRequestModule
+      ),
+  },
+  {
+    path: 'about-us',
+    component: AboutUsComponent
+  },
+  {
+    path: 'contact-us',
+    component: ContactUsComponent
+  },
+  {
+    path: 'faq',
+    component: FaqComponent
   },
 ];
 

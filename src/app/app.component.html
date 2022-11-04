@@ -13,7 +13,20 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
+          <a class="nav-link white" [routerLink]="['/about-us']" aria-current="page">About Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link white" [routerLink]="['/contact-us']" aria-current="page">Contact Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link white" [routerLink]="['/faq']" aria-current="page">FAQ</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link white" [routerLink]="['/courses']" aria-current="page">Online Courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link white" [routerLink]="['/enrollment/create']" aria-current="page"
+           *ngIf="service.userData && !service?.isIndividual">Enrollment Request</a>
         </li>
         <li class="nav-item" *ngIf="service.userData">
           <a class="nav-link white" [routerLink]="['/mycourse']" *ngIf="service.userData && service?.isIndividual">My Learning Plan</a>
@@ -96,16 +109,25 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
             <li class="list-group-item" *ngIf="service.userData">
               <a class="nav-link white" (click)="navigate('/account/change-password')">Change Password</a>
             </li>   -->
-            <li class="list-group-item" *ngIf="service.userData">
-              <a (click)="logout()">
-                Sign out
-              </a>
+            <li class="list-group-item">
+              <a class="nav-link white" (click)="navigate('/about-us')" aria-current="page">About Us</a>
+            </li>
+            <li class="list-group-item">
+              <a class="nav-link white" (click)="navigate('/contact-us')" aria-current="page">Contact Us</a>
+            </li>
+            <li class="list-group-item">
+              <a class="nav-link white" (click)="navigate('/faq')" aria-current="page">FAQ</a>
             </li>
             <li class="list-group-item"  *ngIf="!service.userData">
               <a class="nav-link white" (click)="navigate('/account/login')" aria-current="page">Login</a>
             </li>
             <li class="list-group-item"  *ngIf="!service.userData">
               <a class="nav-link btn btn-primary signupBtn" (click)="navigate('/account/signup')" aria-current="page">Sign up</a>
+            </li>
+            <li class="list-group-item" *ngIf="service.userData">
+              <a (click)="logout()">
+                Sign out
+              </a>
             </li>
           </ul>
         </div>

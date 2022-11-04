@@ -1,0 +1,69 @@
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-12"></div>
+        <div class="col-lg-8 col-md-8 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h1>Contact Us Form</h1>
+                    <hr />
+                    <ngb-alert type="success" [dismissible]="false" *ngIf="success">
+                        <p>
+                           <b>Thanks for your message. we will contact you soon.</b>
+                        </p>   
+                    </ngb-alert>
+                    <ngb-alert type="danger" [dismissible]="false" *ngIf="error">
+                        <p>
+                           <b>{{ errorMessage | titlecase }}</b>
+                        </p>   
+                    </ngb-alert>
+                    <form [formGroup]="formGroup">
+                        <div class="mb-4">
+                            <label>Full Name</label>
+                            <input required class="form-control form-control-lg" formControlName="fullName" />
+                            <p *ngIf="formSubmitted && getControls('fullName').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                            <label>Phone Number</label>
+                            <input required class="form-control form-control-lg" formControlName="phoneNumber" />
+                            <p *ngIf="formSubmitted && getControls('phoneNumber').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                            <label>Email address</label>
+            
+                            <input required type="email" class="form-control form-control-lg" formControlName="email" />
+                            <p *ngIf="formSubmitted && getControls('email').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                            <p *ngIf="formSubmitted && getControls('email').hasError('email')" class="error">
+                                <small> * invalid email</small>
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                            <label>Message</label>
+            
+                            <textarea equired type="text" class="form-control form-control-lg" formControlName="message">
+    
+                            </textarea>
+                            <p *ngIf="formSubmitted && getControls('message').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                            <Button type="submit" class="btn btn-primary btn-lg btn-block"  [disabled]="disable"
+                            (click)="Submit()"
+                        >
+                        Send
+                    </Button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-12"></div>
+    </div>
+</div>
