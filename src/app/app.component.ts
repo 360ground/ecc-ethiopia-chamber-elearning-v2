@@ -47,22 +47,22 @@ export class AppComponent implements OnInit {
   }
 
   isLoggedIn(){
-    // this.service
-    // .mainCanvas('isLoggedIn', 'post', {
-    //   access_token: localStorage.getItem('access_token') ?? "nokey"
-    // })
-    // .subscribe((response: any) => {
-    //   // if(response.status){
-    //   //   this.service.token = response.message.access_token;
+    this.service
+    .mainCanvas('isLoggedIn', 'post', {
+      access_token: localStorage.getItem('access_token') ?? "nokey"
+    })
+    .subscribe((response: any) => {
+      if(response.status){
+        this.service.token = response.message.access_token;
 
-    //   //   if (response.message.accountType == 'company') {
-    //   //     this.service.isIndividual = false;
-    //   //   }
+        if (response.message.accountType == 'company') {
+          this.service.isIndividual = false;
+        }
   
-    //   //   this.service.userData = response.message;
-    //   //   this.service.getEnrolledCourses(response.message.id);
-    //   // }
-    // });
+        this.service.userData = response.message;
+        this.service.getEnrolledCourses(response.message.id);
+      }
+    });
   }
 
 }

@@ -20,7 +20,7 @@ export class MyCourseComponent implements OnInit {
   public completed: any[] = [];
 
   public isLoading: Boolean = false;
-  public adminToken: any = environment.adminToken;
+  public isGeneratingCertificate: boolean = false;
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
@@ -41,12 +41,7 @@ export class MyCourseComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    // if (this.service.myCourses) {
-    //   this.inprogress = this.service.myCourses.inprogress;
-    //   this.completed = this.service.myCourses.completed;
-    // }
-  }
+  ngOnInit(): void {}
 
   navigate(data: any) {
     this.router.navigate(['/learning'], { state: { course: data } });
@@ -80,6 +75,8 @@ export class MyCourseComponent implements OnInit {
 
 
   GenerateCertificate(data: any, index: any){
+    this.isGeneratingCertificate = true;
+
     let payload = {
       courseCode: data.courseCode,
       courseName: data.name,
@@ -100,16 +97,15 @@ export class MyCourseComponent implements OnInit {
         this.service.myCourses.completed[index].canViewCertificate = true;
         this.service.myCourses.completed[index].certificateId = response.message.id;
 
-
       } else {
         this.toastr.error(response.message, 'Error');
-
       }
+
+      this.isGeneratingCertificate = false;
     });
   }
 
   viewCertificate(id: any){
-
     this.service
     .mainCanvas(
       `viewCertificate/${id}`,
@@ -118,7 +114,8 @@ export class MyCourseComponent implements OnInit {
     )
     .subscribe((response: any) => {
       if (response.status) {
-        this.toastr.success('you can view the certificate later.', 'Success');
+        window.open(environment.baseUrlBackend + response.message,"_blank");
+
 
       } else {
         this.toastr.error(response.message, 'Error');

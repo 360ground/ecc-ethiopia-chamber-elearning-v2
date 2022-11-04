@@ -1,0 +1,54 @@
+<div class="container" style="margin-top: 45px !important;">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <div class="card" style="margin-top: 0px; padding: 25px;">
+                <h1  class="mb-4 mt-4" style="color: #3c4043; font-weight:500;">
+                    My Certification
+                </h1>
+                <p class="mb-4">
+                    Keep track of all the previous certification you've earned. Let's get started!
+                </p>
+                <hr style="margin-top: 24px !important; margin-bottom: 24px !important; color: gray;" />
+               
+                
+                
+                <hr style="margin-top: 24px !important; margin-bottom: 24px !important; color: gray;" />
+                <div class="row">
+                    <div class="col-sm-12 col-md-4 col-lg-4" *ngIf="!myCertification.length">
+                        <div class="card" style="padding: 24px !important;">
+                            <div class="empty-card">
+                               <h4 class="empty-card-title">You have no certificate.</h4>
+                               <!-- <p class="empty-card-description mt-4">Get started by adding courses to your plan.</p> -->
+                               <h4 class="empty-card-button mt-4">
+                                <div class="btn btn-primary">
+                                   <i class="fa fa-plus mr-4" aria-hidden="true"></i> Add
+                                </div>
+                               </h4>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4 col-lg-4"  *ngFor="let certificate of myCertification; let i = index;" >
+                        <div class="card" style="padding: 24px !important;">
+                            <div class="empty-card">
+                               <h4 class="empty-card-title">{{ certificate?.courseName | uppercase}}</h4>
+                               <p class="empty-card-description">
+                                   <b>({{ certificate?.createdAt | date }})</b> 
+                                </p>
+                               <h4 class="empty-card-button">
+                                <button class="btn btn-outline-primary" (click)="viewCertificate(certificate.id)" style="margin-right: 20px !important;">
+                                   <i class="fa fa-pencil mr-4" aria-hidden="true"></i> View Certificate
+                                </button>
+                                <button class="btn btn-outline-danger mr-4" (click)="deleteCertificate(certificate.id, i)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i> Delete Certificate
+                                 </button>
+                               </h4>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                <hr style="margin-top: 24px !important; margin-bottom: 24px !important; color: gray;" />
+            </div>
+    
+        </div>
+    </div>
+</div>

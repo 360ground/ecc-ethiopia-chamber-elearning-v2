@@ -42,10 +42,10 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
               </span>
               <div ngbDropdownMenu aria-labelledby="dropdownBasic1" *ngIf="service.userData?.sis_user_id !== 'admin'">
                 <a ngbDropdownItem [routerLink]="['/mycourse']" *ngIf="service.userData && service?.isIndividual">My Learning Plan</a>
-                <!-- <a ngbDropdownItem [routerLink]="['/myeducation']" *ngIf="service.userData && service?.isIndividual">My Education</a>
-                <a ngbDropdownItem [routerLink]="['/']" *ngIf="service.userData && service?.isIndividual">My Certification</a>
+                <a ngbDropdownItem [routerLink]="['/myeducation']" *ngIf="service.userData && service?.isIndividual">My Education</a>
+                <a ngbDropdownItem [routerLink]="['/mycertificate']" *ngIf="service.userData && service?.isIndividual">My Certification</a>
                 <a ngbDropdownItem  [routerLink]="['/account/profile']">Update profile</a>
-                <a ngbDropdownItem  [routerLink]="['/account/change-password']">Change Password</a> -->
+                <!-- <a ngbDropdownItem  [routerLink]="['/account/change-password']">Change Password</a> -->
                 <div class="dropdown-divider"></div>
                 <span ngbDropdownItem href="#" (click)="logout()" style="cursor: pointer !important;">
                   Logout
@@ -65,8 +65,6 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
           <a class="nav-link btn btn-primary signupBtn" [routerLink]="['/account/signup']" aria-current="page">Sign up</a>
         </span>
       </span>
-
-
     </div>
   </div>
 </nav>
@@ -95,20 +93,20 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
             <li class="list-group-item"  *ngIf="service.userData && service?.isIndividual">
               <a class="nav-link white" (click)="navigate('mycourse')">My Learning Plan</a>
             </li>
-            <!-- <li class="list-group-item" *ngIf="service.userData && service?.isIndividual">
+            <li class="list-group-item" *ngIf="service.userData && service?.isIndividual">
               <a  class="nav-link white" (click)="navigate('myeducation')">My Education</a>
             </li>
             <li class="list-group-item">
-              <a class="nav-link white" (click)="navigate('myeducation')" *ngIf="service.userData && service?.isIndividual">
-                Certification
+              <a class="nav-link white" (click)="navigate('mycertificate')" *ngIf="service.userData && service?.isIndividual">
+                My Certification
               </a>
             </li>
             <li class="list-group-item" *ngIf="service.userData">
               <a  class="nav-link white" (click)="navigate('/account/profile')">My profile</a>
             </li>
-            <li class="list-group-item" *ngIf="service.userData">
+            <!-- <li class="list-group-item" *ngIf="service.userData">
               <a class="nav-link white" (click)="navigate('/account/change-password')">Change Password</a>
-            </li>   -->
+            </li>  -->
             <li class="list-group-item">
               <a class="nav-link white" (click)="navigate('/about-us')" aria-current="page">About Us</a>
             </li>

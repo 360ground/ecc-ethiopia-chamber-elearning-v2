@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbAlertConfig } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/service/api.service';
+import { CustomValidators } from '../signup/password-validators';
 
 @Component({
   selector: 'app-update-profile',
@@ -15,24 +17,34 @@ export class UpdateProfileComponent implements OnInit {
   public formSubmitted = false;
   public disable: boolean = false;
   public isIndividual: Boolean = true;
-  public profileUpdateError: any[] = [];
-  public profileUpdateSuccess: Boolean = false;
+  public base64Image: any = null;
 
   constructor(
     private service: ApiService,
     private router: Router,
-    public alertConfig: NgbAlertConfig
+    public toastr: ToastrService
   ) {
     this.isIndividual =
       this.service.userData.accountType == 'company' ? false : true;
+      let names = this.service.userData.name.split(" ");
 
     this.formGroup = new FormGroup({
       individual: new FormGroup({
-        firstname: new FormControl(null, Validators.required),
-        lastname: new FormControl(null, Validators.required),
-        username: new FormControl(null, Validators.required),
+        firstname: new FormControl(names[0], Validators.required),
+        lastname: new FormControl(names[1], Validators.required),
         email: new FormControl(null, [Validators.required, Validators.email]),
-        phonenumber: new FormControl(null, Validators.required),
+        phonenumber: new FormControl(null, [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(10),
+          CustomValidators.patternValidator(new RegExp('^[09|^07]{2}'), {
+            validMobileNumberFormat: true,
+          }),
+          CustomValidators.patternValidator(new RegExp('^[0-9]+$'), {
+            MobileNumberMustBeNumber: true,
+          }),
+        ]),        
+        
         // additional fields
         ageRange: new FormControl(null, Validators.required),
         organizationName: new FormControl(null, Validators.required),
@@ -44,13 +56,22 @@ export class UpdateProfileComponent implements OnInit {
         accountType: new FormControl(null),
       }),
       company: new FormGroup({
-        firstname: new FormControl(null, Validators.required),
-        lastname: new FormControl(null, Validators.required),
-        username: new FormControl(null, Validators.required),
+        firstname: new FormControl(names[0], Validators.required),
+        lastname: new FormControl(names[1], Validators.required),
         email: new FormControl(null, [Validators.required, Validators.email]),
-        phonenumber: new FormControl(null, Validators.required),
+        phonenumber: new FormControl(null, [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(10),
+          CustomValidators.patternValidator(new RegExp('^[09|^07]{2}'), {
+            validMobileNumberFormat: true,
+          }),
+          CustomValidators.patternValidator(new RegExp('^[0-9]+$'), {
+            MobileNumberMustBeNumber: true,
+          }),
+        ]),
         organizationName: new FormControl(null, Validators.required),
-        representativeFullName: new FormControl(null, Validators.required),
+        // representativeFullName: new FormControl(null, Validators.required),
         representativeRole: new FormControl(null, Validators.required),
         sector: new FormControl(null, Validators.required),
         NoOfEmployee: new FormControl(null, Validators.required),
@@ -63,30 +84,11 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.alertConfig.dismissible = true;
-
-    this.getProfileDetail();
-    this.isMemberCheck(false);
-  }
-
-  getProfileDetail() {
     let userData = this.service.userData;
 
-    if (userData.accountType) {
-      this.getControls(userData.accountType).enable();
-      this.getControls(userData.accountType).patchValue(userData);
+    this.getControls(userData.accountType).patchValue(userData);
 
-      let object: any = {};
-
-      userData.customfields.forEach((element: any) => {
-        if (element.type == 'checkbox') {
-          element.value = +element.value;
-        }
-
-        object[element.name] = element.value;
-      });
-      this.getControls(userData.accountType).patchValue(object);
-    }
+    this.isMemberCheck(false);
   }
 
   public getControls(name: any): FormControl {
@@ -95,22 +97,31 @@ export class UpdateProfileComponent implements OnInit {
 
   Submit(name: any) {
     this.formSubmitted = true;
-    if (!this.getControls(name).valid) {
+
+    if(!this.getControls(name).valid) {
       return;
+
     } else {
       this.disable = true;
-      let payload = this.getPayload(name);
 
-      this.service.main(payload).subscribe((response: any) => {
-        this.profileUpdateError = [];
+      let payload = {
+        custom_data: { data: this.getControls(name).value },
+        memberId: this.base64Image
+      };
+      
+      this.service
+      .mainCanvas(
+        `updateProfile/${this.service.userData.id}`,
+        'post',
+        payload
+      ).subscribe((response: any) => {
 
-        if (!response.warnings.length) {
-          this.profileUpdateSuccess = true;
-          this.profileUpdateError = [];
+        if (response.status) {
+          this.toastr.success(response.message, 'Success');
+
         } else {
-          this.profileUpdateError = [];
-          this.profileUpdateSuccess = false;
-          this.profileUpdateError = response.warnings;
+          this.toastr.error(response.message, 'Error');
+
         }
 
         this.disable = false;
@@ -118,43 +129,24 @@ export class UpdateProfileComponent implements OnInit {
     }
   }
 
-  getPayload(name: any) {
-    const formData = new FormData();
+  onFileUpload($event: any) {
+    if (!this.isIndividual) {
+      let file = $event.target.files[0];
 
-    formData.append('wstoken', environment.adminToken);
-    formData.append('wsfunction', 'core_user_update_users');
-    formData.append('moodlewsrestformat', 'json');
-    formData.append('users[0][id]', this.service.userData.id);
+      const reader: any = new FileReader();
+      reader.readAsDataURL(file);
 
-    let keys = Object.keys(this.getControls(name).value);
-    let values = Object.values(this.getControls(name).value);
-    let outerIndex = 0;
-
-    let exclude = ['username', 'firstname', 'lastname', 'email'];
-
-    keys.forEach((element, index) => {
-      if (exclude.includes(element)) {
-        formData.append(`users[0][${element}]`, String(values[index]));
-      } else {
-        if (values[index]) {
-          formData.append(
-            `users[0][customfields][${outerIndex}][type]`,
-            `${element}`
-          );
-          formData.append(
-            `users[0][customfields][${outerIndex}][value]`,
-            element == 'isaMember'
-              ? String(values[index] ? 1 : 0)
-              : String(values[index])
-          );
-          outerIndex++;
-        }
-      }
-    });
-
-    return formData;
+      reader.onload = () => {
+        this.base64Image = reader.result.toString();
+      };
+    }
   }
 
+  removeMemberId() {
+    this.getControls('company.memberId').reset();
+    this.base64Image = null;
+  }
+  
   isMemberCheck(value: any) {
     if (!value) {
       this.getControls('company.membershipType').reset();

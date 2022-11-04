@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/service/api.service';
 
@@ -14,9 +15,7 @@ export class MyEducationComponent implements OnInit {
 
   public formSubmitted = false;
   public disable: boolean = false;
-  public backEndError: any[] = [];
-  public Success: Boolean = false;
-  public educationalBackground: any[] = [];
+  public myEducation: any[] = [];
   public isOnEdit: Boolean = false;
   public currentEditingEducationIndex: any;
 
@@ -30,7 +29,9 @@ export class MyEducationComponent implements OnInit {
     { value: 'Phd', title: 'Phd' },
   ];
 
-  constructor(private service: ApiService, private router: Router) {
+  constructor(private service: ApiService, private router: Router,
+        public toastr: ToastrService
+    ) {
     this.formGroup = new FormGroup({
       institutionName: new FormControl(null, Validators.required),
       qualification: new FormControl(null, Validators.required),
@@ -40,12 +41,7 @@ export class MyEducationComponent implements OnInit {
   }
 
   ngOnInit() {
-    const element = this.service.userData.customfields.find(
-      (element: any) => element.name == 'educationBackground'
-    );
-
-    this.educationalBackground = JSON.parse(element.value);
-    console.log(this.educationalBackground);
+    this.myEducation = this.service.userData.myEducation;
   }
 
   public getControls(name: any): FormControl {
@@ -54,22 +50,33 @@ export class MyEducationComponent implements OnInit {
 
   Submit() {
     this.formSubmitted = true;
-    if (!this.educationalBackground.length) {
+
+    if (!this.myEducation.length) {
       return;
+
     } else {
       this.disable = true;
-      let payload = this.getPayload();
+      let payload = {
+        custom_data: { data: {
+            myEducation: this.myEducation
+          }
+         },
+      };
 
-      this.service.main(payload).subscribe((response: any) => {
-        this.backEndError = [];
+      this.service
+      .mainCanvas(
+        `saveMyEducation/${this.service.userData.id}`,
+        'post',
+        payload
+        ).subscribe((response: any) => {
+          
+        if (response.status) {
+            this.toastr.success(response.message, 'Success');
+            this.service.userData.myEducation = this.myEducation;
 
-        if (!response.warnings.length) {
-          this.Success = true;
-          this.backEndError = [];
         } else {
-          this.backEndError = [];
-          this.Success = false;
-          this.backEndError = response.warnings;
+          this.toastr.error(response.message, 'Error');
+
         }
 
         this.disable = false;
@@ -77,42 +84,25 @@ export class MyEducationComponent implements OnInit {
     }
   }
 
-  getPayload() {
-    const formData = new FormData();
-
-    formData.append('wstoken', environment.adminToken);
-    formData.append('wsfunction', 'core_user_update_users');
-    formData.append('moodlewsrestformat', 'json');
-    formData.append('users[0][id]', this.service.userData.id);
-
-    formData.append(`users[0][customfields][0][type]`, 'educationBackground');
-    formData.append(
-      `users[0][customfields][0][value]`,
-      JSON.stringify(this.educationalBackground)
-    );
-
-    return formData;
-  }
-
   editEducation(index: any) {
-    this.formGroup.setValue(this.educationalBackground[index]);
+    this.formGroup.setValue(this.myEducation[index]);
     this.isOnEdit = true;
     this.currentEditingEducationIndex = index;
   }
 
   addEducation() {
-    this.educationalBackground.push(this.formGroup.value);
+    this.myEducation.push(this.formGroup.value);
     this.formGroup.reset();
   }
 
   removeEducation(index: any) {
     if (confirm('are you sure want to remove this education ?')) {
-      this.educationalBackground.splice(index, 1);
+      this.myEducation.splice(index, 1);
     }
   }
 
   updateEducation() {
-    this.educationalBackground[this.currentEditingEducationIndex] =
+    this.myEducation[this.currentEditingEducationIndex] =
       this.formGroup.value;
     this.isOnEdit = false;
     this.currentEditingEducationIndex = null;

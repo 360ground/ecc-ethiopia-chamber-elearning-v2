@@ -82,3 +82,7 @@ ngb-alert{
         line-height: 2rem !important;
     }
   }
+  
+  .error {
+    color: red !important;
+  }

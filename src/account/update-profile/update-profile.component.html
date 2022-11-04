@@ -23,14 +23,7 @@
         <div class="col-sm-12 col-md-8 col-lg-8 mb-4">
             <form [formGroup]="formGroup" 
                 ngSubmit="isIndividual ? Submit('individual') : Submit('company')">
-                <p *ngIf="profileUpdateSuccess"  class="mt-4" style="margin-top: 53px !important;">
-                    <ngb-alert type="success">Profile Updated successfully. please relogin to see changes.</ngb-alert>
-                </p>
-                <div *ngIf="!profileUpdateSuccess" style="margin-top: 53px !important;">
-                    <div *ngFor="let alert of profileUpdateError">
-                        <ngb-alert type="danger" [dismissible]="false">{{ alert.message }}</ngb-alert>
-                    </div>
-                </div>
+                
                     <div *ngIf="isIndividual" class="mb-4">
                         <div class="card profileCard">
                             <h1 class="mb-4" class="cardTitle">Personal Details</h1>
@@ -41,26 +34,32 @@
                                     <div formGroupName="individual" class="mb-4">
                                         <label>First Name</label>
                                         <input required class="form-control form-control-lg" formControlName="firstname" />
+                                        <p *ngIf="formSubmitted && getControls('individual.firstname').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
+                                       
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                     <div formGroupName="individual" class="mb-4">
                                         <label>Last Name</label>
                                         <input required class="form-control form-control-lg" formControlName="lastname" />
+                                        <p *ngIf="formSubmitted && getControls('individual.lastname').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                    <div formGroupName="individual" class="mb-4">
-                                        <label>User Name</label>
-                    
-                                        <input required class="form-control form-control-lg" formControlName="username" />
-                                    </div>
-                                </div>
+                                
                                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                     <div formGroupName="individual" class="mb-4">
                                         <label>Email address</label>
-                    
                                         <input required type="email" class="form-control form-control-lg" formControlName="email" />
+                                        <p *ngIf="formSubmitted && getControls('individual.email').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
+                                        <p *ngIf="formSubmitted && getControls('individual.email').hasError('email')" class="error">
+                                            <small> * invalid email</small>
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -68,6 +67,21 @@
                                         <label>Phone Number</label>
                     
                                         <input required class="form-control form-control-lg" formControlName="phonenumber" />
+                                        <p *ngIf="formSubmitted && getControls('individual.phonenumber').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
+                                        <p *ngIf="formSubmitted && getControls('individual.phonenumber').hasError('minlength')" class="error">
+                                            <small> * Must atleast 10 characters long </small>
+                                        </p>
+                                        <p *ngIf="formSubmitted && getControls('individual.phonenumber').hasError('maxlength')" class="error">
+                                            <small> * Can't exceed 10 characters</small>
+                                        </p>
+                                        <p *ngIf="formSubmitted && getControls('individual.phonenumber').hasError('validMobileNumberFormat')" class="error">
+                                            <small> * Invalid. mobile number must begin with 09 or 07 then **-**-**-**</small>
+                                        </p>
+                                        <p *ngIf="formSubmitted && getControls('individual.phonenumber').hasError('MobileNumberMustBeNumber')" class="error">
+                                            <small> * mobile number must be a number</small>
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -80,6 +94,9 @@
                                             <option value="50-200">31 - 40</option>
                                             <option value=">200"> 40+</option>
                                         </select>
+                                        <p *ngIf="formSubmitted && getControls('individual.ageRange').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -94,6 +111,9 @@
                                         <label>Organization Name</label>
                     
                                         <input required class="form-control form-control-lg" formControlName="organizationName" />
+                                        <p *ngIf="formSubmitted && getControls('individual.organizationName').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -101,6 +121,9 @@
                                         <label>Sector</label>
                     
                                         <input required class="form-control form-control-lg" formControlName="sector" />
+                                        <p *ngIf="formSubmitted && getControls('individual.sector').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -108,12 +131,18 @@
                                         <label>Current Position (Occupation)</label>
                     
                                         <input required class="form-control form-control-lg" formControlName="occupation" />
+                                        <p *ngIf="formSubmitted && getControls('individual.occupation').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                     <div formGroupName="individual" class="mb-4">
                                         <label>Year Of Exprience</label>
                                         <input type="number" required class="form-control form-control-lg" formControlName="yearOfExperience" />
+                                        <p *ngIf="formSubmitted && getControls('individual.yearOfExperience').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -128,6 +157,9 @@
                                         <label>Country</label>
                     
                                         <input required class="form-control form-control-lg" formControlName="country" />
+                                        <p *ngIf="formSubmitted && getControls('individual.country').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -135,6 +167,9 @@
                                         <label>City</label>
                     
                                         <input required class="form-control form-control-lg" formControlName="city" />
+                                        <p *ngIf="formSubmitted && getControls('individual.city').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -150,18 +185,18 @@
                                     <div formGroupName="company" class="mb-4">
                                         <label>First Name</label>
                                         <input required class="form-control form-control-lg" formControlName="firstname" />
+                                        <p *ngIf="formSubmitted && getControls('company.firstname').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">    
                                     <div formGroupName="company" class="mb-4">
                                         <label>Last Name</label>
                                         <input required class="form-control form-control-lg" formControlName="lastname" />
-                                    </div>
-                                </div>  
-                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                    <div formGroupName="company" class="mb-4">
-                                        <label>Username</label>
-                                        <input required class="form-control form-control-lg" formControlName="username" />
+                                        <p *ngIf="formSubmitted && getControls('company.lastname').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
                                     </div>
                                 </div>  
                             </div>
@@ -174,36 +209,66 @@
                                     <div formGroupName="company" class="mb-4">
                                         <label>Organization Name</label>
                                         <input required class="form-control form-control-lg" formControlName="organizationName" />
+                                        <p *ngIf="formSubmitted && getControls('company.organizationName').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
                                     </div>
                                 </div>    
-                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <!-- <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                     <div formGroupName="company" class="mb-4">
                                         <label>Representative FullName</label>
                                         <input required class="form-control form-control-lg" formControlName="representativeFullName" />
                                     </div>
-                                </div>  
+                                </div>   -->
                                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                     <div formGroupName="company" class="mb-4">
                                         <label>Representative Role</label>
                                         <input required class="form-control form-control-lg" formControlName="representativeRole" />
+                                        <p *ngIf="formSubmitted && getControls('company.representativeRole').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
                                     </div>
                                 </div>  
                                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                     <div formGroupName="company" class="mb-4">
                                         <label>Contact Person Email address</label>
                                         <input required class="form-control form-control-lg" formControlName="email" />
+                                        <p *ngIf="formSubmitted && getControls('company.email').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
+                                        <p *ngIf="formSubmitted && getControls('company.email').hasError('email')" class="error">
+                                            <small> * invalid email</small>
+                                        </p>
                                     </div>
                                 </div>   
                                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                     <div formGroupName="company" class="mb-4">
                                         <label>Contact Person Phone Number</label>
                                         <input required class="form-control form-control-lg" formControlName="phonenumber" />
+                                        <p *ngIf="formSubmitted && getControls('company.phonenumber').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
+                                        <p *ngIf="formSubmitted && getControls('company.phonenumber').hasError('minlength')" class="error">
+                                            <small> * Must atleast 10 characters long </small>
+                                        </p>
+                                        <p *ngIf="formSubmitted && getControls('company.phonenumber').hasError('maxlength')" class="error">
+                                            <small> * Can't exceed 10 characters</small>
+                                        </p>
+                                        <p *ngIf="formSubmitted && getControls('company.phonenumber').hasError('validMobileNumberFormat')" class="error">
+                                            <small> * Invalid. mobile number must begin with 09 or 07 then **-**-**-**</small>
+                                        </p>
+                                        <p *ngIf="formSubmitted && getControls('company.phonenumber').hasError('MobileNumberMustBeNumber')" class="error">
+                                            <small> * mobile number must be a number</small>
+                                        </p>
                                     </div>
                                 </div>   
                                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                     <div formGroupName="company" class="mb-4">
                                         <label>Sector</label>
                                         <input required class="form-control form-control-lg" formControlName="sector" />
+                                        <p *ngIf="formSubmitted && getControls('company.sector').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
                                     </div>
                                 </div>   
                                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -216,6 +281,9 @@
                                             <option value="50-200">50 - 200</option>
                                             <option value=">200"> +200</option>
                                         </select>
+                                        <p *ngIf="formSubmitted && getControls('company.NoOfEmployee').hasError('required')" class="error">
+                                            <small> * required</small>
+                                        </p>
                                     </div>
                                 </div>     
                             </div>
@@ -241,11 +309,22 @@
                                     </div>
                                 </div>  
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <div formGroupName="company" class="mb-4">
-                                        <label>If So, please attache the membership id here.</label>
-                                        <input type="file" class="form-control form-control-lg" formControlName="memberId" />
+                                    <div formGroupName="company" class="mb-4 row">
+                                        <div class="col-sm-12" [ngClass]="getControls('company.memberId').value ? 'col-md-11 col-lg-11' : 'col-md-12 col-lg-12'">
+                                            <label>If So, please attache the membership id here.</label>
+                                            <input type="file" class="form-control form-control-lg" (change)="onFileUpload($event)" 
+                                            accept="image/*" formControlName="memberId" />
+                                        </div>
+                                        <div class="col-sm-12 col-md-1 col-lg-1" *ngIf="getControls('company.memberId').value">
+                                            <label></label>
+                                            <span (click)="removeMemberId()" title="remove member id attachment">
+                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>    
+                                    
+                                </div>   
+                                
                             </div>    
                         </div>    
                     </div>        

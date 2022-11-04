@@ -1,0 +1,38 @@
+.empty-card{
+    padding: 24px;
+    background-color: aliceblue;
+    /* width: 443px; */
+    text-align: center;
+    color: gray;
+    font-weight: 400;
+    border-style: dashed;
+    border-width: thin;
+}
+
+.gray {
+    color: gray !important;
+    font-size: 18px !important;
+}
+
+.card{
+    border-radius: 0px !important;
+}
+
+.icons1 {
+    margin-right: 8px;
+    color: gold;
+    font-size: 20px;
+    font-weight: lighter;
+    /* margin-left: 13px; */
+}
+
+.form-control{
+    font-size: medium !important;
+    font-weight: lighter !important;
+}
+
+label{
+    color: gray;
+    font-weight: lighter;
+    margin-bottom: 9px;
+}
