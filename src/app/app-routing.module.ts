@@ -41,6 +41,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'mycertificate',
+    loadChildren: () =>
+      import('../my-certificate/my-certificate.module').then(
+        (m) => m.MyCertificateModule
+      ),
+  },
+  {
     path: 'quizes',
     loadChildren: () =>
       import('../quize/quize.module').then((m) => m.QuizeModule),

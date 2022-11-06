@@ -33,6 +33,7 @@ export class AppComponent implements OnInit {
             this.service.userData = null;
             this.service.myCourses = null;
             this.service.token = null;
+            localStorage.removeItem('access_token');
             this.router.navigateByUrl('/courses');
           } else {
             alert(response.message);

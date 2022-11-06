@@ -1,1 +1,86 @@
-<p>requests works!</p>
+<div class="container" style="margin-top: 45px !important;">
+    <div class="row top">
+        <div class="col-sm-12 col-md-2 col-lg-2"></div>
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div class="card" *ngIf="!requestDetail">
+                <div class="card-body">
+                    <p>
+                        <span><h1>Enrolment request</h1></span>
+                    </p>
+                    <p><span><hr /></span></p>
+                    <div class="mb-4" *ngIf="requests.length">
+                        <ul class="list-group">
+                            <li class="list-group-item" *ngFor="let request of requests; let i as index"
+                             (click)="viewDetail(request.id)">
+                                <div>
+                                    <p>{{ request?.institution_name | titlecase }}</p>
+                                    <p>{{ request.course_name | titlecase }}</p>
+                                    <p>
+                                        <span>{{ request.createdAt | date }}</span>
+                                        <span>{{ request.status }}</span>
+                                    </p>
+                                </div>  
+                            </li>
+                        </ul>
+                    </div>  
+                </div>
+            </div>
+            <!-- for request detail -->
+            <div class="card" *ngIf="requestDetail">
+                <div class="card-body">
+                    <p>
+                        <span>
+                            <Button class="btn btn-secondary" (click)="back()">
+                                Back
+                            </Button>
+                        </span>
+                    </p>
+                    
+                    <p>
+                        <span>
+                            <h1>Request Detail</h1>
+                        </span>
+                    </p>    
+                    
+                    <p>
+                        <span><hr /></span>
+                    </p>
+                    <div class="mb-4">
+                        <div>
+                            <p>{{ requestDetail?.institution_name | titlecase }}</p>
+                            <p>{{ requestDetail.course_name | titlecase }}</p>
+                            <p>{{ requestDetail.createdAt | date }}</p>
+                        </div>  
+                        <div>
+                            <ul class="list-group">
+                                <li class="list-group-item" *ngFor="let student of requestDetail.students; let i as index">
+                                    <div>
+                                        <p>
+                                            <span>{{ student?.name | titlecase }}</span>
+                                            <span style="float: right !important;">{{ student?.email }}</span>
+                                        </p>
+                                    </div>  
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>
+                                <span>
+                                    <Button class="btn btn-success btn-lg btn-block" (click)="updateRequest('approve')">
+                                        Approve
+                                    </Button>
+                                </span>
+                                <span>
+                                    <Button class="btn btn-danger btn-lg btn-block" (click)="updateRequest('decline')">
+                                        Decline
+                                    </Button>
+                                </span>
+                            </p>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </div>        
+        <div class="col-sm-12 col-md-2 col-lg-2"></div>
+    </div>
+</div>        

@@ -23,7 +23,10 @@ export class MyEducationComponent implements OnInit {
     { value: 'training', title: 'training' },
     { value: 'certificate', title: 'certificate' },
     { value: 'training', title: 'training' },
+    { value: 'diploma', title: 'Diploma' },
+    { value: 'advancedDiploma', title: 'Advanced Diploma' },
     { value: 'BA', title: 'BA' },
+    { value: 'Bsc', title: 'Bsc' },
     { value: 'MA', title: 'MA' },
     { value: 'Msc', title: 'Msc' },
     { value: 'Phd', title: 'Phd' },
@@ -41,7 +44,9 @@ export class MyEducationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.myEducation = this.service.userData.myEducation;
+    this.myEducation = this.service.userData.profile.myEducation ?
+    Object.values(this.service.userData.profile.myEducation)
+    : [];
   }
 
   public getControls(name: any): FormControl {
@@ -56,10 +61,11 @@ export class MyEducationComponent implements OnInit {
 
     } else {
       this.disable = true;
+      this.service.userData.profile.myEducation = Object.values(this.myEducation);
+
       let payload = {
-        custom_data: { data: {
-            myEducation: this.myEducation
-          }
+        custom_data: { data: 
+          this.service.userData.profile
          },
       };
 
@@ -72,7 +78,6 @@ export class MyEducationComponent implements OnInit {
           
         if (response.status) {
             this.toastr.success(response.message, 'Success');
-            this.service.userData.myEducation = this.myEducation;
 
         } else {
           this.toastr.error(response.message, 'Error');

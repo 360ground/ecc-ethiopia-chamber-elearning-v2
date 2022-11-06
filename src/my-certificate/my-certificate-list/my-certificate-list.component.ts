@@ -30,7 +30,7 @@ export class MyCertificateListComponent implements OnInit {
         
       if (response.status) {
 
-          this.myCertification = response.myCertification;
+          this.myCertification = response.message;
 
       } else {
         this.toastr.error(response.message, 'Error');

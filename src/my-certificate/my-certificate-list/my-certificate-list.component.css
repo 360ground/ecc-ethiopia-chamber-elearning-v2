@@ -36,3 +36,7 @@ label{
     font-weight: lighter;
     margin-bottom: 9px;
 }
+
+.btn {
+    border-radius: 0px !important;
+}

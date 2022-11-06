@@ -65,8 +65,9 @@ export class LoginComponent implements OnInit {
         .subscribe((response: any) => {
   
           this.service.token = response.message.access_token;
+          localStorage.setItem('access_token', response.message.access_token);
   
-          if (response.message.accountType == 'company') {
+          if (response.message.profile.accountType == 'company') {
             this.service.isIndividual = false;
           }
   

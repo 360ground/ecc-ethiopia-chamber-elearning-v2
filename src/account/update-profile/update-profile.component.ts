@@ -25,7 +25,7 @@ export class UpdateProfileComponent implements OnInit {
     public toastr: ToastrService
   ) {
     this.isIndividual =
-      this.service.userData.accountType == 'company' ? false : true;
+      this.service.userData.profile.accountType == 'company' ? false : true;
       let names = this.service.userData.name.split(" ");
 
     this.formGroup = new FormGroup({
@@ -53,7 +53,7 @@ export class UpdateProfileComponent implements OnInit {
         country: new FormControl('Ethiopia', Validators.required),
         city: new FormControl(null, Validators.required),
         yearOfExperience: new FormControl(null, Validators.required),
-        accountType: new FormControl(null),
+        accountType: new FormControl('individual'),
       }),
       company: new FormGroup({
         firstname: new FormControl(names[0], Validators.required),
@@ -78,15 +78,14 @@ export class UpdateProfileComponent implements OnInit {
         isaMember: new FormControl(null),
         membershipType: new FormControl({ disabled: true, value: null }),
         memberId: new FormControl({ disabled: true, value: null }),
-        accountType: new FormControl(null),
+        accountType: new FormControl('company'),
       }),
     });
   }
 
   ngOnInit() {
     let userData = this.service.userData;
-
-    this.getControls(userData.accountType).patchValue(userData);
+    this.getControls(userData.profile.accountType).patchValue(userData.profile);
 
     this.isMemberCheck(false);
   }
@@ -104,8 +103,11 @@ export class UpdateProfileComponent implements OnInit {
     } else {
       this.disable = true;
 
+      let value = this.getControls(name).value;
+      value.myEducation = this.service.userData.profile.myEducation;
+
       let payload = {
-        custom_data: { data: this.getControls(name).value },
+        custom_data: { data: value },
         memberId: this.base64Image
       };
       
@@ -117,6 +119,7 @@ export class UpdateProfileComponent implements OnInit {
       ).subscribe((response: any) => {
 
         if (response.status) {
+          this.service.userData.profile = value;
           this.toastr.success(response.message, 'Success');
 
         } else {

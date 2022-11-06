@@ -5,16 +5,16 @@ import { ApiService } from 'src/service/api.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-enrollment-request',
-  templateUrl: './enrollment-request.component.html',
-  styleUrls: ['./enrollment-request.component.css'],
+  selector: 'app-enrollment-request-form',
+  templateUrl: './enrollment-request-form.component.html',
+  styleUrls: ['./enrollment-request-form.component.css'],
 })
-export class EnrollmentRequestComponent implements OnInit {
+export class EnrollmentRequestFormComponent implements OnInit {
   public formGroup: FormGroup;
   public formSubmitted = false;
   public disable: boolean = false;
-  public traineelist: any[] = [];
-  public bankSlip: any[] = [];
+  public traineelist: any = null;
+  public bankSlip: any = null;
 
   public students: any[] = [];
   public studentDetail: any = null;
@@ -23,7 +23,7 @@ export class EnrollmentRequestComponent implements OnInit {
   constructor(
     public service: ApiService,
     private router: Router,
-    public toastr: ToastrService
+    public toastr: ToastrService,
   ) {
     this.formGroup = new FormGroup({
       institution_id: new FormControl(this.service.userData.id),
@@ -66,7 +66,7 @@ export class EnrollmentRequestComponent implements OnInit {
             this.disable = false;
     
           } else {
-            alert(`no trainee found by this email : ${this.getControls('email').value}`)
+            this.toastr.info(`no trainee found by this email : ${this.getControls('email').value}`, 'Error');
             this.disable = false;
           }
           this.isSearching = false;
@@ -93,7 +93,8 @@ export class EnrollmentRequestComponent implements OnInit {
       this.getControls('email').setValue(null);
       this.studentDetail = null
 
-      alert(`trainee already added by this email : ${email}`);
+      this.toastr.info(`trainee already added by this email : ${email}`, 'Error');
+
     }
 
   }
@@ -117,17 +118,17 @@ export class EnrollmentRequestComponent implements OnInit {
   
       reader.onload = () => {
         if(isSlip) {
-          this.bankSlip.push(reader.result.toString());
+          this.bankSlip = reader.result.toString();
 
         } else {
-          this.traineelist.push(reader.result.toString());
+          this.traineelist = reader.result.toString();
         }
       }; 
   }
 
   public removeAttatchment(isSlip: boolean) {
     if(confirm(`are you sure want to remove the ${ isSlip ? 'bank Slip' : 'trainee list' } attachment ?`)){
-      isSlip ?  this.bankSlip = [] : this.traineelist = [];
+      isSlip ?  this.bankSlip = null : this.traineelist = null;
     }
   }
 
@@ -135,20 +136,17 @@ export class EnrollmentRequestComponent implements OnInit {
     this.formSubmitted = true;
     this.getControls('email').clearValidators();
     
-    console.log(this.formGroup.controls)
-
     if (!this.formGroup.valid) {
       return;
       
     } else {
       this.disable = true;
       let payload = this.formGroup.value;
+
       payload.traineelist = this.traineelist;
       payload.bankSlip = this.bankSlip;
-
+      payload.students = JSON.stringify(Object.assign({}, this.students));
       delete payload.email;
-
-      console.log(payload);
 
       this.service
       .mainCanvas(`createEnrollmentRequest`, 'post', {})

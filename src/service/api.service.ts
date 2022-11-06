@@ -113,11 +113,11 @@ export class ApiService {
         if (
           progress.requirement_count == progress.requirement_completed_count
         ) {
-          completed.push(element);
           element.canViewCertificate = true;
+          completed.push(element);
         } else {
-          inprogress.push(element);
           element.canViewCertificate = false;
+          inprogress.push(element);
 
         }
       } else {
