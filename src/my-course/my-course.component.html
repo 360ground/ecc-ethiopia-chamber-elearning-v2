@@ -155,16 +155,16 @@
                                     </p>
                                     <p>
                                         <span>
-                                            <Button class="btn btn-primary btn-lg btn-block" 
+                                            <Button class="btn btn-outline-primary  btn-block" 
                                             *ngIf="course.canViewCertificate && !isGeneratingCertificate" 
                                             (click)="GenerateCertificate(course,j)">
                                                 Generate Certificate
                                             </Button>
-                                            <div class="btn btn-primary btn-lg btn-block disabled" *ngIf="isGeneratingCertificate">
+                                            <div class="btn btn-outline-primary btn-block disabled" *ngIf="isGeneratingCertificate">
                                                 Generating ...
                                             </div>
     
-                                            <Button class="btn btn-primary btn-lg btn-block" *ngIf="course.canViewCertificate" 
+                                            <Button class="btn btn-outline-primary btn-block" *ngIf="course.certificateId" 
                                              (click)="viewCertificate(course.certificateId)">
                                                 View Certificate
                                             </Button>

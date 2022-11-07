@@ -57,7 +57,7 @@
 
 .numbers{
     border-radius: 50%; 
-    width:16%; 
+    width:23%; 
     height: 10%; 
     font-size: 33px;
 }
@@ -146,7 +146,7 @@
 
 .lists {
     color: #80868b !important;
-    font: 500 16px Google Sans,Arial,sans-serif;
+    font: 500 14px Google Sans,Arial,sans-serif;
     letter-spacing: 1.25px;
     margin-bottom: 40px !important;
     /* text-transform: uppercase; */
@@ -173,6 +173,10 @@
 .main-module-card-container {
     background: #f8f9fa !important;
     border-bottom: 1px solid #d3d3d3 !important;
+}
+
+.leftColumen {
+    padding: 2px !important;
 }
 
 @media only screen and (max-width: 760px) {
@@ -203,6 +207,14 @@
 
     .course-title {
         margin-top: -16px !important;
+    }
+
+    .lists {
+        font: 500 19px Google Sans,Arial,sans-serif !important;
+    }
+
+    .leftColumen {
+        padding-left: 31px !important;
     }
 
   }
