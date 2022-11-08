@@ -12,10 +12,10 @@ export class ContactUsComponent implements OnInit {
 
   public formGroup: FormGroup;
   public formSubmitted = false;
-  public disable: boolean = false;
   public error: boolean = false;
   public success: boolean = false;
   public errorMessage: any;
+  public disable: boolean = false;
 
   constructor(
     private service: ApiService,

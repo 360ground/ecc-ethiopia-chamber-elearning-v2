@@ -155,17 +155,18 @@
                                     </p>
                                     <p>
                                         <span>
-                                            <Button class="btn btn-outline-primary  btn-block" 
-                                            *ngIf="course.canViewCertificate && !isGeneratingCertificate" 
-                                            (click)="GenerateCertificate(course,j)">
-                                                Generate Certificate
+                                            <Button class="btn btn-primary btn-lg btn-block" *ngIf="course.canGenerateCertificate" 
+                                                [disabled]="course?.isGeneratingCertificate" (click)="GenerateCertificate(course,j)">
+                                                <span *ngIf="course?.isGeneratingCertificate">
+                                                    <i class='fa fa-spinner fa-spin fa-3x fa-fw'></i> 
+                                                </span>
+                                                <span *ngIf="!course?.isGeneratingCertificate">
+                                                    Generate Certificate
+                                                </span>
                                             </Button>
-                                            <div class="btn btn-outline-primary btn-block disabled" *ngIf="isGeneratingCertificate">
-                                                Generating ...
-                                            </div>
-    
-                                            <Button class="btn btn-outline-primary btn-block" *ngIf="course.certificateId" 
-                                             (click)="viewCertificate(course.certificateId)">
+                                           
+                                            <Button class="btn btn-primary btn-lg btn-block" *ngIf="course.canViewCertificate" 
+                                                (click)="viewCertificate(course.certificateId)">
                                                 View Certificate
                                             </Button>
                                         </span>

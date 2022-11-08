@@ -16,8 +16,9 @@
                                <h4 class="empty-card-title">You have no certificate.</h4>
                                <!-- <p class="empty-card-description mt-4">Get started by adding courses to your plan.</p> -->
                                <h4 class="empty-card-button mt-4">
-                                <div class="btn btn-primary">
-                                   <i class="fa fa-plus mr-4" aria-hidden="true"></i> Add
+                                <div>
+                                    <img style="width: 84px !important;margin-top: -10px;margin-left: -25px;"
+                                      [src]="emptyCertificateUrl" alt="empty Certificate" />
                                 </div>
                                </h4>
                             </div> 
@@ -32,10 +33,10 @@
                                 </p>
                                <h4 class="empty-card-button">
                                 <button class="btn btn-outline-primary" (click)="viewCertificate(certificate.id)" style="margin-right: 20px !important;">
-                                   <i class="fa fa-pencil mr-4" aria-hidden="true"></i> View Certificate
+                                   <i class="fa fa-eye mr-4" aria-hidden="true"></i> View
                                 </button>
                                 <button class="btn btn-outline-danger mr-4" (click)="deleteCertificate(certificate.id, i)">
-                                    <i class="fa fa-trash" aria-hidden="true"></i> Delete Certificate
+                                    <i class="fa fa-trash" aria-hidden="true"></i> Delete
                                  </button>
                                </h4>
                             </div> 

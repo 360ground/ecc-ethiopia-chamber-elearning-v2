@@ -1,6 +1,8 @@
 export const environment = {
   production: true,
   logoUrl: `${window.location.origin}/eccNew/assets/logo.png`,
+  emptyCertificateUrl: `${window.location.origin}/eccNew/assets/emptyCertificate.png`,
+
   usericonUrl: `${window.location.origin}/eccNew/assets/user_icon.png`,
   baseUrlCanvas: 'http://3.122.238.52/api/v1/',
   canvasUrl: 'http://3.122.238.52',

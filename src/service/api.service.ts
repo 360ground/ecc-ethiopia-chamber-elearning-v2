@@ -19,6 +19,7 @@ export class ApiService {
   public message$: BehaviorSubject<string> = new BehaviorSubject('');
   public isIndividual: Boolean = true;
   public isAuthenticating: Boolean = false;
+  public MyCertificates: any[] = [];
 
 
   constructor(public http: HttpClient) {}
@@ -93,39 +94,95 @@ export class ApiService {
               });
             });
 
-            this.separate(extractedCourses);
+            this.separate(extractedCourses, userId);
           });
       });
   }
 
-  separate(data: any) {
+  
+  separate(data: any, userId: any) {
     let completed: any[] = [];
     let inprogress: any[] = [];
 
-    data.forEach((element: any, index: any) => {
-      let progress = element.course_progress;
+    this.mainCanvas(`getAllCertificates/${userId}`, 'get', {})
+      .subscribe((response: any) => {
 
-      if ('requirement_count' in progress) {
-        element.percentage =
-          (progress.requirement_completed_count / progress.requirement_count) *
-          100;
-        element.modules_published = true;
-        if (
-          progress.requirement_count == progress.requirement_completed_count
-        ) {
-          element.canViewCertificate = true;
-          completed.push(element);
-        } else {
-          element.canViewCertificate = true;
-          inprogress.push(element);
+       this.MyCertificates = response.status ? response.message : []; 
+       
+        data.forEach((element: any, index: any) => {
+          let progress = element.course_progress;
+    
+          if ('requirement_count' in progress) {
+            element.percentage =
+              (progress.requirement_completed_count / progress.requirement_count) *
+              100;
+            element.modules_published = true;
+            if (
+              progress.requirement_count == progress.requirement_completed_count
+            ) {
+              
+              let certificate = this.MyCertificates.find((certi: any)=> +certi.courseId == element.id);
+             
+              // if the certificate for the specified course is found
+              if(certificate !== undefined){
+    
+                element.canGenerateCertificate = false;
+                element.canViewCertificate = true;
+                element.certificateId = certificate.id;
+                element.isGeneratingCertificate = false;
 
-        }
-      } else {
-        element.percentage = 0;
-        element.modules_published = false;
-        inprogress.push(element);
-      }
-    });
+                completed.push(element);
+
+              } else {
+              
+                  let payload = {
+                    courseId: element.id,
+                    courseCode: element.course_code,
+                    courseName: element.name,
+                    studentName: this.userData.name,
+                    studentId: this.userData.id,
+                    email: this.userData.email
+                  };
+              
+                  this
+                  .mainCanvas(
+                    `generateCertificate/`,
+                    'post',
+                    payload
+                  )
+                  .subscribe((response: any) => {
+                    if (response.status) {
+                      element.canViewCertificate = true;
+                      element.canGenerateCertificate = false;
+                      element.certificateId = response.message.id;
+                      element.isGeneratingCertificate = false;
+
+                    } else {
+                      element.canGenerateCertificate = true;
+                      element.canViewCertificate = false;
+                      element.certificateId = null;
+                      element.isGeneratingCertificate = false;
+                    }
+
+                    completed.push(element);
+              
+                  });    
+              }
+        
+            } else {
+              element.canViewCertificate = true;
+              inprogress.push(element);
+    
+            }
+          } else {
+            element.percentage = 0;
+            element.modules_published = false;
+            inprogress.push(element);
+          }
+        });
+       
+      });
+
 
     this.myCourses.completed = completed;
     this.myCourses.inprogress = inprogress;

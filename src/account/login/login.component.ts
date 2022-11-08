@@ -69,10 +69,9 @@ export class LoginComponent implements OnInit {
   
           if (response.message.profile.accountType == 'company') {
             this.service.isIndividual = false;
-          }
+        }
   
           this.service.userData = response.message;
-  
           this.service.getEnrolledCourses(response.message.id);
   
           // check if the redirection

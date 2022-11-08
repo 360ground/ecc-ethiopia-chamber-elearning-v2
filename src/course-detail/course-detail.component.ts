@@ -178,10 +178,10 @@ export class CourseDetailComponent implements OnInit {
     this.disabled = true;
 
     let data = {
-      student_id: this.service.userData.id,
-      course_id: this.id,
-      course_title: this.state.name,
-      course_code: this.state.course_code,
+      studentId: this.service.userData.id,
+      courseId: this.id,
+      courseTitle: this.state.name,
+      courseCode: this.state.course_code,
       status: 'pending',
     };
 
