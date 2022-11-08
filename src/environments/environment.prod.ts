@@ -7,9 +7,11 @@ export const environment = {
   canvasClient_id: '10000000000004',
   canvasClient_secret:
     'a1tqQmIaA6RWluysJGVhePsU7ZEz9Du7i33jWttYfHIXl77lAQqDmKPmcJ8XbMrf',
-  redirectUrlAfterLoginIncanvas: `${window.location.origin}/eccNew/redirect.html`,
+  redirectUrlAfterLoginIncanvas: `${window.location.origin}/eccNew/`,
   tokenCanvas:
     'hE4zb714iUtLDvgqXQrUtnbMlU8yT4gFaFykeAC8mrQ6E5QdpfjKSEboljgDAaSV',
+
+  applicationUrl: `${window.location.origin}`,  
 
   // back end
   baseUrlBackend: 'http://3.125.158.58:4000',

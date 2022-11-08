@@ -12,5 +12,22 @@
 </head>
 <body class="mat-typography">
   <app-root></app-root>
+  <script>
+    const params = new URL(window.location.href).searchParams;
+
+    if(params.get('code')){
+      window.history.replaceState('data', 'Ethiopia Chamber of Commerce - Digital School',`${window.location.origin}/account/login?code=` + params.get('code'));
+
+    } else if(params.get('paymentSuccess')) {
+      window.history.replaceState('data', 'Ethiopia Chamber of Commerce - Digital School',`${window.location.origin}`);
+
+    } else if(params.get('paymentCancel')) {
+      window.history.replaceState('data', 'Ethiopia Chamber of Commerce - Digital School',`${window.location.origin}`);
+
+    } else {
+      window.history.replaceState('data', 'Ethiopia Chamber of Commerce - Digital School',`${window.location.origin}`);
+
+    }
+  </script>
 </body>
 </html>

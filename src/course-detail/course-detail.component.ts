@@ -49,47 +49,53 @@ export class CourseDetailComponent implements OnInit {
     public toastr: ToastrService
   ) {}
 
-  openSnackBar(message: any, btnText: any) {
-    this._snackBar.open(message, btnText, {
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-    });
-  }
-
   ngOnInit(): void {
-    this.id = this.actRoute.snapshot.paramMap.get('id');
-    this.index = this.actRoute.snapshot.paramMap.get('index');
-    this.queryParam = this.actRoute.snapshot.queryParams;
+    let queryParam: any = this.actRoute.snapshot.queryParams;
+    this.paymentId = queryParam.paymentId;
 
-    this.state = this.location.getState();
-    this.state.short = this.state.public_description.substring(0, 200);
+    console.log(queryParam)
 
-    // load user enrolled courses
-    if (this.service.userData) {
-      let inprogress = this.service.myCourses.inprogress;
-      let completed = this.service.myCourses.completed;
+    if(queryParam !== undefined){
+      if ('paymentId' in queryParam) {
+        this.checkBill(this.paymentId);
+        
+      } else if ('paymentCancel' in queryParam) {
+        this.disabled = false;
+        console.log('payment calceld');
+        this.toastr.info('Payment canceld by User', 'Information');
+  
+      }
 
-      let merged = inprogress.concat(completed);
+    } 
+    
+      this.id = this.actRoute.snapshot.paramMap.get('id');
+      this.index = this.actRoute.snapshot.paramMap.get('index');
 
-      let index = merged.findIndex((ele: any) => ele.id == +this.id);
+      this.state = this.location.getState();
+      this.state.short = this.state.public_description.substring(0, 200);
+  
+      // load user enrolled courses
+      if (this.service.userData) {
+        let inprogress = this.service.myCourses.inprogress;
+        let completed = this.service.myCourses.completed;
+  
+        let merged = inprogress.concat(completed);
+  
+        let index = merged.findIndex((ele: any) => ele.id == +this.id);
+  
+        this.isEnrolledForThisCourse = index > -1 ? true : false;
+      }
+  
+      if ('activities' in this.state) {
+      } else {
+        this.getDetailModules();
+      }
+      if ('extraInfo' in this.state) {
+      } else {
+        this.getExtraInfo();
+      }
 
-      this.isEnrolledForThisCourse = index > -1 ? true : false;
-    }
-
-    if ('activities' in this.state) {
-    } else {
-      this.getDetailModules();
-    }
-    if ('extraInfo' in this.state) {
-    } else {
-      this.getExtraInfo();
-    }
-
-    if ('paymentId' in this.queryParam) {
-      // payment is success so call update method
-      this.checkBill(this.queryParam.paymentId);
-      this.paymentId = this.queryParam.paymentId;
-    }
+    
   }
 
   getCustomeFieldValue(customFields: any[], name: any) {
@@ -156,10 +162,12 @@ export class CourseDetailComponent implements OnInit {
           this.state.percentage = 0;
           this.state.modules_published = true;
           this.service.myCourses.inprogress.push(this.state);
+          this.disabled = false;
           this.router.navigate(['/mycourse']);
-          this.openSnackBar(response.message, 'Dismiss');
+          this.toastr.success(response.message, 'Success');
+
         } else {
-          this.openSnackBar(response.message, 'Dismiss');
+          this.toastr.error(response.message, 'Error');
         }
 
         this.enrolling = false;
@@ -167,6 +175,8 @@ export class CourseDetailComponent implements OnInit {
   }
 
   createPaymentSideEffect() {
+    this.disabled = true;
+
     let data = {
       student_id: this.service.userData.id,
       course_id: this.id,
@@ -188,6 +198,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
   checkBill(paymentId: any) {
+    this.disabled = true;
     this.service
       .mainCanvas(`getPaymentSideeffect/${paymentId}`, 'get', {})
       .subscribe((response: any) => {
@@ -209,33 +220,35 @@ export class CourseDetailComponent implements OnInit {
   }
 
   createPaymentReference(paymentId: any) {
-    this.disabled = true;
 
     let payload = {
-      purchaseDetails: {
-        orderId: 'Not Required',
-        description: `Payment For the course : ${this.state.name}`,
-        amount: +this.course_fee,
-        customerName: this.service.userData.name,
-        customerPhoneNumber: this.service.userData.phonenumber,
-      },
-      redirectUrls: {
-        returnUrl: `${window.location.origin}/detail/${this.id}/${this.index}?paymentId=${paymentId}`,
-        cancelUrl: `${window.location.origin}/detail/${this.id}/${this.index}`,
-        callbackUrl: environment.callBackUrlAfterPayment,
-      },
-      metaData: {
-        student_name: this.service.userData.name,
-        course_name: this.state.name,
-        paymentId: paymentId
-      },
+        data: {
+          purchaseDetails: {
+            orderId: 'Not Required',
+            description: `Payment For the course : ${this.state.name}`,
+            amount: +this.course_fee,
+            customerName: this.service.userData.name,
+            customerPhoneNumber: this.service.userData.profile.phonenumber,
+          },
+          redirectUrls: {
+            returnUrl: `${environment.applicationUrl}/detail/${this.id}/${this.index}?paymentId=${paymentId}&paymentSuccess=true`,
+            cancelUrl: `${environment.applicationUrl}/detail/${this.id}/${this.index}?paymentId=${paymentId}&paymentCancel=true`,
+            callbackUrl: `${environment.baseUrlBackend}/paymentSuccessCallBack`,
+          },
+          metaData: {
+            student_name: this.service.userData.name,
+            course_name: this.state.name,
+            paymentId: paymentId
+          }
+
+        }
     };
 
     this.service
       .mainCanvas(`createPaymentReference`, 'post', payload)
       .subscribe((response: any) => {
         if(response.status){
-          window.open(response.message.link.href);
+          window.location.replace(response.message.link.href);
             
         } else {
           this.toastr.error(response.message, 'Error');

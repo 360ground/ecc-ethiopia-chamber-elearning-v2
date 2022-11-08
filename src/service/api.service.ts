@@ -116,7 +116,7 @@ export class ApiService {
           element.canViewCertificate = true;
           completed.push(element);
         } else {
-          element.canViewCertificate = false;
+          element.canViewCertificate = true;
           inprogress.push(element);
 
         }

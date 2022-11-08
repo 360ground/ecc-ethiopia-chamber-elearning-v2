@@ -76,9 +76,10 @@ export class MyCourseComponent implements OnInit {
 
   GenerateCertificate(data: any, index: any){
     this.isGeneratingCertificate = true;
-
+    console.log(data);
     let payload = {
-      courseCode: data.courseCode,
+      courseId: data.id,
+      courseCode: data.course_code,
       courseName: data.name,
       studentName: this.service.userData.name,
       studentId: this.service.userData.id,
