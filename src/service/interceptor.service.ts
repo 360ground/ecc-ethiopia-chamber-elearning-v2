@@ -11,7 +11,7 @@ export class InterceptorService {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     const token = environment.tokenCanvas;
     const cloned = req.clone({
-      headers: req.headers.set('authorization', `${token}`),
+      headers: req.headers.set('authorization', `${token}`).set('content-type','application/json'),
     });
     return next.handle(cloned);
   }

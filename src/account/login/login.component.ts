@@ -5,6 +5,8 @@ import { Location } from '@angular/common';
 import { ApiService } from 'src/service/api.service';
 import { environment } from 'src/environments/environment';
 
+import { CookieService } from 'ngx-cookie-service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -24,7 +26,8 @@ export class LoginComponent implements OnInit {
     public service: ApiService,
     private router: Router,
     public location: Location,
-    public actRoute: ActivatedRoute
+    public actRoute: ActivatedRoute,
+    private cookieService: CookieService
   ) {
     this.formGroup = new FormGroup({
       username: new FormControl(null, Validators.required),
@@ -65,14 +68,25 @@ export class LoginComponent implements OnInit {
         .subscribe((response: any) => {
   
           this.service.token = response.message.access_token;
-          localStorage.setItem('access_token', response.message.access_token);
-  
-          if (response.message.profile.accountType == 'company') {
-            this.service.isIndividual = false;
-        }
-  
+
+          this.cookieService.set('access_token', response.message.access_token,1,'/');
+
           this.service.userData = response.message;
-          this.service.getEnrolledCourses(response.message.id);
+  
+          if('profile' in response.message){
+            if(response.message.profile.accountType == 'individual'){
+              this.service.getEnrolledCourses(response.message.id);
+    
+            } else if(response.message.profile.accountType == 'company'){
+              this.service.isIndividual = false;
+  
+            } 
+
+          } else {
+            this.service.isIndividual = false;
+            window.location.replace(environment.baseUrlCanvas)
+
+          }
   
           // check if the redirection
           let state: any = this.location.getState();
@@ -91,6 +105,7 @@ export class LoginComponent implements OnInit {
         });
         
       }
+
       this.service.isAuthenticating = false;
   }
 

@@ -39,6 +39,7 @@ export class CourseDetailComponent implements OnInit {
   queryParam: any;
   paymentId: any;
   public enrolling: boolean = false;
+  public paymnetSettlement: any = null;
 
   constructor(
     public service: ApiService,
@@ -53,47 +54,46 @@ export class CourseDetailComponent implements OnInit {
     let queryParam: any = this.actRoute.snapshot.queryParams;
     this.paymentId = queryParam.paymentId;
 
-    console.log(queryParam)
-
     if(queryParam !== undefined){
       if ('paymentId' in queryParam) {
         this.checkBill(this.paymentId);
         
       } else if ('paymentCancel' in queryParam) {
         this.disabled = false;
-        console.log('payment calceld');
         this.toastr.info('Payment canceld by User', 'Information');
   
       }
 
     } 
     
-      this.id = this.actRoute.snapshot.paramMap.get('id');
-      this.index = this.actRoute.snapshot.paramMap.get('index');
+    this.id = this.actRoute.snapshot.paramMap.get('id');
+    this.index = this.actRoute.snapshot.paramMap.get('index');
 
-      this.state = this.location.getState();
-      this.state.short = this.state.public_description.substring(0, 200);
-  
-      // load user enrolled courses
-      if (this.service.userData) {
-        let inprogress = this.service.myCourses.inprogress;
-        let completed = this.service.myCourses.completed;
-  
-        let merged = inprogress.concat(completed);
-  
-        let index = merged.findIndex((ele: any) => ele.id == +this.id);
-  
-        this.isEnrolledForThisCourse = index > -1 ? true : false;
-      }
-  
-      if ('activities' in this.state) {
-      } else {
-        this.getDetailModules();
-      }
-      if ('extraInfo' in this.state) {
-      } else {
-        this.getExtraInfo();
-      }
+    this.state = this.location.getState();
+    this.state.short = this.state.public_description.substring(0, 200);
+
+    this.checkPaymnetSettlement();
+
+    // load user enrolled courses
+    if (this.service.userData) {
+      let inprogress = this.service.myCourses.inprogress;
+      let completed = this.service.myCourses.completed;
+
+      let merged = inprogress.concat(completed);
+
+      let index = merged.findIndex((ele: any) => ele.id == +this.id);
+
+      this.isEnrolledForThisCourse = index > -1 ? true : false;
+    }
+
+    if ('activities' in this.state) {
+    } else {
+      this.getDetailModules();
+    }
+    if ('extraInfo' in this.state) {
+    } else {
+      this.getExtraInfo();
+    }
 
     
   }
@@ -126,15 +126,27 @@ export class CourseDetailComponent implements OnInit {
             this.enroll();
           }
         } else {
-          // start calling the meda pay after confirmation
-          let message = `this course is costs you ${this.course_fee} ETB. would you like to continue ?`;
-          
-          if (
-            confirm(message)
-          ) {
-            // start calling mega pay
-            this.createPaymentSideEffect();
+          // check if the user is payed or not for the course
+
+          if(this.paymnetSettlement){
+            this.enroll();
+
+          } else {
+            this.enrolling = true;
+
+            // start calling the meda pay after confirmation
+            let message = `this course is costs you ${this.course_fee} ETB. would you like to continue ?`;
+            
+            if (
+              confirm(message)
+            ) {
+              this.enrolling = true;
+              // start calling mega pay
+                this.createPaymentSideEffect();
+            }
+
           }
+
         }
       }
     }
@@ -174,6 +186,26 @@ export class CourseDetailComponent implements OnInit {
       });
   }
 
+  checkPaymnetSettlement() {
+
+    let data = {
+      studentId: this.service.userData.id,
+      courseId: this.id,
+    };
+
+    this.service
+      .mainCanvas(`checkPaymnetSettlement`, 'post', data)
+      .subscribe((response: any) => {
+        if (response.status) {``
+          this.createPaymentReference(response.message.id);
+          this.paymnetSettlement =response.message[0];
+          
+        } else {
+          this.toastr.error(response.message, 'Error');
+        }
+      });
+  }
+
   createPaymentSideEffect() {
     this.disabled = true;
 
@@ -193,12 +225,15 @@ export class CourseDetailComponent implements OnInit {
         } else {
           this.toastr.error(response.message, 'Error');
           this.disabled = false;
+          this.enrolling = false;
         }
       });
   }
 
   checkBill(paymentId: any) {
     this.disabled = true;
+    this.enrolling = true;
+
     this.service
       .mainCanvas(`getPaymentSideeffect/${paymentId}`, 'get', {})
       .subscribe((response: any) => {
@@ -214,6 +249,7 @@ export class CourseDetailComponent implements OnInit {
             } else {
               this.toastr.error(response.message, 'Error');
               this.disabled = false;
+              this.enrolling  = false;
             }
           });
       });
@@ -253,6 +289,8 @@ export class CourseDetailComponent implements OnInit {
         } else {
           this.toastr.error(response.message, 'Error');
           this.disabled = false;
+
+          this.enrolling = false;
         }
       });
   }

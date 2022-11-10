@@ -21,11 +21,10 @@
         <div class="col-sm-12 col-md-2 col-lg-2"></div>
     
         <div class="col-sm-12 col-md-8 col-lg-8 mb-4">
-            <form [formGroup]="formGroup" 
-                ngSubmit="isIndividual ? Submit('individual') : Submit('company')">
+            <form [formGroup]="formGroup">
                 
                     <div *ngIf="isIndividual" class="mb-4">
-                        <div class="card profileCard">
+                        <div class="card profileCard" >
                             <h1 class="mb-4" class="cardTitle">Personal Details</h1>
                             <p class="gray mb-4">This name will appear on your certificates.</p>
                             <!-- <hr class="mb-4 mt-4" /> -->
@@ -101,6 +100,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="card profileCard">
                             <h1 class="mb-4" class="cardTitle">Work Details</h1>
                             <p class="gray mb-4">This name will appear on your certificates.</p>
@@ -147,6 +147,7 @@
                                 </div>
                             </div>
                         </div>  
+
                         <div class="card profileCard">
                             <h1 class="mb-4" class="cardTitle">Address Details</h1>
                             <p class="gray mb-4">This name will appear on your certificates.</p>
@@ -173,7 +174,101 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>    
+                        </div> 
+
+                        <div class="card profileCard">
+                            <h1 class="mb-4" class="cardTitle">Education Details</h1>
+                            <p class="gray mb-4">This is your education record register in our system.</p>
+
+                            <div class="row">
+                                <div class="col-sm-12 col-md-8 col-lg-8"></div>
+                                <div class="col-sm-12 col-md-4 col-lg-4">
+                                    <button class="btn btn-success mb-2 me-2" (click)="openModal(longContent)">
+                                        <i class="fa fa-plus mr-4" aria-hidden="true"></i> Add New
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="row">
+                                <div class="col-sm-12 col-md-4 col-lg-4" *ngIf="!myEducation.length">
+                                    <div class="card" style="padding: 24px;">
+                                        <div class="empty-card">
+                                           <h4 class="empty-card-title">You have not added education.</h4>                                       
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-6"  *ngFor="let eduBack of myEducation; let i = index;" >
+                                    <div class="empty-card">
+                                        <h4 class="empty-card-title">{{ eduBack?.institutionName }}</h4>
+                                        <p class="empty-card-description">
+                                        {{ eduBack?.fieldOfStudy | titlecase }}  ({{ eduBack?.qualification }})
+                                        </p>
+                                        <p class="empty-card-description">
+                                            <b>({{ eduBack?.dateOfCompletion }})</b> 
+                                        </p>
+                                        
+                                        <p class="empty-card-button">
+                                            <button class="btn btn-outline-primary" (click)="editEducation(i)">
+                                                <i class="fa fa-pencil mr-4" aria-hidden="true"></i> Edit
+                                            </button>
+                                            <button class="btn btn-outline-danger" style="margin-right: 29px;" (click)="removeEducation(i)">
+                                                <i class="fa fa-trash" aria-hidden="true"></i> Remove
+                                            </button>
+                                        </p>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>  
+
+                        <ng-template #content let-modal>
+                            <div class="modal-header">
+                                <h4 class="modal-title">Add Education</h4>
+                                <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>One fine body&hellip;</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+                            </div>
+                        </ng-template>
+                        
+                        <ng-template #longContent let-modal>
+                            <div class="modal-header">
+                                <h4 class="modal-title">{{ isOnEdit ? 'Edit education' : 'Add Education' }}</h4>
+                                <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div formGroupName="education" class="mb-4">
+                                    <label>Institution Name</label>
+                                    <input class="form-control form-control-lg"  formControlName="institutionName" />
+                                </div>
+                                <div formGroupName="education" class="mb-4">
+                                    <label>Qualification</label>
+                                    <select required class="form-control form-control-lg" placeholder="--select --"
+                                        formControlName="qualification">
+                                        <option [value]="quali.value" *ngFor="let quali of qualification; let i = index">{{ quali.title | titlecase }}</option>
+                                    </select>
+                                </div>
+                                <div formGroupName="education" class="mb-4">
+                                    <label>Field of study</label>
+                                    <input class="form-control form-control-lg" formControlName="fieldOfStudy" />
+                                </div>
+                                <div formGroupName="education" class="mb-4">
+                                    <label>Date of Completion</label>
+                                    <input class="form-control form-control-lg"
+                                    formControlName="dateOfCompletion" />
+                                </div>
+                                
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" (click)="saveChanges()">
+                                    Save Changes
+                                </button>
+                            </div>
+                        </ng-template>
+
                     </div>
 
                     <div *ngIf="!isIndividual" class="mb-4">
@@ -326,7 +421,7 @@
                                 </div>   
                                 
                             </div>    
-                        </div>    
+                        </div> 
                     </div>        
                         
                     <Button type="submit" class="btn btn-primary btn-lg btn-block"  *ngIf="!disable"

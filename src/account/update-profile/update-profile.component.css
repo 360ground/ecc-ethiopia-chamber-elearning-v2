@@ -25,7 +25,7 @@ ngb-alert{
     font-weight: lighter !important;
 }
 
-.card {
+.Procard {
     padding: 30px !important;
 }
 .headerCard{
@@ -61,6 +61,7 @@ ngb-alert{
     margin-bottom: 10px !important;
     box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%) !important;
     margin-top: 52px !important;
+    padding: 30px !important;
 }
 
 .cardTitle {
@@ -88,3 +89,50 @@ ngb-alert{
     color: red !important;
   }
 
+
+
+
+  /* education css */
+
+  .empty-card{
+    padding: 24px 24px 47px 24px;
+    background-color: aliceblue;
+    /* width: 443px; */
+    text-align: center;
+    color: gray;
+    font-weight: 400;
+    border-style: dashed;
+    border-width: thin;
+}
+
+.gray {
+    color: gray !important;
+    font-size: 18px !important;
+}
+
+.card{
+    border-radius: 0px !important;
+}
+
+.icons1 {
+    margin-right: 8px;
+    color: gold;
+    font-size: 20px;
+    font-weight: lighter;
+    /* margin-left: 13px; */
+}
+
+.form-control{
+    font-size: medium !important;
+    font-weight: lighter !important;
+}
+
+label{
+    color: gray;
+    font-weight: lighter;
+    margin-bottom: 9px;
+}
+
+.empty-card-button {
+    margin-right: 21% !important;
+}

@@ -32,12 +32,13 @@
                                    <b>({{ certificate?.createdAt | date }})</b> 
                                 </p>
                                <h4 class="empty-card-button">
-                                <button class="btn btn-outline-primary" (click)="viewCertificate(certificate.id)" style="margin-right: 20px !important;">
+                                <button class="btn btn-outline-primary" (click)="viewCertificate(certificate.id)" 
+                                    style="margin: 10px 0px 0px 0px !important; width: 100% !important;">
                                    <i class="fa fa-eye mr-4" aria-hidden="true"></i> View
                                 </button>
-                                <button class="btn btn-outline-danger mr-4" (click)="deleteCertificate(certificate.id, i)">
+                                <!-- <button class="btn btn-outline-danger mr-4" (click)="deleteCertificate(certificate.id, i)">
                                     <i class="fa fa-trash" aria-hidden="true"></i> Delete
-                                 </button>
+                                 </button> -->
                                </h4>
                             </div> 
                         </div>

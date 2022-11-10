@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/service/api.service';
 
+import { CookieService } from 'ngx-cookie-service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -16,7 +18,7 @@ export class AppComponent implements OnInit {
   public logoUrl: any = environment.logoUrl;
   public usericonUrl: any = environment.usericonUrl;
 
-  constructor(public service: ApiService, public router: Router) {}
+  constructor(public service: ApiService, public router: Router, private cookieService: CookieService) {}
 
   ngOnInit(): void {
     this.isLoggedIn();
@@ -48,9 +50,12 @@ export class AppComponent implements OnInit {
   }
 
   isLoggedIn(){
+    
+    let access_token = this.cookieService.get('access_token');
+
     this.service
     .mainCanvas('isLoggedIn', 'post', {
-      access_token: localStorage.getItem('access_token') ?? "nokey"
+      access_token: access_token ?? "nokey"
     })
     .subscribe((response: any) => {
       if(response.status){
