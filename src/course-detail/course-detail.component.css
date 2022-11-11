@@ -241,3 +241,8 @@
     cursor: pointer !important;
     text-decoration: none !important;
 }
+
+
+.fa-spinner {
+    font-size: 25px !important;
+}

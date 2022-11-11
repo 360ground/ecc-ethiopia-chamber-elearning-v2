@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
 
     this.service
     .mainCanvas('isLoggedIn', 'post', {
-      access_token: access_token ?? "nokey"
+      access_token: access_token !== "" ? access_token:  "nokey"
     })
     .subscribe((response: any) => {
       if(response.status){

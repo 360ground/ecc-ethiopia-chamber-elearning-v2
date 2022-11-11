@@ -39,7 +39,7 @@ export class CourseDetailComponent implements OnInit {
   queryParam: any;
   paymentId: any;
   public enrolling: boolean = false;
-  public paymnetSettlement: any = null;
+  public paymnetSettlement: any[] = [null];
 
   constructor(
     public service: ApiService,
@@ -72,12 +72,14 @@ export class CourseDetailComponent implements OnInit {
     this.state = this.location.getState();
     this.state.short = this.state.public_description.substring(0, 200);
 
-    this.checkPaymnetSettlement();
+    if(this.service.userData){
+      this.checkPaymnetSettlement();
+    }
 
     // load user enrolled courses
-    if (this.service.userData) {
-      let inprogress = this.service.myCourses.inprogress;
-      let completed = this.service.myCourses.completed;
+    if (this.service.userData && this.service.myCourses) {
+      let inprogress: any[] = this.service.myCourses.inprogress;
+      let completed: any[] = this.service.myCourses.completed;
 
       let merged = inprogress.concat(completed);
 
@@ -128,11 +130,11 @@ export class CourseDetailComponent implements OnInit {
         } else {
           // check if the user is payed or not for the course
 
-          if(this.paymnetSettlement){
-            this.enroll();
-
+          if(this.paymnetSettlement.length){
+            if (confirm(`are you sure want to start learning ?`)) {
+              this.enroll();
+            }
           } else {
-            this.enrolling = true;
 
             // start calling the meda pay after confirmation
             let message = `this course is costs you ${this.course_fee} ETB. would you like to continue ?`;
@@ -197,8 +199,7 @@ export class CourseDetailComponent implements OnInit {
       .mainCanvas(`checkPaymnetSettlement`, 'post', data)
       .subscribe((response: any) => {
         if (response.status) {``
-          this.createPaymentReference(response.message.id);
-          this.paymnetSettlement =response.message[0];
+          this.paymnetSettlement = response.message;
           
         } else {
           this.toastr.error(response.message, 'Error');

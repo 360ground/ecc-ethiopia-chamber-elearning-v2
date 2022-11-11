@@ -44,6 +44,7 @@ export class MyCourseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.service.myCourses.inprogress)
   }
 
   navigate(data: any) {

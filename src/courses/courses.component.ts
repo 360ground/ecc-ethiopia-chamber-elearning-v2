@@ -73,6 +73,10 @@ export class CoursesComponent implements OnInit {
         .subscribe((response: any) => {
           this.courses = response;
           // this.courses.shift();
+
+          this.courses.forEach((element: any) => {
+            element.image_download_url = element.image_download_url.replace('https', 'http');
+          });  
           this.service.loadedCourses = this.courses;
           this.isLoading = false;
           this.closeModal();
