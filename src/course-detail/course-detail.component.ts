@@ -29,6 +29,7 @@ export class CourseDetailComponent implements OnInit {
   public isModulesLoading: Boolean = false;
   public adminToken: any = environment.adminToken;
   public isEnrolledForThisCourse: Boolean = false;
+  public isFree: Boolean = true;
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
@@ -39,7 +40,7 @@ export class CourseDetailComponent implements OnInit {
   queryParam: any;
   paymentId: any;
   public enrolling: boolean = false;
-  public paymnetSettlement: any[] = [null];
+  public paymnetSettlement: any[] = [];
 
   constructor(
     public service: ApiService,
@@ -71,6 +72,9 @@ export class CourseDetailComponent implements OnInit {
 
     this.state = this.location.getState();
     this.state.short = this.state.public_description.substring(0, 200);
+    
+    this.state.extraInfo?.attributes.course_fee != 'Free' ? this.isFree = false : null;
+    console.log(this.state.extraInfo?.attributes.course_fee);
 
     if(this.service.userData){
       this.checkPaymnetSettlement();
@@ -336,4 +340,11 @@ export class CourseDetailComponent implements OnInit {
       }
     }, 50);
   }
+
+  login(){
+    this.router.navigateByUrl('/account/login');
+  }
+
+
+
 }

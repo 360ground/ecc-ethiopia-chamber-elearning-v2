@@ -40,8 +40,7 @@ export class LoginComponent implements OnInit {
     this.code = this.queryParam.code;
 
     if ('code' in this.queryParam) {
-        this.service.isAuthenticating = true;
-        this.login(this.queryParam.code);
+      this.login(this.queryParam.code);
       
     } else {
       window.location.replace(this.loginRedirectUrl);
@@ -55,6 +54,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(code: any) {
+
     let data: any = {
       grant_type: 'authorization_code',
       client_id: environment.canvasClient_id,
@@ -63,6 +63,9 @@ export class LoginComponent implements OnInit {
     };
 
     if(!this.service.userData){
+      this.service.isAuthenticating = true;
+      console.log(this.service.isAuthenticating);
+
       this.service
         .mainCanvas('login', 'post', data)
         .subscribe((response: any) => {
@@ -87,7 +90,8 @@ export class LoginComponent implements OnInit {
             window.location.replace(environment.baseUrlCanvas)
 
           }
-  
+
+          
           // check if the redirection
           let state: any = this.location.getState();
   
@@ -98,15 +102,14 @@ export class LoginComponent implements OnInit {
             });
           } else {
             // or from login button
+            this.service.isAuthenticating = false;
+            console.log(this.service.isAuthenticating);
             this.router.navigate(['/']);
           }
   
           
         });
-        
-      }
-
-      this.service.isAuthenticating = false;
+    }
   }
 
 

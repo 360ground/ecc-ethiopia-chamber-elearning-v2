@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -18,11 +18,17 @@ export class AppComponent implements OnInit {
   public logoUrl: any = environment.logoUrl;
   public usericonUrl: any = environment.usericonUrl;
 
-  constructor(public service: ApiService, public router: Router, private cookieService: CookieService) {}
+  constructor(public service: ApiService, public router: Router, 
+    private cookieService: CookieService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.isLoggedIn();
   }
+
+  ngAfterViewChecked(){
+    //your code to update the model
+    this.cdr.detectChanges();
+ }
 
   logout() {
     if (

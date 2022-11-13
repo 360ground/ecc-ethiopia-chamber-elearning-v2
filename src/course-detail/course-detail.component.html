@@ -13,16 +13,22 @@
                                 style="border-radius: 0px; width: 231px; padding: 14px;" [disabled]="enrolling" (click)="startLearning()">
                                 <div>
                                     <span *ngIf="enrolling">
-                                        <i class='fa fa-spinner fa-spin fa-3x fa-fw' style="margin-right: 10px !important;" aria-hidden="true"></i> 
+                                        <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
+                                        style="margin-right: 10px !important;" aria-hidden="true"></i> 
                                     </span>
-                                    <span *ngIf="!enrolling" style="font-weight: 500;">Enroll Me this course</span>
+                                    <span *ngIf="!enrolling" style="font-weight: bold; font-size: 20px ip !important;">
+                                        {{ 
+                                            paymnetSettlement.length || isFree ?
+                                             'Enroll' : 'Pay & Enroll'  
+                                        }}
+                                    </span>
                                 </div>
                             </button>
-
+<!-- 
                             <span style="font-weight: 500; width: 231px;" *ngIf="!state?.extraInfo"
                                 class="btn btn-primary disabled_button disabled">
-                                  {{ paymnetSettlement ? 'Enroll Me for Course' : 'Pay & Enroll for Course'  }}
-                            </span>
+                                  {{ paymnetSettlement.length ? 'Enroll' : 'Pay & Enroll'  }}
+                            </span> -->
                         </span>
 
                         <span *ngIf="isEnrolledForThisCourse"> 
@@ -234,7 +240,7 @@
                                                 </a>
                                             </span>
                                             <span *ngIf="!isEnrolledForThisCourse">
-                                                <p *ngFor="let subActivity of activity?.items; let i = index" class="moduleList"
+                                                <p *ngFor="let subActivity of activity?.items; let i = index" class="moduleList" (click)="login();"
                                                     [title]="service.userData ? isEnrolledForThisCourse ? 'click to open' : 'Not enrolled' : 'login to open'" 
                                                     >
                                                     {{ subActivity?.title }}
