@@ -57,7 +57,7 @@
 
 .numbers{
     border-radius: 50%; 
-    width:23%; 
+    width:16%; 
     height: 10%; 
     font-size: 33px;
 }
@@ -202,7 +202,7 @@
     }
 
     .numbers {
-        width: 18% !important;
+        width: 16% !important;
     }
 
     .course-title {
@@ -240,4 +240,9 @@
     transition: color .25s ease !important; 
     cursor: pointer !important;
     text-decoration: none !important;
+}
+
+
+.fa-spinner {
+    font-size: 25px !important;
 }

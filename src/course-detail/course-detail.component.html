@@ -9,23 +9,30 @@
                     <!-- <p class="gray mb-4">Presented By : {{state?.contacts[0]?.fullname}}</p> -->
                     <p class="mt-4" *ngIf="service?.isIndividual">
                         <span *ngIf="!isEnrolledForThisCourse">
-                            <button type="button" *ngIf="state?.extraInfo" class="btn btn-primary" style="border-radius: 0px; width: 200px;
-                            padding: 14px;"  [disabled]="enrolling" (click)="startLearning()">
-                                <i class="fa fa-spinner" style="margin-right: 10px !important;" aria-hidden="true" *ngIf="disabled"></i>
-                                <span style="font-weight: 500;">Start this course</span>
+                            <button type="button" *ngIf="state?.extraInfo" class="btn btn-primary" 
+                                style="border-radius: 0px; width: 231px; padding: 14px;" [disabled]="enrolling" (click)="startLearning()">
+                                <div>
+                                    <span *ngIf="enrolling">
+                                        <i class='fa fa-spinner fa-spin fa-3x fa-fw' style="margin-right: 10px !important;" aria-hidden="true"></i> 
+                                    </span>
+                                    <span *ngIf="!enrolling" style="font-weight: 500;">Enroll Me this course</span>
+                                </div>
                             </button>
-                            <span style="font-weight: 500; width: 200px;" *ngIf="!state?.extraInfo"
-                            class="btn btn-primary disabled_button disabled">Start this course</span>
+
+                            <span style="font-weight: 500; width: 231px;" *ngIf="!state?.extraInfo"
+                                class="btn btn-primary disabled_button disabled">
+                                  {{ paymnetSettlement ? 'Enroll Me for Course' : 'Pay & Enroll for Course'  }}
+                            </span>
                         </span>
 
-                        <span *ngIf="isEnrolledForThisCourse">
-                            <button type="button" class="btn btn-primary" *ngIf="state?.extraInfo" style="border-radius: 0px; width: 200px;
+                        <span *ngIf="isEnrolledForThisCourse"> 
+                            <button type="button" class="btn btn-primary" *ngIf="state?.extraInfo" style="border-radius: 0px; width: 231px;
                             padding: 14px;"  [disabled]="enrolling" (click)="startLearning()">
                                 <i class="fa fa-spinner" style="margin-right: 10px !important;" 
                                 aria-hidden="true" *ngIf="enrolling"></i>
                                 <span style="font-weight: 500;">Continue learing</span>
                             </button>
-                            <span style="font-weight: 500; width: 200px;" class="btn btn-primary disabled_button disabled"
+                            <span style="font-weight: 500; width: 231px;" class="btn btn-primary disabled_button disabled"
                              *ngIf="!state?.extraInfo">Continue learing</span>
                         </span>
                     </p>
@@ -215,7 +222,7 @@
                                     text-transform: capitalize;">{{activity.name}}</p>
                                     <p style="color: #3c4043;
                                     font: 300 14px/18px Roboto,Arial,Helvetica,serif;
-                                    margin-bottom: 10px;">{{ activity?.items.length }} LESSONS</p>
+                                    margin-bottom: 10px;">{{ activity?.items?.length }} LESSONS</p>
                                     <hr class="mb-4" />
                                     <div class="innerModuleCards">
                                             <span *ngIf="isEnrolledForThisCourse">

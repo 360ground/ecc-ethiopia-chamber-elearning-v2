@@ -1,1 +1,22 @@
-<p>faq works!</p>
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-1 col-md-1 col-sm-12"></div>
+        <div class="col-lg-10 col-md-10 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+                        <ngb-panel *ngFor="let q of faq; let i = index" [title]="q.title">
+                            <ng-template ngbPanelContent>
+                                {{ q.body }}
+                            </ng-template>
+                        </ngb-panel>
+                    </ngb-accordion>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-12"></div>
+    </div>
+</div>                
+
+

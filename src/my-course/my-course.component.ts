@@ -17,7 +17,9 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class MyCourseComponent implements OnInit {
   public inprogress: any[] = [];
-  public completed: any[] = [];
+  public completed: any[] = []; 
+
+  public certificateViewUrl:any = environment.baseUrlBackend;
 
   public isLoading: Boolean = false;
   public isGeneratingCertificate: boolean = false;
@@ -41,7 +43,9 @@ export class MyCourseComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.service.myCourses.inprogress)
+  }
 
   navigate(data: any) {
     this.router.navigate(['/learning'], { state: { course: data } });
@@ -75,10 +79,11 @@ export class MyCourseComponent implements OnInit {
 
 
   GenerateCertificate(data: any, index: any){
-    this.isGeneratingCertificate = true;
+    this.service.myCourses.completed[index].isGeneratingCertificate = true;
 
     let payload = {
-      courseCode: data.courseCode,
+      courseId: data.id,
+      courseCode: data.course_code,
       courseName: data.name,
       studentName: this.service.userData.name,
       studentId: this.service.userData.id,
@@ -93,35 +98,22 @@ export class MyCourseComponent implements OnInit {
     )
     .subscribe((response: any) => {
       if (response.status) {
-        this.toastr.success(response.message, 'Success');
         this.service.myCourses.completed[index].canViewCertificate = true;
+        this.service.myCourses.completed[index].canGenerateCertificate = false;
+
         this.service.myCourses.completed[index].certificateId = response.message.id;
+        this.toastr.success('Certificate generated successfully.', 'Success');
 
       } else {
         this.toastr.error(response.message, 'Error');
       }
 
-      this.isGeneratingCertificate = false;
+      this.service.myCourses.completed[index].isGeneratingCertificate = false;
     });
   }
 
   viewCertificate(id: any){
-    this.service
-    .mainCanvas(
-      `viewCertificate/${id}`,
-      'get',
-      {}
-    )
-    .subscribe((response: any) => {
-      if (response.status) {
-        window.open(environment.baseUrlBackend + response.message,"_blank");
-
-
-      } else {
-        this.toastr.error(response.message, 'Error');
-
-      }
-    });
+    window.open(`${this.certificateViewUrl}/viewCertificate/${id}`,'_blank');
   }
 
 

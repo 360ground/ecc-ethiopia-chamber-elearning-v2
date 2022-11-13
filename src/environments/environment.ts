@@ -6,6 +6,7 @@ export const environment = {
   // general
   production: false,
   logoUrl: '/assets/logo.png',
+  emptyCertificateUrl: '/assets/emptyCertificate.png',
   usericonUrl: '/assets/user_icon.png',
   baseUrlCanvas: 'http://3.122.238.52/api/v1/',
   canvasUrl: 'http://3.122.238.52',
@@ -15,6 +16,8 @@ export const environment = {
   redirectUrlAfterLoginIncanvas: 'http://localhost:4200/account/login',
   tokenCanvas:
     'hE4zb714iUtLDvgqXQrUtnbMlU8yT4gFaFykeAC8mrQ6E5QdpfjKSEboljgDAaSV',
+    
+  applicationUrl: 'http://localhost:4200',  
 
   // backend express
   baseUrlBackend: 'http://localhost:4000',

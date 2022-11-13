@@ -22,8 +22,8 @@
         <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="card lowerCard" >
                 <mat-tab-group>
-                    <mat-tab label="In progress ({{service.myCourses.inprogress ? service.myCourses.inprogress.length : 0}})">
-                        <div class="row mb-4" *ngIf="!service.myCourses.inprogress.length" style="width: 100% !important;">
+                    <mat-tab label="In progress ({{service.myCourses?.inprogress ? service.myCourses?.inprogress.length : 0}})">
+                        <div class="row mb-4" *ngIf="!service.myCourses?.inprogress.length" style="width: 100% !important;">
                             <div class="col-sm-12 col-md-3 col-lg-3 mb-4">
                                 <div class="card courseCard" style="padding: 24px !important;">
                                     <div class="empty-card">
@@ -40,7 +40,7 @@
                         </div>
     
                         <div class="row mt-4" style="width: 100% !important;">
-                            <div class="col-sm-12 col-md-4 col-lg-4 mb-4" *ngFor="let course of service.myCourses.inprogress; let i = index">
+                            <div class="col-sm-12 col-md-4 col-lg-4 mb-4" *ngFor="let course of service.myCourses?.inprogress; let i = index">
                                 <div class="card">
                                     <mat-icon class="removeButton" (click)="removeCourse(course,i,'inprogress');">delete_forever</mat-icon>
                                         <img class="card-img-top" style="height: 220px !important;"
@@ -98,8 +98,8 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Completed ({{service.myCourses.completed ? service.myCourses.completed.length : 0}})">
-                        <div class="card lowercard" *ngIf="!service.myCourses.completed.length" style="padding: 24px !important;">
+                    <mat-tab label="Completed ({{service.myCourses?.completed ? service.myCourses?.completed.length : 0}})">
+                        <div class="card lowercard" *ngIf="!service.myCourses?.completed.length" style="padding: 24px !important;">
                             <div class="empty-card">
                                <h4 class="empty-card-title">What would you like to learn?</h4>
                                <p class="empty-card-description mt-4">Go back to your courses in progress.</p>
@@ -110,7 +110,7 @@
                                </h4>
                             </div> 
                         </div>
-                        <div class="col-sm-12 col-md-3 col-lg-3 mb-4" *ngFor="let course of service.myCourses.completed; let j = index">
+                        <div class="col-sm-12 col-md-3 col-lg-3 mb-4" *ngFor="let course of service.myCourses?.completed; let j = index">
                             <div class="card courseCard">
                                 <mat-icon class="removeButton"  (click)="removeCourse(course,j,'completed');">delete_forever</mat-icon>
                                 <img class="card-img-top" style="height: 220px !important;"
@@ -155,17 +155,18 @@
                                     </p>
                                     <p>
                                         <span>
-                                            <Button class="btn btn-outline-primary  btn-block" 
-                                            *ngIf="course.canViewCertificate && !isGeneratingCertificate" 
-                                            (click)="GenerateCertificate(course,j)">
-                                                Generate Certificate
+                                            <Button class="btn btn-primary btn-lg btn-block" *ngIf="course.canGenerateCertificate" 
+                                                [disabled]="course?.isGeneratingCertificate" (click)="GenerateCertificate(course,j)">
+                                                <span *ngIf="course?.isGeneratingCertificate">
+                                                    <i class='fa fa-spinner fa-spin fa-3x fa-fw'></i> 
+                                                </span>
+                                                <span *ngIf="!course?.isGeneratingCertificate">
+                                                    Generate Certificate
+                                                </span>
                                             </Button>
-                                            <div class="btn btn-outline-primary btn-block disabled" *ngIf="isGeneratingCertificate">
-                                                Generating ...
-                                            </div>
-    
-                                            <Button class="btn btn-outline-primary btn-block" *ngIf="course.certificateId" 
-                                             (click)="viewCertificate(course.certificateId)">
+                                           
+                                            <Button class="btn btn-primary btn-lg btn-block" *ngIf="course.canViewCertificate" 
+                                                (click)="viewCertificate(course.certificateId)">
                                                 View Certificate
                                             </Button>
                                         </span>

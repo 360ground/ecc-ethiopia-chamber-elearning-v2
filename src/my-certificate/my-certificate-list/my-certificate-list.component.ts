@@ -12,7 +12,8 @@ import { ApiService } from 'src/service/api.service';
 })
 export class MyCertificateListComponent implements OnInit {
   public myCertification: any[] = [];
- 
+  public emptyCertificateUrl: any = environment.emptyCertificateUrl;
+  public certificateViewUrl:any = environment.baseUrlBackend;
 
   constructor(private service: ApiService, private router: Router,
         public toastr: ToastrService
@@ -41,22 +42,7 @@ export class MyCertificateListComponent implements OnInit {
   }
   
   viewCertificate(id: any){
-    this.service
-    .mainCanvas(
-      `viewCertificate/${id}`,
-      'get',
-      {}
-    )
-    .subscribe((response: any) => {
-      if (response.status) {
-        window.open(environment.baseUrlBackend + response.message,"_blank");
-
-
-      } else {
-        this.toastr.error(response.message, 'Error');
-
-      }
-    });
+    window.open(`${this.certificateViewUrl}/viewCertificate/${id}`,'_blank');
   }
 
   deleteCertificate(id: any, index: any){
@@ -71,6 +57,16 @@ export class MyCertificateListComponent implements OnInit {
         if (response.status) {
           this.toastr.success(response.message, 'Success');
           this.myCertification.splice(index,1);
+
+          this.service.myCourses.completed.forEach((element:any, index:any) => {
+            if(element.certificateId == id){
+              this.service.myCourses.completed[index].canGenerateCertificate = true;
+              this.service.myCourses.completed[index].canViewCertificate = false;
+              this.service.myCourses.completed[index].certificateId = null;
+              this.service.myCourses.completed[index].isGeneratingCertificate = false;
+
+            }
+          });
   
         } else {
           this.toastr.error(response.message, 'Error');

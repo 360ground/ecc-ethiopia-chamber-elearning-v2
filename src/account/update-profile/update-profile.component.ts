@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgbAlertConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/service/api.service';
@@ -11,18 +11,42 @@ import { CustomValidators } from '../signup/password-validators';
   selector: 'app-update-profile',
   templateUrl: './update-profile.component.html',
   styleUrls: ['./update-profile.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class UpdateProfileComponent implements OnInit {
   public formGroup: FormGroup;
+
   public formSubmitted = false;
   public disable: boolean = false;
   public isIndividual: Boolean = true;
   public base64Image: any = null;
 
+  public myEducation: any[] = [];
+  public isOnEdit: Boolean = false;
+  public currentEditingEducationIndex: any;
+
+  @ViewChild('longContent') longContent: any;
+
+
+  public qualification: any[] = [
+    { value: 'training', title: 'training' },
+    { value: 'certificate', title: 'certificate' },
+    { value: 'training', title: 'training' },
+    { value: 'diploma', title: 'Diploma' },
+    { value: 'advancedDiploma', title: 'Advanced Diploma' },
+    { value: 'BA', title: 'BA' },
+    { value: 'Bsc', title: 'Bsc' },
+    { value: 'MA', title: 'MA' },
+    { value: 'Msc', title: 'Msc' },
+    { value: 'Phd', title: 'Phd' },
+  ];
+
+
   constructor(
     private service: ApiService,
     private router: Router,
-    public toastr: ToastrService
+    public toastr: ToastrService,
+    private modalService: NgbModal
   ) {
     this.isIndividual =
       this.service.userData.profile.accountType == 'company' ? false : true;
@@ -80,12 +104,23 @@ export class UpdateProfileComponent implements OnInit {
         memberId: new FormControl({ disabled: true, value: null }),
         accountType: new FormControl('company'),
       }),
+      education: new FormGroup({
+        institutionName: new FormControl(null, Validators.required),
+        qualification: new FormControl(null, Validators.required),
+        fieldOfStudy: new FormControl(null, Validators.required),
+        dateOfCompletion: new FormControl(null, Validators.required),
+      })
     });
+
   }
 
   ngOnInit() {
     let userData = this.service.userData;
     this.getControls(userData.profile.accountType).patchValue(userData.profile);
+
+    this.myEducation = this.service.userData.profile.myEducation ?
+    Object.values(this.service.userData.profile.myEducation)
+    : [];
 
     this.isMemberCheck(false);
   }
@@ -104,7 +139,7 @@ export class UpdateProfileComponent implements OnInit {
       this.disable = true;
 
       let value = this.getControls(name).value;
-      value.myEducation = this.service.userData.profile.myEducation;
+      value.myEducation = Object.values(this.myEducation);
 
       let payload = {
         custom_data: { data: value },
@@ -121,9 +156,12 @@ export class UpdateProfileComponent implements OnInit {
         if (response.status) {
           this.service.userData.profile = value;
           this.toastr.success(response.message, 'Success');
+          this.modalService.dismissAll();
 
         } else {
           this.toastr.error(response.message, 'Error');
+          this.getControls('education').reset();
+          this.modalService.dismissAll();
 
         }
 
@@ -160,4 +198,50 @@ export class UpdateProfileComponent implements OnInit {
       this.getControls('company.memberId').enable();
     }
   }
+
+
+  saveChanges(){
+    this.isOnEdit ? this.updateEducation() : this.addEducation();
+  }
+
+  editEducation(index: any) {
+    this.getControls('education').setValue(this.myEducation[index]);
+    this.isOnEdit = true;
+    this.currentEditingEducationIndex = index;
+
+    this.modalService.open(this.longContent, { scrollable: true, size: 'lg' });
+  }
+
+  addEducation() {
+    this.myEducation.push(this.getControls('education').value);
+    this.getControls('education').reset();
+    this.modalService.dismissAll();
+
+  }
+
+  removeEducation(index: any) {
+    if (confirm('are you sure want to remove this education ?')) {
+      this.myEducation.splice(index, 1);
+    }
+  }
+
+  updateEducation() {
+    this.myEducation[this.currentEditingEducationIndex] =
+      this.getControls('education').value;
+    this.isOnEdit = false;
+    this.currentEditingEducationIndex = null;
+    this.getControls('education').reset();
+
+    this.modalService.dismissAll();
+
+  }
+
+
+	openModal(longContent: any) {
+		this.modalService.open(longContent, { scrollable: true, size: 'lg' });
+	}
+
+
+
+
 }

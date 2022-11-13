@@ -1,0 +1,30 @@
+.row {
+    margin-top: 102px !important;
+}
+
+.error {
+    color: red !important;
+}
+
+.btn-block {
+    width: 100% !important;
+}
+
+.fa-spinner {
+    font-size: 32px !important;
+  }
+
+
+
+.accordion-button {
+    color: black !important;
+    background-color: transparent !important;
+    box-shadow: inset 0 calc(var(--bs-accordion-border-width) * -1) 0 var(--bs-accordion-border-color) !important;
+}  
+
+
+.accordion-button:hover{
+    color: black !important;
+}
+
+

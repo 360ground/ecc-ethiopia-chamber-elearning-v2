@@ -57,7 +57,14 @@
                             <Button type="submit" class="btn btn-primary btn-lg btn-block"  [disabled]="disable"
                             (click)="Submit()"
                         >
-                        Send
+                        <div>
+                            <span *ngIf="disable">
+                                <i class='fa fa-spinner fa-spin fa-3x fa-fw'></i> 
+                            </span>
+                            <span *ngIf="!disable">
+                                Send
+                            </span>
+                        </div>
                     </Button>
                         </div>
                     </form>
