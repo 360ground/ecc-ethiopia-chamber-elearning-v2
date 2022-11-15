@@ -30,7 +30,7 @@ export class SignupComponent implements OnInit {
     public alertConfig: NgbAlertConfig
   ) {
     this.formGroup = new FormGroup({
-      type: new FormControl(null, Validators.required),
+      type: new FormControl('individual', Validators.required),
       individual: new FormGroup({
         firstname: new FormControl(null, Validators.required),
         lastname: new FormControl(null, Validators.required),
@@ -107,7 +107,7 @@ export class SignupComponent implements OnInit {
         representativeRole: new FormControl(null, Validators.required),
         sector: new FormControl(null, Validators.required),
         NoOfEmployee: new FormControl(null, Validators.required),
-        isaMember: new FormControl(null),
+        isaMember: new FormControl(false),
         membershipType: new FormControl({ disabled: true, value: null }),
         memberId: new FormControl({ disabled: true, value: null }),
         accountType: new FormControl('company'),

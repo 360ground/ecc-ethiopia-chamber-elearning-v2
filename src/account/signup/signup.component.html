@@ -257,16 +257,18 @@
                             </p>
                         </div>
                     </div>
-                    <Button type="submit" class="btn btn-primary btn-lg btn-block"  *ngIf="!disable"
+                    <Button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="disable"
                         (click)="isIndividual ? Submit('individual') : Submit('company')"
                     >
-                    Create my new account
+                    <span *ngIf="disable">
+                        <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
+                        style="margin-right: 10px !important; font-size: 24px !important;" aria-hidden="true"></i>
+                    </span>
+                    <span  *ngIf="!disable">
+                        Register
+                    </span>
                 </Button>
                 <!-- [disabled]="(isIndividual ? getControls('individual').invalid : getControls('company').invalid)" -->
-
-                    <Button class="btn btn-primary btn-lg btn-block disabled"  *ngIf="disable">
-                        Create my new account
-                    </Button>
                 </div>
             </form> 
         </div>

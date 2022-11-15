@@ -123,5 +123,26 @@
   }
   
 
+  .course {
+    /* position: relative !important; */
+    /* overflow: hidden !important;
+    margin:0 !important;
+    padding:0 !important;
+    height: 100px !important;
+    width: 100px !important; */
+    
+  }
+  
+  .course{
+    /* height: 100px;   */
+    -moz-transition:all .8s;-webkit-transition:all .8s;transition:all .8s
+  }
+  .course:hover{
+    /* max-width:100% !important; */
+    -moz-transform: scale(0.9) !important;
+    -webkit-transform: scale(0.9) !important;
+    transform: scale(0.9) !important; 
+    z-index: inherit !important; 
+  }
 
 

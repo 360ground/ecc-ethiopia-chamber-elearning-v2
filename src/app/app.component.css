@@ -97,12 +97,15 @@
     color: gray !important;
     text-align: center !important;
     font-weight: bolder !important;
+
+    margin-top: 42px !important;
+    /* margin-left: 50% !important; */
   }
 
 
-  .nav-item :hover {
-    background-color: #0d6efd !important;
-    color: white !important;
-    padding: 10px !important;
-    /* border-radius: 10px !important; */
+  .bottomBorder {
+    border-bottom: #0d6efd 2px solid !important;
+    transition: width .35s ease,left .35s ease !important;
+
   }
+

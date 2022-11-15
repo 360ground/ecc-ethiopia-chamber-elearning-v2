@@ -6,6 +6,7 @@ import { ApiService } from 'src/service/api.service';
 import { environment } from 'src/environments/environment';
 
 import { CookieService } from 'ngx-cookie-service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +28,9 @@ export class LoginComponent implements OnInit {
     private router: Router,
     public location: Location,
     public actRoute: ActivatedRoute,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    public toastr: ToastrService
+
   ) {
     this.formGroup = new FormGroup({
       username: new FormControl(null, Validators.required),
@@ -79,11 +82,61 @@ export class LoginComponent implements OnInit {
           if('profile' in response.message){
             if(response.message.profile.accountType == 'individual'){
               this.service.getEnrolledCourses(response.message.id);
+
+              let missingProfileFields: any[] = [];
+              let requiredFields = ['ageRange','organizationName','sector','occupation','country','city','yearOfExperience'];
+              let availableFields = Object.keys(this.service.userData.profile);
+      
+              requiredFields.forEach(element => {
+                if(!availableFields.includes(element)){
+                  missingProfileFields.push(element);
     
+                }
+              });
+
+              if(missingProfileFields.length){
+                let message = `Hello ${this.service.userData.name}, your profile seems to be not completed. 
+                               please complete the following fields. (${missingProfileFields.toString()})`;
+
+                this.service.missingProfileFieldsMessage.push(message);
+
+                this.toastr.info('please fill all the required fields.','Incomplete Profile');
+
+                this.router.navigateByUrl('/account/profile');
+
+              } else {
+                this.router.navigateByUrl('/');
+
+              }
+        
             } else if(response.message.profile.accountType == 'company'){
               this.service.isIndividual = false;
-  
-            } 
+
+              let missingProfileFields: any[] = [];
+              let requiredFields = ['organizationName','representativeRole','sector','NoOfEmployee'];
+              let availableFields = Object.keys(this.service.userData.profile);
+      
+              requiredFields.forEach(element => {
+                if(!availableFields.includes(element)){
+                  missingProfileFields.push(element);
+                }
+              });  
+
+              if(missingProfileFields.length){
+                let message = `Hello ${this.service.userData.name}, your profile seems to be not completed. 
+                               please complete the following fields. (${missingProfileFields.toString()})`;
+
+                this.service.missingProfileFieldsMessage.push(message);
+
+                this.toastr.info('please fill all the required fields.','Incomplete Profile');
+
+                this.router.navigateByUrl('/account/profile');
+
+              } else {
+                this.router.navigateByUrl('/');
+
+              }
+            }
 
           } else {
             this.service.isIndividual = false;
@@ -103,8 +156,7 @@ export class LoginComponent implements OnInit {
           } else {
             // or from login button
             this.service.isAuthenticating = false;
-            console.log(this.service.isAuthenticating);
-            this.router.navigate(['/']);
+            // this.router.navigate(['/']);
           }
   
           

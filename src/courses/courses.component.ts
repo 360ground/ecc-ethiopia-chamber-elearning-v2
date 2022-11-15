@@ -23,6 +23,9 @@ export class CoursesComponent implements OnInit {
   public isLoadingCourseCategories: Boolean = false;
   public adminToken: any = environment.adminToken;
 
+  public missingProfileFields:any [] = [];
+
+
   public paymentOptions: any[] = [
     { title: 'Free', id: 1 },
     { title: 'Not Free', id: 0 },
@@ -42,6 +45,7 @@ export class CoursesComponent implements OnInit {
   public selectedPayment: any[] = [];
   public selectedcertificate: any[] = [];
   public selectedCourseLength: any[] = [];
+  public messages: any[] | undefined;
 
   constructor(
     public service: ApiService,
@@ -57,14 +61,9 @@ export class CoursesComponent implements OnInit {
   ngOnInit(): void {
     if (this.service.loadedCourses) {
       this.courses = this.service.loadedCourses;
+      
     } else {
       this.isLoading = true;
-
-      const formData = new FormData();
-
-      formData.append('wstoken', environment.adminToken);
-      formData.append('wsfunction', 'core_course_get_courses_by_field');
-      formData.append('moodlewsrestformat', 'json');
 
       this.openModal();
 
@@ -72,7 +71,6 @@ export class CoursesComponent implements OnInit {
         .mainCanvas('getAllCourses', 'get', null)
         .subscribe((response: any) => {
           this.courses = response;
-          // this.courses.shift();
 
           this.courses.forEach((element: any) => {
             element.image_download_url = element.image_download_url.replace('https', 'http');
@@ -83,11 +81,13 @@ export class CoursesComponent implements OnInit {
         });
     }
 
-    // if (this.service.courseCategories) {
-    //   this.courseCategories = this.service.courseCategories;
-    // } else {
-    //   this.getCategories();
-    // }
+    if(this.service.missingProfileFields.length){
+      this.messages?.push(
+        `Hello ${this.service.userData.name} , your profile seems to be not completed. 
+         please complete the following fields. (${ this.service.missingProfileFields.toString() })`
+      );
+    }
+
   }
 
   openModal() {
@@ -96,6 +96,10 @@ export class CoursesComponent implements OnInit {
 
   closeModal() {
     this.modalService.dismissAll();
+  }
+
+  closeMessage(){
+    this.messages = [];
   }
 
   getCategories() {

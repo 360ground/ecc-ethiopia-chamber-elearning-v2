@@ -17,6 +17,9 @@ export class AppComponent implements OnInit {
 
   public logoUrl: any = environment.logoUrl;
   public usericonUrl: any = environment.usericonUrl;
+  public url: any = 'courses';
+
+  @ViewChild('drawer') drawer: MatSidenav | undefined;
 
   constructor(public service: ApiService, public router: Router, 
     private cookieService: CookieService, private cdr: ChangeDetectorRef) {}
@@ -41,8 +44,10 @@ export class AppComponent implements OnInit {
             this.service.userData = null;
             this.service.myCourses = null;
             this.service.token = null;
-            localStorage.removeItem('access_token');
-            this.router.navigateByUrl('/courses');
+            this.cookieService.delete('access_token');
+            
+            window.location.reload();
+
           } else {
             alert(response.message);
           }
@@ -50,9 +55,14 @@ export class AppComponent implements OnInit {
     }
   }
 
-  navigate(url: any) {
+  navigate(isSmallScreen: boolean = true, url: any) {
     this.isSidnavShown = false;
+    this.url = url;
     this.router.navigateByUrl(url);
+
+    if(isSmallScreen){
+      this.drawer?.toggle();
+    }
   }
 
   isLoggedIn(){

@@ -19,7 +19,7 @@
                                     <span *ngIf="!enrolling" style="font-weight: bold; font-size: 20px ip !important;">
                                         {{ 
                                             paymnetSettlement.length || isFree ?
-                                             'Enroll' : 'Pay & Enroll'  
+                                             'Take course' : 'Pay & Take course'  
                                         }}
                                     </span>
                                 </div>
@@ -67,6 +67,11 @@
                             </div>    
                             <div class="col-sm-10 col-md-10 col-lg-10">
                                 <p class="lists">
+                                    <span style="
+                                    font-weight: bolder !important;
+                                ">Course detail</span>
+                                </p>    
+                                <p class="lists">
                                     <span><i class="icons1 fa fa-bars" aria-hidden="true"></i>
                                     </span>
                                     <span>Modules : {{ state?.extraInfo?.attributes.total_number_of_topic }}</span>
@@ -96,6 +101,11 @@
                         </div>    
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" *ngIf="state?.extraInfo?.features">
+                        <p class="lists">
+                            <span style="
+                            font-weight: bolder !important;
+                        ">Course features</span>
+                        </p> 
                         <div *ngFor="let feature of state?.extraInfo?.features; let i = index;">
                             <p class="lists">
                                 <span>
@@ -209,7 +219,7 @@
                 color: black;">Loading modules ...</h4>
             </div>
             <div  *ngIf="state?.activities">
-                <h1 style="margin-bottom: 20px !important; text-align:center; margin-top: 65px !important">
+                <h1 style="margin-bottom: -18px !important; text-align:center; margin-top: 65px !important">
                     Modules included
                 </h1>
                 <div class="row">
@@ -222,7 +232,7 @@
                         <div id="moduleCardsContainer" class="moduleCardsContainer" style="margin-top: 65px !important">
                             <div class="col-sm-12 col-md-3 col-lg-3" 
                             style="display: inline-block; margin-right: 98px !important;"
-                             *ngFor="let activity of state?.activities; let i = index">
+                                *ngFor="let activity of state?.activities; let i = index">
                                 <div class="card moduleCards">
                                     <p style="color: #3c4043; font-weight: 500;
                                     text-transform: capitalize;">{{activity.name}}</p>

@@ -24,6 +24,7 @@ export class UpdateProfileComponent implements OnInit {
   public myEducation: any[] = [];
   public isOnEdit: Boolean = false;
   public currentEditingEducationIndex: any;
+  public memberId: any = null;
 
   @ViewChild('longContent') longContent: any;
 
@@ -56,8 +57,8 @@ export class UpdateProfileComponent implements OnInit {
       individual: new FormGroup({
         firstname: new FormControl(names[0], Validators.required),
         lastname: new FormControl(names[1], Validators.required),
-        email: new FormControl(null, [Validators.required, Validators.email]),
-        phonenumber: new FormControl(null, [
+        email: new FormControl(this.service.userData.email, [Validators.required, Validators.email]),
+        phonenumber: new FormControl(this.service.userData.phonenumber, [
           Validators.required,
           Validators.minLength(10),
           Validators.maxLength(10),
@@ -82,7 +83,7 @@ export class UpdateProfileComponent implements OnInit {
       company: new FormGroup({
         firstname: new FormControl(names[0], Validators.required),
         lastname: new FormControl(names[1], Validators.required),
-        email: new FormControl(null, [Validators.required, Validators.email]),
+        email: new FormControl(this.service.userData.email, [Validators.required, Validators.email]),
         phonenumber: new FormControl(null, [
           Validators.required,
           Validators.minLength(10),
@@ -116,13 +117,30 @@ export class UpdateProfileComponent implements OnInit {
 
   ngOnInit() {
     let userData = this.service.userData;
+
+    
+    if(userData.profile.isaMember){
+      userData.profile.isaMember = 1;
+
+      this.getControls('company.memberId').enable();
+      this.getControls('company.membershipType').enable();
+
+      if(userData.profile.memberId){
+        this.memberId = environment.baseUrlBackend + userData.profile.memberId;
+      }
+
+    } else {
+      userData.profile.isaMember = 0;
+
+    }
+
     this.getControls(userData.profile.accountType).patchValue(userData.profile);
 
     this.myEducation = this.service.userData.profile.myEducation ?
     Object.values(this.service.userData.profile.myEducation)
     : [];
 
-    this.isMemberCheck(false);
+    this.isMemberCheck(userData.profile.isaMember);
   }
 
   public getControls(name: any): FormControl {
@@ -242,6 +260,38 @@ export class UpdateProfileComponent implements OnInit {
 	}
 
 
+  openImage(){
+    window.open(this.memberId, '_blank');
+  }
 
+  deleteMemberId(){
+    if(confirm(`are you sure want to delete this file ?`)){
+      this.disable = true;
+
+      let payload = {
+        url: this.service.userData.profile.memberId
+      };
+  
+      this.service
+        .mainCanvas(
+          `deleteFiles`,
+          'post',
+          payload
+        ).subscribe((response: any) => {
+  
+          if (response.status) {
+            this.toastr.success(response.message, 'Success');
+            this.memberId = null;
+  
+          } else {
+            this.toastr.error(response.message, 'Error');
+  
+          }
+  
+          this.disable = false;
+        });
+
+    }
+  }
 
 }

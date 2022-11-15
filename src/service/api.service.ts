@@ -21,6 +21,9 @@ export class ApiService {
   public isAuthenticating: Boolean = false;
   public MyCertificates: any[] = [];
 
+  public missingProfileFields: any[] = [];
+  public missingProfileFieldsMessage: any[] = [];
+
 
   constructor(public http: HttpClient) {}
 

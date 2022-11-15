@@ -17,7 +17,7 @@ Button {
     border-radius: 0px !important;
     font-size: 15px !important;
     font-weight: lighter !important;
-    float: right !important;
+    /* float: right !important; */
 }
 
 ngb-alert{
@@ -135,4 +135,34 @@ label{
 
 .empty-card-button {
     margin-right: 21% !important;
+}
+
+
+.fa-trash-o {
+    margin-top: 44px !important;
+    font-size: 22px !important;
+    color: red !important;
+    font-weight: 200 !important;
+    cursor: pointer !important;
+}
+
+.memberIdCardContainer {
+    border-style: solid !important;
+    border-color: #fff !important;
+    border-width: 2px !important;
+    border-radius: 4px !important;
+    width: 250px !important;
+    height: 250px !important;
+    text-align: center;
+    cursor: pointer;
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+    padding-top: 5px !important;
+}
+
+.previousmemberIdLable{
+    color: gray !important;
+    font-size: 16px !important;
+    text-transform: capitalize !important;
+    font-weight: lighter !important;
 }
