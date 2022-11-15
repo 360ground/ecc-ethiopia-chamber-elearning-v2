@@ -274,7 +274,7 @@ export class CourseDetailComponent implements OnInit {
           redirectUrls: {
             returnUrl: `${environment.applicationUrl}/detail/${this.id}/${this.index}?paymentId=${paymentId}&paymentSuccess=true`,
             cancelUrl: `${environment.applicationUrl}/detail/${this.id}/${this.index}?paymentId=${paymentId}&paymentCancel=true`,
-            callbackUrl: `${environment.baseUrlBackend}/paymentSuccessCallBack`,
+            callbackUrl: `https://25db-196-190-62-130.eu.ngrok.io/paymentSuccessCallBack`,
           },
           metaData: {
             student_name: this.service.userData.name,
