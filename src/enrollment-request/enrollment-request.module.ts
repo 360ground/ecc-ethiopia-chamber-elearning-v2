@@ -13,7 +13,7 @@ import { EnrollmentRequestFormComponent } from './RequestForm/enrollment-request
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'myrequest',
     component: MyRequestComponent,
   },
   {

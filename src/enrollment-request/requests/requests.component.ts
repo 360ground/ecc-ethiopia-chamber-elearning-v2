@@ -11,6 +11,7 @@ import { ApiService } from 'src/service/api.service';
 export class RequestsComponent implements OnInit {
   public requests: any = [];
   public requestDetail: any = null;
+  public index: any;
 
   constructor(
     public service: ApiService,
@@ -32,19 +33,11 @@ export class RequestsComponent implements OnInit {
       });
   }
 
-  viewDetail(id: any){
-    this.service
-      .mainCanvas(`getDetailEnrollmentRequest/${id}`, 'get', {})
-      .subscribe((response: any) => {
-        if (response.status) {
-          this.requestDetail = response.message;
-          this.requestDetail.students = Object.values(JSON.parse(this.requestDetail.students))
+  viewDetail(index: any, request: any){
+    this.requestDetail = request;
+    this.requestDetail.students = Object.values(JSON.parse(this.requestDetail.students));
 
-        } else {
-          this.toastr.error(response.message, 'Error');
-
-        }
-      });
+    this.index = index;
   }
 
   back(){
@@ -52,22 +45,26 @@ export class RequestsComponent implements OnInit {
   }
   
   updateRequest(status: any){
-    let payload = {
-      id: this.requestDetail.id,
-      status: status
-    };
+    if(confirm(`are you sure want to ${status} this request ?`)){
+      let payload = {
+        id: this.requestDetail.id,
+        status: status
+      };
+  
+      this.service
+        .mainCanvas(`updateEnrollmentRequest`, 'post', payload)
+        .subscribe((response: any) => {
+          if (response.status) {
+            this.toastr.success(response.message, 'Success');
+            this.requests[this.index].status = status;
+  
+          } else {
+            this.toastr.error(response.message, 'Error');
+  
+          }
+        });
+    }
 
-    this.service
-      .mainCanvas(`updateEnrollmentRequest`, 'post', payload)
-      .subscribe((response: any) => {
-        if (response.status) {
-          this.toastr.success(response.message, 'Success');
-
-        } else {
-          this.toastr.error(response.message, 'Error');
-
-        }
-      });
   }
 
 }

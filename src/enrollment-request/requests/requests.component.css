@@ -1,0 +1,31 @@
+.requestCourseName {
+    font-size: 20px !important;
+    font-weight: lighter !important;
+}
+
+.requestInstitutionName {
+    font-size: 18px !important;
+    font-weight: 500 !important;
+}
+
+.requestStatus {
+    float: right !important;
+    background: aliceblue !important;
+    padding: 10px !important;
+    font-size: 18px !important;
+    text-transform: uppercase !important;
+    border-radius: 9px !important;
+}
+
+.lists {
+    cursor: pointer !important;
+}
+
+.requestDetailHeader{
+    font-size: 17px !important;
+    margin-left: 17px !important;
+}
+
+.btn {
+    margin-right: 20px !important;
+}

@@ -75,11 +75,11 @@ export class LoginComponent implements OnInit {
   
           this.service.token = response.message.access_token;
 
-          this.cookieService.set('access_token', response.message.access_token,1,'/');
-
           this.service.userData = response.message;
   
           if('profile' in response.message){
+            this.cookieService.set('access_token', response.message.access_token,1,'/');
+
             if(response.message.profile.accountType == 'individual'){
               this.service.getEnrolledCourses(response.message.id);
 

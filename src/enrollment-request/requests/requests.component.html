@@ -4,20 +4,20 @@
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="card" *ngIf="!requestDetail">
                 <div class="card-body">
-                    <p>
+                    <!-- <p>
                         <span><h1>Enrolment request</h1></span>
-                    </p>
+                    </p> -->
                     <p><span><hr /></span></p>
                     <div class="mb-4" *ngIf="requests.length">
                         <ul class="list-group">
-                            <li class="list-group-item" *ngFor="let request of requests; let i as index"
-                             (click)="viewDetail(request.id)">
+                            <li class="list-group-item lists" *ngFor="let request of requests; let i as index"
+                             (click)="viewDetail(i,request)">
                                 <div>
-                                    <p>{{ request?.institution_name | titlecase }}</p>
-                                    <p>{{ request.course_name | titlecase }}</p>
-                                    <p>
-                                        <span>{{ request.createdAt | date }}</span>
-                                        <span>{{ request.status }}</span>
+                                    <p class="requestCourseName">{{ request.course_name | titlecase }}</p>
+                                    <p class="requestInstitutionName">{{ request?.institution_name }}</p>
+                                    <p class="courseFooter">
+                                        <span class="requestDate">request date : {{ request.createdAt | date }}</span>
+                                        <span class="requestStatus">{{ request.status }}</span>
                                     </p>
                                 </div>  
                             </li>
@@ -35,7 +35,6 @@
                             </Button>
                         </span>
                     </p>
-                    
                     <p>
                         <span>
                             <h1>Request Detail</h1>
@@ -47,10 +46,20 @@
                     </p>
                     <div class="mb-4">
                         <div>
-                            <p>{{ requestDetail?.institution_name | titlecase }}</p>
-                            <p>{{ requestDetail.course_name | titlecase }}</p>
-                            <p>{{ requestDetail.createdAt | date }}</p>
+                            <p class="requestDetailHeader">Institution name : <b>{{ requestDetail?.institution_name }}</b></p>
+                            <p class="requestDetailHeader">Course name : <b>{{ requestDetail.course_name | titlecase }}</b></p>
+                            <p class="requestDetailHeader">Request date: <b>{{ requestDetail.createdAt | date }}</b></p>
+                            <p class="requestDetailHeader">Status: <b>{{ requestDetail.status | uppercase }}</b></p>
                         </div>  
+                        <p>
+                            <span><hr /></span>
+                        </p>
+                        <p>
+                            <span>
+                                <h1>Trainee List</h1>
+                            </span>
+                        </p>    
+                        
                         <div>
                             <ul class="list-group">
                                 <li class="list-group-item" *ngFor="let student of requestDetail.students; let i as index">
@@ -63,15 +72,15 @@
                                 </li>
                             </ul>
                         </div>
-                        <div>
+                        <div style="margin-top: 43px !important">
                             <p>
                                 <span>
-                                    <Button class="btn btn-success btn-lg btn-block" (click)="updateRequest('approve')">
+                                    <Button class="btn btn-success btn-lg btn-block mr-4" (click)="updateRequest('Approved')">
                                         Approve
                                     </Button>
                                 </span>
                                 <span>
-                                    <Button class="btn btn-danger btn-lg btn-block" (click)="updateRequest('decline')">
+                                    <Button class="btn btn-danger btn-lg btn-block" (click)="updateRequest('declined')">
                                         Decline
                                     </Button>
                                 </span>

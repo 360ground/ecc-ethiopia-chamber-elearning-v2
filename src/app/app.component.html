@@ -37,10 +37,19 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
         <!-- [ngClass]="url == 'courses' ? 'bottomBorder' : ''" -->
 
         <li class="nav-item">
-          <a class="nav-link white" [routerLink]="['/enrollment/create']" (click)="navigate(false, 'enrollment/create')"  
-           [ngClass]="url == 'enrollment/create' ? 'bottomBorder' : ''" aria-current="page"
+          <a class="nav-link white" [routerLink]="['/enrollment/myrequest']" (click)="navigate(false, 'enrollment/myrequest')"  
+           [ngClass]="url == 'enrollment/myrequest' ? 'bottomBorder' : ''" aria-current="page"
+           *ngIf="service.userData && !service?.isIndividual">My Enrollment Request</a>
+        </li>
+
+
+        <li class="nav-item">
+          <a class="nav-link white" [routerLink]="['/enrollment/requests']" (click)="navigate(false, 'enrollment/requests')"  
+           [ngClass]="url == 'enrollment/requests' ? 'bottomBorder' : ''" aria-current="page"
            *ngIf="service.userData && !service?.isIndividual">Enrollment Request</a>
         </li>
+
+
         <li class="nav-item" *ngIf="service.userData">
           <a class="nav-link white" [routerLink]="['/mycourse']" (click)="navigate(false, 'mycourse')" 
           [ngClass]="url == 'mycourse' ? 'bottomBorder' : ''"
