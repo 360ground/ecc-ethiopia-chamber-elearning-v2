@@ -115,7 +115,9 @@ export class ApiService {
         data.forEach((element: any, index: any) => {
           let progress = element.course_progress;
 
-          element.image_download_url = element.image_download_url.replace('https', 'http');
+          if (location.protocol == 'http:'){
+            element.image_download_url = element.image_download_url.replace('https', 'http');
+          }
     
           if ('requirement_count' in progress) {
             element.percentage =

@@ -8,8 +8,7 @@
                         <div class="mb-4">
                             <label>Course</label>
                             <select class="form-control form-control-lg" formControlName="course_id">
-                                <option *ngFor="let course of service.loadedCourses; let i as index" [value]="course.id" 
-                                    (click)="selectCourse(course)">
+                                <option *ngFor="let course of service.loadedCourses; let i as index" [value]="course.id">
                                     {{ course.name | titlecase }}
                                 </option>
                             </select>
@@ -21,8 +20,23 @@
                         <h1>Add trainee's</h1>
                         <p>search the trainee by their email address ...</p>
                         <div class="mb-4">
-                            <input type="email" class="form-control form-control-lg" formControlName="email"
-                            (keydown)="search($event)" />
+                            <div class="row">
+                                <div class="col-sm-12 col-md-10 col-lg-10">
+                                    <input type="email" class="form-control form-control-lg" formControlName="email" />
+                                </div>
+                                <div class="col-sm-12 col-md-2 col-lg-2">
+                                    <button class="btn btn-primary btn-block btn-lg" [disabled]="isSearching" type="button"
+                                    style="width: 100% !important;" (click)="search()">
+                                    <span *ngIf="isSearching">
+                                        <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
+                                        style="margin-right: 10px !important; font-size: 20px !important;" aria-hidden="true"></i>
+                                    </span>
+                                    <span *ngIf="!isSearching">
+                                        search
+                                    </span>
+                                </button>
+                                </div>
+                            </div>
                             <p *ngIf="getControls('email').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
@@ -30,9 +44,9 @@
                                 <small> * invalid email</small>
                             </p>
                         </div>
-                        <p *ngIf="isSearching" style="text-align: center !important;">
+                        <!-- <p *ngIf="isSearching" style="text-align: center !important;">
                             searching ...
-                        </p>
+                        </p> -->
                         <div class="mb-4" *ngIf="studentDetail">
                             <ul class="list-group">
                             <li class="list-group-item">
@@ -48,7 +62,12 @@
                                     </div>
                                     <div class="col-md-2 col-sm-12 col-lg-2">
                                         <Button class="btn btn-success btn-block" style="width: 100%;" (click)="addStudent(studentDetail)">
-                                            Add
+                                            <span>
+                                                <i class="fa fa-plus mr-4" aria-hidden="true"></i>
+                                            </span>
+                                            <span>
+                                                Add
+                                            </span>
                                         </Button>
                                     </div>
                                 </div>  
@@ -63,12 +82,12 @@
                                         <div class="col-md-2 col-sm-12 col-lg-2" style="text-align: center !important;">
                                             <img [src]="student?.avatar_url" style="width: 42px; height: 42px;border-radius: 50%;margin-right: 5px;" />
                                         </div>
-                                        <div class="col-md-4 col-sm-12 col-lg-4 nameLable">
+                                        <div class="col-md-8 col-sm-12 col-lg-8 nameLable">
                                             {{ student?.name | titlecase }}
                                         </div>
-                                        <div class="col-md-4 col-sm-12 col-lg-4 nameLable">
+                                        <!-- <div class="col-md-4 col-sm-12 col-lg-4 nameLable">
                                             {{ student?.email }}
-                                        </div>
+                                        </div> -->
                                         <div class="col-md-2 col-sm-12 col-lg-2" style="text-align: center !important">
                                             <mat-icon class="removeButton"  (click)="removeStudent(i);">delete_forever</mat-icon>
                                         </div>
@@ -130,7 +149,13 @@
                         </div> 
                         <div class="mb-4 row">
                             <Button type="submit" class="btn btn-primary btn-lg btn-block" (click)="Submit()" [disabled]="disable">
-                                Submit
+                                <span *ngIf="disable">
+                                    <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
+                                    style="margin-right: 10px !important; font-size: 24px !important;" aria-hidden="true"></i>
+                                </span>
+                                <span *ngIf="!disable">
+                                    Submit request
+                                </span>
                             </Button>
                         </div>   
                     </form>

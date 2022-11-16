@@ -17,6 +17,8 @@ export const environment = {
 
   // back end
   baseUrlBackend: 'http://3.125.158.58:4000',
+  paymentSuccessCallbackUrl: 'http://3.125.158.58:4000',
+
 
   // medapay
   medapayUrl: 'https://api.pay.meda.chat/v1/bills',

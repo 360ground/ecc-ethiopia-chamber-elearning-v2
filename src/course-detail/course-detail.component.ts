@@ -74,14 +74,13 @@ export class CourseDetailComponent implements OnInit {
     this.state.short = this.state.public_description.substring(0, 200);
     
     this.state.extraInfo?.attributes.course_fee != 'Free' ? this.isFree = false : null;
-    console.log(this.state.extraInfo?.attributes.course_fee);
 
     if(this.service.userData){
       this.checkPaymnetSettlement();
     }
 
     // load user enrolled courses
-    if (this.service.userData && this.service.myCourses) {
+    if (this.service.userData.profile.accountType == 'individual' && this.service.myCourses) {
       let inprogress: any[] = this.service.myCourses.inprogress;
       let completed: any[] = this.service.myCourses.completed;
 
@@ -274,7 +273,7 @@ export class CourseDetailComponent implements OnInit {
           redirectUrls: {
             returnUrl: `${environment.applicationUrl}/detail/${this.id}/${this.index}?paymentId=${paymentId}&paymentSuccess=true`,
             cancelUrl: `${environment.applicationUrl}/detail/${this.id}/${this.index}?paymentId=${paymentId}&paymentCancel=true`,
-            callbackUrl: `https://25db-196-190-62-130.eu.ngrok.io/paymentSuccessCallBack`,
+            callbackUrl: `${environment.paymentSuccessCallbackUrl}/paymentSuccessCallBack`,
           },
           metaData: {
             student_name: this.service.userData.name,

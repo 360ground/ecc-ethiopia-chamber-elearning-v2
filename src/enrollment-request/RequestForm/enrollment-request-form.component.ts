@@ -27,7 +27,7 @@ export class EnrollmentRequestFormComponent implements OnInit {
   ) {
     this.formGroup = new FormGroup({
       institution_id: new FormControl(this.service.userData.id),
-      institution_name: new FormControl(this.service.userData.name),
+      institution_name: new FormControl(this.service.userData.profile.organizationName),
       course_id: new FormControl(null, Validators.required),
       course_name: new FormControl(null),
       traineelist: new FormControl(null, Validators.required),
@@ -45,24 +45,21 @@ export class EnrollmentRequestFormComponent implements OnInit {
     return this.formGroup.get(name) as FormControl;
   }
 
-  public search($event:any){    
-    if($event.key === "Enter") {
-      
+  public search(){    
       if(this.getControls('email').valid){
         this.isSearching = true;
 
         this.getControls('email').disable();
         this.studentDetail = null;
-  
-        $event.preventDefault();
-        
+          
         let criteria: any = `sis_login_id:` + this.getControls('email').value;
     
         this.service
-        .mainCanvas(`searchUser/${criteria}`, 'get', {})
+        .mainCanvas(`searchUser/${criteria}`, 'get', null)
         .subscribe((response: any) => {
           if (response.status) {
             this.studentDetail = response.message;
+
             this.disable = false;
     
           } else {
@@ -71,11 +68,10 @@ export class EnrollmentRequestFormComponent implements OnInit {
           }
           this.isSearching = false;
           this.getControls('email').enable();
+
         });
 
       }
-    }
-
   }
 
   public addStudent(data: any){
@@ -105,11 +101,6 @@ export class EnrollmentRequestFormComponent implements OnInit {
     }
   }
 
-  public selectCourse(course:any){
-    this.getControls('course_name').setValue(course.name);
-    this.getControls('course_id').setValue(course.id);
-  }
-
   public onFileUpload($event: any, isSlip: boolean) {
     let file = $event.target.files[0];
 
@@ -134,13 +125,22 @@ export class EnrollmentRequestFormComponent implements OnInit {
 
   Submit() {
     this.formSubmitted = true;
+
     this.getControls('email').clearValidators();
-    
+    this.getControls('email').updateValueAndValidity();
+
     if (!this.formGroup.valid) {
       return;
       
     } else {
       this.disable = true;
+
+      let result = this.service.loadedCourses.find((element:any) => 
+        element.id == this.getControls('course_id').value
+      );
+
+      this.getControls('course_name').setValue(result.name);
+
       let payload = this.formGroup.value;
 
       payload.traineelist = this.traineelist;
@@ -149,11 +149,12 @@ export class EnrollmentRequestFormComponent implements OnInit {
       delete payload.email;
 
       this.service
-      .mainCanvas(`createEnrollmentRequest`, 'post', {})
+      .mainCanvas(`createEnrollmentRequest`, 'post', payload)
       .subscribe((response: any) => {
         if (response.status) {
           this.disable = false;
           this.toastr.success(response.message, 'Success');
+          // navigate to the list
 
         } else {
           this.disable = false;

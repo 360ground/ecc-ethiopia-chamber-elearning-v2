@@ -73,7 +73,10 @@ export class CoursesComponent implements OnInit {
           this.courses = response;
 
           this.courses.forEach((element: any) => {
-            element.image_download_url = element.image_download_url.replace('https', 'http');
+            if (location.protocol == 'http:'){
+              element.image_download_url = element.image_download_url.replace('https', 'http');
+            }
+
           });  
           this.service.loadedCourses = this.courses;
           this.isLoading = false;

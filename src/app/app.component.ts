@@ -75,14 +75,18 @@ export class AppComponent implements OnInit {
     })
     .subscribe((response: any) => {
       if(response.status){
-        this.service.token = response.message.access_token;
+        
+        this.service.userData = response.message;
 
-        if (response.message.accountType == 'company') {
+        this.service.token = response.message.access_token;
+        if (response.message.profile.accountType == 'individual') {
+          this.service.getEnrolledCourses(response.message.id);
+          
+        } else if(response.message.profile.accountType == 'company') {
           this.service.isIndividual = false;
+
         }
   
-        this.service.userData = response.message;
-        this.service.getEnrolledCourses(response.message.id);
       }
     });
   }

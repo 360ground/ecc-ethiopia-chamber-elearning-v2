@@ -38,7 +38,7 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
 
         <li class="nav-item">
           <a class="nav-link white" [routerLink]="['/enrollment/create']" (click)="navigate(false, 'enrollment/create')"  
-            aria-current="page"
+           [ngClass]="url == 'enrollment/create' ? 'bottomBorder' : ''" aria-current="page"
            *ngIf="service.userData && !service?.isIndividual">Enrollment Request</a>
         </li>
         <li class="nav-item" *ngIf="service.userData">

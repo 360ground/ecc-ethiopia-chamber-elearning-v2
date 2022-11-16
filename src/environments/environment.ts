@@ -17,10 +17,11 @@ export const environment = {
   tokenCanvas:
     'hE4zb714iUtLDvgqXQrUtnbMlU8yT4gFaFykeAC8mrQ6E5QdpfjKSEboljgDAaSV',
     
-  applicationUrl: 'http://localhost:4200',  
+  applicationUrl: 'http://localhost:4200',
 
   // backend express
   baseUrlBackend: 'http://localhost:4000',
+  paymentSuccessCallbackUrl: 'https://21a3-196-188-51-250.in.ngrok.io',
 
   // medapay
   medapayUrl: 'https://api.pay.meda.chat/v1/bills',
