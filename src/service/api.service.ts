@@ -146,7 +146,7 @@ export class ApiService {
                     courseId: element.id,
                     courseCode: element.course_code,
                     courseName: element.name,
-                    studentName: this.userData.name,
+                    studentName: this.userData.short_name,
                     studentId: this.userData.id,
                     email: this.userData.email
                   };

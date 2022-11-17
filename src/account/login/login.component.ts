@@ -96,7 +96,7 @@ export class LoginComponent implements OnInit {
 
               if(missingProfileFields.length){
                 let message = `Hello ${this.service.userData.name}, your profile seems to be not completed. 
-                               please complete the following fields. (${missingProfileFields.toString()})`;
+                               please complete the following fields. (${missingProfileFields.toString().replace(',', ', ')})`;
 
                 this.service.missingProfileFieldsMessage.push(message);
 
@@ -124,7 +124,7 @@ export class LoginComponent implements OnInit {
 
               if(missingProfileFields.length){
                 let message = `Hello ${this.service.userData.name}, your profile seems to be not completed. 
-                               please complete the following fields. (${missingProfileFields.toString()})`;
+                               please complete the following fields. (${missingProfileFields.toString().replace(',', ', ')})`;
 
                 this.service.missingProfileFieldsMessage.push(message);
 

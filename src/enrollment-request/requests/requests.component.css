@@ -10,11 +10,10 @@
 
 .requestStatus {
     float: right !important;
-    background: aliceblue !important;
     padding: 10px !important;
     font-size: 18px !important;
-    text-transform: uppercase !important;
-    border-radius: 9px !important;
+    color: white !important;
+    border-radius: 4px !important;
 }
 
 .lists {
@@ -28,4 +27,35 @@
 
 .btn {
     margin-right: 20px !important;
+}
+
+.card {
+    margin-top: 48px !important;
+}
+
+.remarkBox {
+    border: gray 1px solid !important;
+    padding: 10px !important;
+    border-radius: 5px !important;
+    margin-left: 17px !important;
+
+}
+
+.enrollmentStatus {
+    color: white !important;
+    padding: 6px 20px 8px 20px !important;
+    width: 313px !important;
+    text-transform: uppercase !important;
+    border-radius: 5px !important;
+}
+
+.pendingStatus {
+    background-color: #1a73e8 !important;
+}
+
+.successStatus {
+    background-color: green !important;
+}
+.failedStatus {
+    background-color: red !important;
 }

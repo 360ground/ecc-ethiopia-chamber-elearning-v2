@@ -74,10 +74,17 @@ export class EnrollmentRequestFormComponent implements OnInit {
       }
   }
 
-  public addStudent(data: any){
-  
+  public addStudent(student: any){
     let index = this.students.findIndex(x => x.email == this.getControls('email').value);
     
+    let data = {
+      name: student.short_name,
+      email: student.email,
+      id: student.id,
+      avatar_url: student.avatar_url,
+      status: 'pending',
+      isEnrolling: false
+    };
 
     if(index < 0){
       this.students.push(data);
@@ -133,35 +140,40 @@ export class EnrollmentRequestFormComponent implements OnInit {
       return;
       
     } else {
-      this.disable = true;
+      if(this.students.length){
+        this.disable = true;
+  
+        let result = this.service.loadedCourses.find((element:any) => 
+          element.id == this.getControls('course_id').value
+        );
+  
+        this.getControls('course_name').setValue(result.name);
+  
+        let payload = this.formGroup.value;
+  
+        payload.traineelist = this.traineelist;
+        payload.bankSlip = this.bankSlip;
+        payload.students = JSON.stringify(Object.assign({}, this.students));
+        delete payload.email;
+  
+        this.service
+        .mainCanvas(`createEnrollmentRequest`, 'post', payload)
+        .subscribe((response: any) => {
+          if (response.status) {
+            this.disable = false;
+            this.toastr.success(response.message, 'Success');
+            // navigate to the list
+  
+          } else {
+            this.disable = false;
+            this.toastr.error(response.message, 'Error');
+  
+          }
+        });
 
-      let result = this.service.loadedCourses.find((element:any) => 
-        element.id == this.getControls('course_id').value
-      );
-
-      this.getControls('course_name').setValue(result.name);
-
-      let payload = this.formGroup.value;
-
-      payload.traineelist = this.traineelist;
-      payload.bankSlip = this.bankSlip;
-      payload.students = JSON.stringify(Object.assign({}, this.students));
-      delete payload.email;
-
-      this.service
-      .mainCanvas(`createEnrollmentRequest`, 'post', payload)
-      .subscribe((response: any) => {
-        if (response.status) {
-          this.disable = false;
-          this.toastr.success(response.message, 'Success');
-          // navigate to the list
-
-        } else {
-          this.disable = false;
-          this.toastr.error(response.message, 'Error');
-
-        }
-      });
+      } else {
+        this.toastr.error('Please add a students.', 'Error');
+      }
     }
   }
 }

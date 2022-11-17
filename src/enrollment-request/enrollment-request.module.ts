@@ -14,7 +14,7 @@ import { EnrollmentRequestFormComponent } from './RequestForm/enrollment-request
 const routes: Routes = [
   {
     path: 'myrequest',
-    component: MyRequestComponent,
+    component: EnrollmentRequestFormComponent,
   },
   {
     path: 'create',

@@ -44,7 +44,6 @@ export class MyCourseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.service.myCourses.inprogress)
   }
 
   navigate(data: any) {
@@ -53,7 +52,7 @@ export class MyCourseComponent implements OnInit {
 
   removeCourse(course: any, index: any, type: any) {
     if (
-      confirm(`are you sure want to ${course.name} from your learning plan ?`)
+      confirm(`are you sure want to remove ${course.name} from your learning plan ?`)
     ) {
       this.service
         .mainCanvas(
@@ -63,7 +62,8 @@ export class MyCourseComponent implements OnInit {
         )
         .subscribe((response: any) => {
           if (response.status) {
-            this.openSnackBar(response.message, 'Dismiss');
+            this.toastr.success(response.message, 'Success');
+
 
             if (type == 'inprogress') {
               this.service.myCourses.inprogress.splice(index, 1);
@@ -71,7 +71,8 @@ export class MyCourseComponent implements OnInit {
               this.service.myCourses.completed.splice(index, 1);
             }
           } else {
-            this.openSnackBar(response.message, 'Dismiss');
+            this.toastr.error(response.message, 'Success');
+
           }
         });
     }
@@ -85,7 +86,7 @@ export class MyCourseComponent implements OnInit {
       courseId: data.id,
       courseCode: data.course_code,
       courseName: data.name,
-      studentName: this.service.userData.name,
+      studentName: this.service.userData.short_name,
       studentId: this.service.userData.id,
       email: this.service.userData.email
     };

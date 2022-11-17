@@ -3,7 +3,7 @@
         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"></div>
 
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-            <p  *ngFor="let message of service.missingProfileFieldsMessage; let i as index">
+            <p  *ngFor="let message of service.missingProfileFieldsMessage; let i = index">
                 <ngb-alert [dismissible]="true" (closed)="closeMessage()">
                     <strong>Warning!</strong> 
                         {{ message }}

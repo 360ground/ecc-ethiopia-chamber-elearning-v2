@@ -51,7 +51,7 @@ export class UpdateProfileComponent implements OnInit {
   ) {
     this.isIndividual =
       this.service.userData.profile.accountType == 'company' ? false : true;
-      let names = this.service.userData.name.split(" ");
+      let names = this.service.userData.short_name.split(" ");
 
     this.formGroup = new FormGroup({
       individual: new FormGroup({
