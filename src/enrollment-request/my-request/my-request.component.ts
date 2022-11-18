@@ -35,4 +35,41 @@ export class MyRequestComponent implements OnInit {
     });
   }
 
+  editRequest(request: any){
+    this.router.navigate(['/enrollment/create'],{state: {
+      enrollmentRequestDetail: request
+    }})
+  }
+
+  navigate(){
+    this.router.navigateByUrl('/enrollment/create');
+  }
+
+  deleteRequest(request: any, index: any){
+    if(request.status !== 'pending'){
+      this.toastr.error(`You can't delete while the request not in the pending state`, 'Error');
+
+    } else {
+      if(confirm(`are you sure want to delete this request ?`)){
+  
+         let payload = {id: request.id, url: `uploads/requests/${request.id}`};
+  
+        this.service
+        .mainCanvas(`deleteEnrollmentRequest/${request.id}`, 'post', payload)
+        .subscribe((response: any) => {
+          if (response.status) {
+            this.myrequest.splice(index,1);
+            this.toastr.success(response.message, 'Success');
+            
+          } else {
+            this.toastr.error(response.message, 'Error');
+          }
+    
+        });
+  
+      }
+
+    }
+  }
+
 }

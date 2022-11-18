@@ -4,6 +4,22 @@
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="card">
                 <div class="card-body">
+                    <p>
+                        <span>
+                            <Button class="btn btn-secondary" (click)="navigate()">
+                                <span class="mr-4">
+                                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                                </span>
+                                <span class="ml-4">
+                                    Back to list
+                                </span>
+                            </Button>
+                        </span>
+                    </p>
+                    <p>
+                        <span><h1 class="topHeader">{{ isOnEditing ? 'Update' : 'Create new' }} Enrollment request</h1></span>
+                    </p>
+                    <p><span><hr /></span></p>
                     <form [formGroup]="formGroup">
                         <div class="mb-4">
                             <label>Course</label>
@@ -82,14 +98,30 @@
                                         <div class="col-md-2 col-sm-12 col-lg-2" style="text-align: center !important;">
                                             <img [src]="student?.avatar_url" style="width: 42px; height: 42px;border-radius: 50%;margin-right: 5px;" />
                                         </div>
-                                        <div class="col-md-8 col-sm-12 col-lg-8 nameLable">
-                                            {{ student?.name | titlecase }}
+                                        <div class="col-md-6 col-sm-12 col-lg-6 nameLable">
+                                            <span>
+                                                {{ student?.name | titlecase }}
+                                            </span>
+                                            <br />
+                                            <span class="emailField">
+                                                <small class="emailField">({{ student?.email }})</small>
+                                            </span>
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 col-lg-3 nameLable">
+                                            <span class="enrollmentStatus" [ngClass]="
+                                                student?.status == 'pending' ? 'pendingStatus' : 
+                                                student?.status == 'success' ? 'successStatus': 'failedStatus'">
+                                                    {{ student?.status }}
+                                            </span>
                                         </div>
                                         <!-- <div class="col-md-4 col-sm-12 col-lg-4 nameLable">
                                             {{ student?.email }}
                                         </div> -->
-                                        <div class="col-md-2 col-sm-12 col-lg-2" style="text-align: center !important">
-                                            <mat-icon class="removeButton"  (click)="removeStudent(i);">delete_forever</mat-icon>
+                                        <div class="col-md-1 col-sm-12 col-lg-1" style="text-align: center !important">
+                                            <span (click)="removeStudent(i);">
+                                                <i class="fa fa-times" aria-hidden="true" style="margin-top: 14px !important;"></i>
+                                            </span>
+                                            <!-- <mat-icon class="removeButton"  (click)="removeStudent(i);">delete_forever</mat-icon> -->
                                         </div>
                                     </div> 
                                     
@@ -111,7 +143,7 @@
                         </div> -->
                         <div class="mb-4">
                             <label>Remarks</label>
-                            <textarea rows="3" class="form-control form-control-lg" formControlName="remark"></textarea>
+                            <textarea rows="5" class="form-control form-control-lg" formControlName="remark"></textarea>
                         </div>
                         <div class="mb-4 row">
                             <div class="col-sm-12" [ngClass]="traineelist ? 'col-md-11 col-lg-11' : 'col-md-12 col-lg-12'">
@@ -128,6 +160,22 @@
                             </div>
                             <p *ngIf="formSubmitted && getControls('traineelist').hasError('required')" class="error">
                                 <small> * required</small>
+                            </p>
+
+                            <p *ngIf="isOnEditing" style="margin-top: 15px !important;">
+                                <span class="mr-4" style="margin-right: 25px !important;">
+                                    <button type="button" class="btn btn-light mr-4" (click)="openAttachment('traineeList')">
+                                        view trainee's list
+                                    </button>
+                                </span>
+                                
+                                <span *ngIf="showTraineeListDeleteSpinner">
+                                    <i class='fa fa-spinner fa-spin fa-3x fa-fw mr-2' 
+                                    style="margin-right: 10px !important; font-size: 19px !important;" aria-hidden="true"></i>deleting ...
+                                </span>
+                                <span class="ml-4" *ngIf="!showTraineeListDeleteSpinner" (click)="deleteAttatchment('traineeList')">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                </span>
                             </p>
                         </div> 
                         <div class="mb-4 row">
@@ -146,15 +194,31 @@
                             <p *ngIf="formSubmitted && getControls('bankSlip').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
+                    
+                            <p *ngIf="isOnEditing" style="margin-top: 15px !important;">
+                                <span class="mr-4" style="margin-right: 25px !important;">
+                                    <button type="button" class="btn btn-light mr-4" (click)="openAttachment('bankSlip')">
+                                        view bankSlip
+                                    </button>
+                                </span>
+                                
+                                <span *ngIf="showbBankslipDeleteSpinner">
+                                    <i class='fa fa-spinner fa-spin fa-3x fa-fw mr-2' 
+                                    style="margin-right: 10px !important; font-size: 19px !important;" aria-hidden="true"></i>deleting ...
+                                </span>
+                                <span class="ml-4" *ngIf="!showbBankslipDeleteSpinner" (click)="deleteAttatchment('bankSlip')">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                </span>
+                            </p>
                         </div> 
                         <div class="mb-4 row">
                             <Button type="submit" class="btn btn-primary btn-lg btn-block" (click)="Submit()" [disabled]="disable">
-                                <span *ngIf="disable">
+                                <span *ngIf="showSpinner">
                                     <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
                                     style="margin-right: 10px !important; font-size: 24px !important;" aria-hidden="true"></i>
                                 </span>
-                                <span *ngIf="!disable">
-                                    Submit request
+                                <span *ngIf="!showSpinner">
+                                    {{ isOnEditing ? 'Update request' : 'Submit request'}}
                                 </span>
                             </Button>
                         </div>   

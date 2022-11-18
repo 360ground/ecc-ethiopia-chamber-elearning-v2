@@ -37,8 +37,11 @@ export class AppComponent implements OnInit {
     if (
       confirm(`${this.service.userData.name} are you sure want to logout ?`)
     ) {
+
+      let id = this.service.userData.sis_user_id == 'admin' ? 'admin' :  this.service.userData.id;
+
       this.service
-        .mainCanvas(`logout/${this.service.userData.id}/${this.service.token}`, 'delete', null)
+        .mainCanvas(`logout/${id}/${this.cookieService.get('access_token')}`, 'delete', null)
         .subscribe((response: any) => {
           if (response.status) {
             this.service.userData = null;

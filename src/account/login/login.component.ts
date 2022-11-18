@@ -67,7 +67,6 @@ export class LoginComponent implements OnInit {
 
     if(!this.service.userData){
       this.service.isAuthenticating = true;
-      console.log(this.service.isAuthenticating);
 
       this.service
         .mainCanvas('login', 'post', data)
@@ -76,9 +75,9 @@ export class LoginComponent implements OnInit {
           this.service.token = response.message.access_token;
 
           this.service.userData = response.message;
+          this.cookieService.set('access_token', response.message.access_token,1,'/');
   
           if('profile' in response.message){
-            this.cookieService.set('access_token', response.message.access_token,1,'/');
 
             if(response.message.profile.accountType == 'individual'){
               this.service.getEnrolledCourses(response.message.id);
@@ -140,7 +139,9 @@ export class LoginComponent implements OnInit {
 
           } else {
             this.service.isIndividual = false;
-            window.location.replace(environment.baseUrlCanvas)
+            this.router.navigateByUrl('/');
+
+            // window.location.replace(environment.baseUrlCanvas)
 
           }
 

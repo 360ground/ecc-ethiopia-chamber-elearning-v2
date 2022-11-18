@@ -36,14 +36,14 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
         </li>
         <!-- [ngClass]="url == 'courses' ? 'bottomBorder' : ''" -->
 
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="service.userData?.profile?.accountType == 'company'">
           <a class="nav-link white" [routerLink]="['/enrollment/myrequest']" (click)="navigate(false, 'enrollment/myrequest')"  
            [ngClass]="url == 'enrollment/myrequest' ? 'bottomBorder' : ''" aria-current="page"
            *ngIf="service.userData && !service?.isIndividual">My Enrollment Request</a>
         </li>
 
 
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="service.userData?.sis_user_id == 'admin'">
           <a class="nav-link white" [routerLink]="['/enrollment/requests']" (click)="navigate(false, 'enrollment/requests')"  
            [ngClass]="url == 'enrollment/requests' ? 'bottomBorder' : ''" aria-current="page"
            *ngIf="service.userData && !service?.isIndividual">Enrollment Request</a>
@@ -64,11 +64,12 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
                   <img [src]="service.userData?.avatar_url" style="width: 29px; height: 30px;border-radius: 50%;margin-right: 5px;" />
                   Welcome, {{ service.userData?.short_name }} 
               </span>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1" *ngIf="service.userData?.sis_user_id !== 'admin'">
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                 <a ngbDropdownItem [routerLink]="['/mycourse']" *ngIf="service.userData && service?.isIndividual">My learning plan</a>
                 <!-- <a ngbDropdownItem [routerLink]="['/myeducation']" *ngIf="service.userData && service?.isIndividual">My Education</a> -->
                 <a ngbDropdownItem [routerLink]="['/mycertificate']" *ngIf="service.userData && service?.isIndividual">My certification</a>
-                <a ngbDropdownItem  [routerLink]="['/account/profile']">Update profile</a>
+                <a ngbDropdownItem  [routerLink]="['/account/profile']"
+                  *ngIf="service.userData?.sis_user_id !== 'admin'">Update profile</a>
                 <!-- <a ngbDropdownItem  [routerLink]="['/account/change-password']">Change Password</a> -->
                 <div class="dropdown-divider"></div>
                 <span ngbDropdownItem href="#" (click)="logout()" style="cursor: pointer !important;">

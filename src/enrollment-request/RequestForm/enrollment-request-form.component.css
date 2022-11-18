@@ -36,8 +36,8 @@ Button {
     cursor: pointer !important;
 }
 
-.fa-trash-o {
-    margin-top: 44px !important;
+.fa-trash-o, .fa-times {
+    margin-top: 44px;
     font-size: 22px !important;
     color: red !important;
     font-weight: 200 !important;
@@ -46,4 +46,34 @@ Button {
 
 .error {
     color: red !important;
+}
+
+.emailField {
+    font-size: 15px !important;
+    color: gray !important;
+
+}
+
+.enrollmentStatus {
+    color: white !important;
+    padding: 6px 20px 8px 20px !important;
+    width: 313px !important;
+    text-transform: uppercase !important;
+    border-radius: 5px !important;
+    font-size: 15px !important;
+}
+
+.pendingStatus {
+    background-color: #1a73e8 !important;
+}
+
+.successStatus {
+    background-color: green !important;
+}
+.failedStatus {
+    background-color: red !important;
+}
+
+.topHeader {
+    font-weight: lighter !important;
 }

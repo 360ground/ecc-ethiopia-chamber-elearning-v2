@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Location } from '@angular/common';
@@ -50,6 +50,7 @@ export class CourseDetailComponent implements OnInit {
     public _snackBar: MatSnackBar,
     public toastr: ToastrService
   ) {}
+ 
 
   ngOnInit(): void {
     let queryParam: any = this.actRoute.snapshot.queryParams;
@@ -72,15 +73,17 @@ export class CourseDetailComponent implements OnInit {
 
     this.state = this.location.getState();
     this.state.short = this.state.public_description.substring(0, 200);
-    
-    this.state.extraInfo?.attributes.course_fee != 'Free' ? this.isFree = false : null;
-
+  
     if(this.service.userData){
       this.checkPaymnetSettlement();
     }
 
+    this.check();
+
+  
+
     // load user enrolled courses
-    if (this.service.userData.profile.accountType == 'individual' && this.service.myCourses) {
+    if (this.service.userData?.profile?.accountType == 'individual' && this.service.myCourses) {
       let inprogress: any[] = this.service.myCourses.inprogress;
       let completed: any[] = this.service.myCourses.completed;
 
@@ -101,6 +104,12 @@ export class CourseDetailComponent implements OnInit {
     }
 
     
+  }
+
+  check(): void {
+    if(this.state.extraInfo?.attributes?.course_fee !== 'Free') {
+      this.isFree = false;
+    }  
   }
 
   getCustomeFieldValue(customFields: any[], name: any) {

@@ -13,7 +13,7 @@
     padding: 10px !important;
     font-size: 18px !important;
     color: white !important;
-    border-radius: 4px !important;
+    /* border-radius: 4px !important; */
 }
 
 .lists {
@@ -47,6 +47,7 @@
     width: 313px !important;
     text-transform: uppercase !important;
     border-radius: 5px !important;
+    font-size: 15px !important;
 }
 
 .pendingStatus {
@@ -58,4 +59,14 @@
 }
 .failedStatus {
     background-color: red !important;
+}
+
+small {
+    font-size: 15px !important;
+    color: gray !important;
+
+}
+
+.topHeader {
+    font-weight: lighter !important;
 }

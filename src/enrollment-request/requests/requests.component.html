@@ -11,9 +11,9 @@
             </p>
             <div class="card" *ngIf="!requestDetail">
                 <div class="card-body">
-                    <!-- <p>
-                        <span><h1>Enrolment request</h1></span>
-                    </p> -->
+                    <p>
+                        <span><h1 class="topHeader">Enrollment request's</h1></span>
+                    </p>
                     <p><span><hr /></span></p>
                     <div class="mb-4" *ngIf="requests.length">
                         <ul class="list-group">
@@ -54,7 +54,7 @@
                     </p>
                     <p>
                         <span>
-                            <h1>Request Detail</h1>
+                            <h1 class="topHeader">Request Detail</h1>
                         </span>
                     </p>    
                     
@@ -100,15 +100,19 @@
                                 <li class="list-group-item" *ngFor="let student of requestDetail.students; let i as index">
                                     <div>
                                         <div class="row">
-                                            <div class="col-sm-12 col-md-1 col-lg-1">
+                                            <div class="col-sm-12 col-md-2 col-lg-2">
                                                 <img [src]="student?.avatar_url" style="width: 42px; height: 35px;border-radius: 50%;margin-right: 5px;" />
                                             </div>
-                                            <div class="col-sm-12 col-md-4 col-lg-4">
-                                                <span>{{ student?.name | titlecase }}</span>
+                                            <div class="col-sm-12 col-md-7 col-lg-7" style="text-align: center !important;">
+                                                <span>
+                                                    {{ student?.name | titlecase }}
+                                                </span>
+                                                <br />
+                                                <span class="emailField">
+                                                    <small>({{ student?.email }})</small>
+                                                </span>
                                             </div>
-                                            <div class="col-sm-12 col-md-4 col-lg-4">
-                                                <span>{{ student?.email }}</span>
-                                            </div>
+                                         
                                             <div class="col-sm-12 col-md-3 col-lg-3">
                                                 <span class="enrollmentStatus" [ngClass]="
                                                 student?.status == 'pending' ? 'pendingStatus' : 

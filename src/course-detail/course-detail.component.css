@@ -234,12 +234,17 @@
 
 
 .moduleList {
-    color: #1a73e8 !important;
+    color: #224574 !important;
+    /* #224574 */
     font: 400 14px/22px Google Sans,Arial,sans-serif !important; 
     margin-bottom: 16px !important;
     transition: color .25s ease !important; 
     cursor: pointer !important;
     text-decoration: none !important;
+}
+
+.moduleList:hover {
+    color: #1a73e8 !important;
 }
 
 
