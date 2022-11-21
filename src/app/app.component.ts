@@ -68,6 +68,10 @@ export class AppComponent implements OnInit {
     }
   }
 
+  redirectToAdmin(){
+    window.open(`${environment.canvasUrl}`, '_blank');
+  }
+
   isLoggedIn(){
     
     let access_token = this.cookieService.get('access_token');

@@ -20,7 +20,7 @@
     color: gray !important;
     border: 0px none #FFFFFF !important;
     margin-top: 22px !important;
-    margin-left: 70px !important;
+    /* margin-left: 70px !important; */
 }
 
 .dropdown-item{
@@ -35,6 +35,10 @@
 
     #smaller {
         display: block !important;
+    }
+
+    .manageCoursebtn{
+      width: inherit !important;
     }
   }
 
@@ -109,3 +113,8 @@
 
   }
 
+
+  .manageCoursebtn{
+    margin-right: 25px !important;
+    
+  }

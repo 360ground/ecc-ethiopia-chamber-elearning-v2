@@ -161,6 +161,24 @@ export class UpdateProfileComponent implements OnInit {
 
       let payload = {
         custom_data: { data: value },
+        user_data: { 
+          user : {
+            name:
+              this.getControls(`${name}.firstname`).value +
+              ' ' +
+              this.getControls(`${name}.lastname`).value,
+            short_name:
+              this.getControls(`${name}.firstname`).value +
+              ' ' +
+              this.getControls(`${name}.lastname`).value,
+            sortable_name:
+              this.getControls(`${name}.firstname`).value +
+              ' ' +
+              this.getControls(`${name}.lastname`).value,
+            email:  this.getControls(`${name}.email`).value
+          }
+        },
+
         memberId: this.base64Image
       };
       

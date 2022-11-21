@@ -139,6 +139,7 @@ export class LoginComponent implements OnInit {
 
           } else {
             this.service.isIndividual = false;
+            this.service.isAdmin = true;
             this.router.navigateByUrl('/');
 
             // window.location.replace(environment.baseUrlCanvas)

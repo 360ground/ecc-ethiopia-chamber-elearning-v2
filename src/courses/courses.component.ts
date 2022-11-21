@@ -171,6 +171,7 @@ export class CoursesComponent implements OnInit {
       return 'N/A';
     }
   }
+
 }
 
 @Component({

@@ -77,3 +77,9 @@ Button {
 .topHeader {
     font-weight: lighter !important;
 }
+
+@media only screen and (max-width: 760px) {
+    .searchBtn {
+        margin-top: 20px !important;
+    }
+}

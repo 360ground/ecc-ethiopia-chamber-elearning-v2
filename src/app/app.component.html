@@ -49,14 +49,18 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
            *ngIf="service.userData && !service?.isIndividual">Enrollment Request</a>
         </li>
 
-
+        
         <li class="nav-item" *ngIf="service.userData">
           <a class="nav-link white" [routerLink]="['/mycourse']" (click)="navigate(false, 'mycourse')" 
           [ngClass]="url == 'mycourse' ? 'bottomBorder' : ''"
           *ngIf="service.userData && service?.isIndividual">My learning plan</a>
         </li>
       </ul>
-      
+
+      <span class="nav-item" *ngIf="service.userData?.sis_user_id == 'admin'">
+        <a class="btn btn-primary" (click)="redirectToAdmin()">Manage Courses</a>
+      </span>  
+
       <span class="navbar-text" style="margin-right: 32px;">
         <span *ngIf="service.userData" class="white">
             <div ngbDropdown class="d-inline-block">
@@ -124,10 +128,10 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
             <!-- <li class="list-group-item" *ngIf="service.userData && service?.isIndividual">
               <a  class="nav-link white" (click)="navigate(true,'myeducation')">My Education</a>
             </li> -->
-            <li class="list-group-item" style="width: fit-content;">
+            <li class="list-group-item" style="width: fit-content;" *ngIf="service.userData && service?.isIndividual">
               <a class="nav-link white" (click)="navigate(true,'mycertificate')" 
               [ngClass]="url == 'mycertificate' ? 'bottomBorder' : ''"
-              *ngIf="service.userData && service?.isIndividual">
+             >
                 My certification
               </a>
             </li>
@@ -156,8 +160,26 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
             </li>
 
             <hr />
-        
 
+
+            <li class="list-group-item" *ngIf="service.userData?.profile?.accountType == 'company'">
+              <a class="nav-link white" [routerLink]="['/enrollment/myrequest']" 
+              (click)="navigate(true, 'enrollment/myrequest')"  
+              [ngClass]="url == 'enrollment/myrequest' ? 'bottomBorder' : ''" aria-current="page"
+              *ngIf="service.userData && !service?.isIndividual">My Enrollment Request</a>
+            </li>
+
+            <li class="list-group-item" *ngIf="service.userData?.sis_user_id == 'admin'">
+              <a class="nav-link white" [routerLink]="['/enrollment/requests']" 
+              (click)="navigate(true, 'enrollment/requests')"  
+              [ngClass]="url == 'enrollment/requests' ? 'bottomBorder' : ''" aria-current="page"
+              *ngIf="service.userData && !service?.isIndividual">Enrollment Request</a>
+            </li>
+
+            <span class="list-group-item" *ngIf="service.userData?.sis_user_id == 'admin'">
+              <a class="btn btn-primary manageCoursebtn" (click)="redirectToAdmin()">Manage Courses</a>
+            </span>
+        
             <li class="list-group-item" style="width: fit-content;"  *ngIf="!service.userData">
               <a class="nav-link white" (click)="navigate(true,'/account/login')" style="text-align: center;margin-left: 148% !important;"
               [ngClass]="url == '/account/login' ? 'bottomBorder' : ''"

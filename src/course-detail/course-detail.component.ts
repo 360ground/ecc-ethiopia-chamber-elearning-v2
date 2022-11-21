@@ -72,15 +72,12 @@ export class CourseDetailComponent implements OnInit {
     this.index = this.actRoute.snapshot.paramMap.get('index');
 
     this.state = this.location.getState();
+    
     this.state.short = this.state.public_description.substring(0, 200);
   
     if(this.service.userData){
       this.checkPaymnetSettlement();
     }
-
-    this.check();
-
-  
 
     // load user enrolled courses
     if (this.service.userData?.profile?.accountType == 'individual' && this.service.myCourses) {
@@ -102,14 +99,6 @@ export class CourseDetailComponent implements OnInit {
     } else {
       this.getExtraInfo();
     }
-
-    
-  }
-
-  check(): void {
-    if(this.state.extraInfo?.attributes?.course_fee !== 'Free') {
-      this.isFree = false;
-    }  
   }
 
   getCustomeFieldValue(customFields: any[], name: any) {
@@ -327,6 +316,11 @@ export class CourseDetailComponent implements OnInit {
         response.features = Object.values(response.features);
         this.state.extraInfo = response;
         this.service.loadedCourses[this.index].extraInfo = response;
+
+        if(response.attributes?.course_fee !== 'Free') {
+          this.isFree = false;
+        }
+
         this.isExtraInfoLoading = false;
       });
   }

@@ -18,6 +18,7 @@ export class ApiService {
 
   public message$: BehaviorSubject<string> = new BehaviorSubject('');
   public isIndividual: Boolean = true;
+  public isAdmin: Boolean = false;
   public isAuthenticating: Boolean = false;
   public MyCertificates: any[] = [];
 
