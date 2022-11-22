@@ -16,7 +16,9 @@ export class EnrollmentRequestFormComponent implements OnInit {
   public formSubmitted = false;
   public disable: boolean = false;
   public traineelist: any = null;
+  public traineelistErrorMessage: any = null;
   public bankSlip: any = null;
+  public bankSlipErrorMessage: any = null;
 
   public students: any[] = [];
   public studentDetail: any = null;
@@ -27,6 +29,7 @@ export class EnrollmentRequestFormComponent implements OnInit {
   public showSpinner: boolean = false;
   public showTraineeListDeleteSpinner: boolean = false;
   public showbBankslipDeleteSpinner: boolean = false;
+
 
   constructor(
     public service: ApiService,
@@ -57,6 +60,7 @@ export class EnrollmentRequestFormComponent implements OnInit {
 
     if(this.state){
       this.isOnEditing = true;
+      this.status = this.state.status;
 
       this.state.students = Object.values(JSON.parse(this.state.students));
   
@@ -65,11 +69,17 @@ export class EnrollmentRequestFormComponent implements OnInit {
       });
   
       this.formGroup.patchValue(this.state);
-
+    
       if(this.state.status !== 'pending'){
         this.disable = true;
         this.formGroup.disable();
       }
+
+      this.getControls('bankSlip').clearValidators();
+      this.getControls('bankSlip').updateValueAndValidity();
+
+      this.getControls('traineelist').clearValidators();
+      this.getControls('traineelist').updateValueAndValidity();
 
     }
 
@@ -155,7 +165,13 @@ export class EnrollmentRequestFormComponent implements OnInit {
   }
 
   public onFileUpload($event: any, isSlip: boolean) {
+    this.bankSlipErrorMessage = this.traineelistErrorMessage = "";
+
     let file = $event.target.files[0];
+
+    const maxAllowedSize = 10 * 1024 * 1024;
+
+    if (file.size <= maxAllowedSize) {
 
       const reader: any = new FileReader();
       reader.readAsDataURL(file);
@@ -163,11 +179,24 @@ export class EnrollmentRequestFormComponent implements OnInit {
       reader.onload = () => {
         if(isSlip) {
           this.bankSlip = reader.result.toString();
-
+  
         } else {
           this.traineelist = reader.result.toString();
         }
       }; 
+
+    } else {
+      $event.target.value = '';
+
+      if(isSlip) {
+        this.bankSlipErrorMessage = 'Only file less than 10 MB size is allowed.';
+
+      } else {
+        this.traineelistErrorMessage = 'Only file less than 10 MB size is allowed.';
+      }  
+
+    }
+
   }
 
   public removeAttatchment(isSlip: boolean) {

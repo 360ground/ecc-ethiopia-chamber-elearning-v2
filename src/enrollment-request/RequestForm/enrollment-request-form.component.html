@@ -149,8 +149,7 @@
                             <div class="col-sm-12" [ngClass]="traineelist ? 'col-md-11 col-lg-11' : 'col-md-12 col-lg-12'">
                                 <label>please attache the trainee list here.</label>
                                 <input type="file" class="form-control form-control-lg" (change)="onFileUpload($event, false)" 
-                                formControlName="traineelist"
-                                accept="image/*" />
+                                formControlName="traineelist" accept="application/pdf" />
                             </div>
                             <div class="col-sm-12 col-md-1 col-lg-1" *ngIf="traineelist">
                                 <label></label>
@@ -160,6 +159,11 @@
                             </div>
                             <p *ngIf="formSubmitted && getControls('traineelist').hasError('required')" class="error">
                                 <small> * required</small>
+                            </p>
+                            <p *ngIf="traineelistErrorMessage" class="fileErrorMessage">
+                                <small>
+                                    {{ traineelistErrorMessage }}
+                                </small>
                             </p>
 
                             <p *ngIf="isOnEditing" style="margin-top: 15px !important;">
@@ -183,7 +187,7 @@
                                 <label>please attache the bank slip here.</label>
                                 <input type="file" class="form-control form-control-lg" (change)="onFileUpload($event,true)" 
                                 formControlName="bankSlip"
-                                accept="image/*" />
+                                accept="application/pdf" />
                             </div>
                             <div class="col-sm-12 col-md-1 col-lg-1" *ngIf="bankSlip">
                                 <label></label>
@@ -193,6 +197,11 @@
                             </div>
                             <p *ngIf="formSubmitted && getControls('bankSlip').hasError('required')" class="error">
                                 <small> * required</small>
+                            </p>
+                            <p *ngIf="bankSlipErrorMessage" class="fileErrorMessage">
+                                <small>
+                                    {{ bankSlipErrorMessage }}
+                                </small>
                             </p>
                     
                             <p *ngIf="isOnEditing" style="margin-top: 15px !important;">
