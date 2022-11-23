@@ -223,7 +223,7 @@ export class EnrollmentRequestFormComponent implements OnInit {
     } else {
       if(confirm(`are you sure want to delete this ${attachment} ?`)){
   
-        attachment == 'traineeList' ? this.showTraineeListDeleteSpinner = true : 
+        attachment == 'traineelist' ? this.showTraineeListDeleteSpinner = true : 
         this.showbBankslipDeleteSpinner = true;
   
         let payload = {
@@ -238,13 +238,13 @@ export class EnrollmentRequestFormComponent implements OnInit {
           ).subscribe((response: any) => {
     
             if (response.status) {
-              attachment == 'traineeList' ? this.showTraineeListDeleteSpinner = false : 
+              attachment == 'traineelist' ? this.showTraineeListDeleteSpinner = false : 
               this.showbBankslipDeleteSpinner = false;
   
               this.toastr.success(response.message, 'Success');
     
             } else {
-              attachment == 'traineeList' ? this.showTraineeListDeleteSpinner = false : 
+              attachment == 'traineelist' ? this.showTraineeListDeleteSpinner = false : 
               this.showbBankslipDeleteSpinner = false;
   
               this.toastr.error(response.message, 'Error');
