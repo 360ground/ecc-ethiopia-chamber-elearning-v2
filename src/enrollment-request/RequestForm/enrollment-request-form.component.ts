@@ -227,7 +227,7 @@ export class EnrollmentRequestFormComponent implements OnInit {
         this.showbBankslipDeleteSpinner = true;
   
         let payload = {
-          url: `/uploads/requests/${this.state.id}/${attachment}`
+          url: `/uploads/requests/${this.state.id}/${attachment}.pdf`
         };
     
         this.service
