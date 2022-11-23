@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/service/api.service';
 
 import { CookieService } from 'ngx-cookie-service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,8 @@ export class AppComponent implements OnInit {
 
   @ViewChild('drawer') drawer: MatSidenav | undefined;
 
-  constructor(public service: ApiService, public router: Router, 
+  constructor(public service: ApiService, public router: Router,
+    public toastr: ToastrService,
     private cookieService: CookieService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
@@ -86,13 +88,76 @@ export class AppComponent implements OnInit {
         this.service.userData = response.message;
 
         this.service.token = response.message.access_token;
-        if (response.message.profile.accountType == 'individual') {
-          this.service.getEnrolledCourses(response.message.id);
-          
-        } else if(response.message.profile.accountType == 'company') {
-          this.service.isIndividual = false;
 
+        if('profile' in response.message){
+          if (response.message.profile.accountType == 'individual') {
+            this.service.getEnrolledCourses(response.message.id);
+
+
+            this.service.getEnrolledCourses(response.message.id);
+
+            let missingProfileFields: any[] = [];
+            let requiredFields = ['ageRange','organizationName','sector','occupation','country','city','yearOfExperience'];
+            let availableFields = Object.keys(this.service.userData.profile);
+    
+            requiredFields.forEach(element => {
+              if(!availableFields.includes(element)){
+                missingProfileFields.push(element);
+  
+              }
+            });
+
+            if(missingProfileFields.length){
+              let message = `Hello ${this.service.userData.name}, your profile seems to be not completed. 
+                             please complete the following fields. (${missingProfileFields.toString().replace(',', ', ')})`;
+
+              this.service.missingProfileFieldsMessage.push(message);
+
+              this.toastr.info('please fill all the required fields.','Incomplete Profile');
+
+              this.router.navigateByUrl('/account/profile');
+
+            } else {
+              this.router.navigateByUrl('/');
+
+            }
+
+          } else if(response.message.profile.accountType == 'company') {
+              this.service.isIndividual = false;
+
+              let missingProfileFields: any[] = [];
+              let requiredFields = ['organizationName','representativeRole','sector','NoOfEmployee'];
+              let availableFields = Object.keys(this.service.userData.profile);
+      
+              requiredFields.forEach(element => {
+                if(!availableFields.includes(element)){
+                  missingProfileFields.push(element);
+                }
+              });  
+
+              if(missingProfileFields.length){
+                let message = `Hello ${this.service.userData.name}, your profile seems to be not completed. 
+                               please complete the following fields. (${missingProfileFields.toString().replace(',', ', ')})`;
+
+                this.service.missingProfileFieldsMessage.push(message);
+
+                this.toastr.info('please fill all the required fields.','Incomplete Profile');
+
+                this.router.navigateByUrl('/account/profile');
+
+              } else {
+                this.router.navigateByUrl('/');
+
+              }
+          } 
+
+        } else {
+          this.service.isIndividual = false;
+          this.service.isAdmin = true;
+          this.router.navigateByUrl('/');
         }
+
+
   
       }
     });

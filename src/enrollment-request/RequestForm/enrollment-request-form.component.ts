@@ -236,11 +236,27 @@ export class EnrollmentRequestFormComponent implements OnInit {
             'post',
             payload
           ).subscribe((response: any) => {
+
+            attachment == 'traineelist' ? this.showTraineeListDeleteSpinner = false : 
+            this.showbBankslipDeleteSpinner = false;
     
             if (response.status) {
-              attachment == 'traineelist' ? this.showTraineeListDeleteSpinner = false : 
-              this.showbBankslipDeleteSpinner = false;
   
+              if(attachment == 'traineelist'){
+                this.traineelist = null;
+                this.getControls('traineelist').setValue(null);
+
+                this.getControls('traineelist').clearValidators();
+                this.getControls('traineelist').updateValueAndValidity();
+
+              } else {
+                this.traineelist = null;
+                this.getControls('bankSlip').setValue(null);
+
+                this.getControls('bankSlip').clearValidators();
+                this.getControls('bankSlip').updateValueAndValidity();
+              }
+
               this.toastr.success(response.message, 'Success');
     
             } else {
@@ -306,8 +322,9 @@ export class EnrollmentRequestFormComponent implements OnInit {
         this.toastr.error('Please add a students.', 'Error');
       }
     }
-  }
 
+
+  }
 
   navigate(){
     this.router.navigateByUrl('/enrollment/myrequest');

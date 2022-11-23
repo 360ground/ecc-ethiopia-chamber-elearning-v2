@@ -99,14 +99,14 @@ export class RequestsComponent implements OnInit {
     let url = `${environment.baseUrlBackend}/uploads/requests/${this.requestDetail.id}`;
 
     if(attachment == 'bankSlip'){
-      window.open(`${url}/bankSlip.jpeg`, '_blank');
+      window.open(`${url}/bankSlip.pdf`, '_blank');
       
     } else {
-      window.open(`${url}/traineelist.jpeg`, '_blank');
+      window.open(`${url}/traineelist.pdf`, '_blank');
     }
   }
 
-  async enrollTrainee(){
+  enrollTrainee(){
     if(this.requestDetail.status !== 'Approved'){
       this.toastr.error('the request must be approved before enrolling the trainee`s','Error');
 
@@ -124,69 +124,84 @@ export class RequestsComponent implements OnInit {
           }
         };
 
-        this.requestDetail.students.forEach(async (element:any, index: any) => {
+        var i = 0;
+
+        this.requestDetail.students.forEach(async (element: any, index: any) => {
           data.enrollment.user_id = element.id;
+          element.isEnrolling = true; 
+  
+          // selfEnroll
+          await this.fakeApiCall(element, data, index);
+          i ++;
           
-          this.requestDetail.students[index].isEnrolling = true; 
-
-          this.service
-            .mainCanvas(`selfEnroll/${this.requestDetail.course_id}`, 'post', data)
-            .subscribe((response: any) => {
-              if (response.status) {
-                this.requestDetail.students[index].status = 'success'; 
-                this.requestDetail.students[index].isEnrolling = false; 
-      
-              } else {
-                this.requestDetail.students[index].status = 'failed'; 
-                this.requestDetail.students[index].isEnrolling = false; 
-      
-                this.failedAttempts.push(element.name);
-                this.remainingTrainees.push(element);
-              }
-      
-            });
         });
 
-        let payload:any = {
-          id: this.requestDetail.id,
-          students: JSON.stringify(Object.assign({}, this.requestDetail.students)),
-        };
+        console.log(this.requestDetail.students.length);
+        console.log(i);
+
+        if(i == this.requestDetail.students.length - 1){
+          console.log(this.requestDetail.students);
+        }
+
+        // let payload:any = {
+        //   id: this.requestDetail.id,
+        //   students: JSON.stringify(Object.assign({}, this.requestDetail.students)),
+        // };
     
-        !this.failedAttempts.length ? payload.status = 'Enrolled' : null;   
+        // !this.failedAttempts.length ? payload.status = 'Enrolled' : null;   
     
-        this.service
-          .mainCanvas(`updateEnrollmentRequest`, 'post', payload)
-          .subscribe((response: any) => {
+        // this.service
+        //   .mainCanvas(`updateEnrollmentRequest`, 'post', payload)
+        //   .subscribe((response: any) => {
     
-            if (response.status) {
-              this.toastr.success(response.message, 'Success');
+        //     if (response.status) {
+        //       this.toastr.success(response.message, 'Success');
     
-              this.showEnrollSpinner = false;
+        //       this.showEnrollSpinner = false;
         
-              if(this.failedAttempts.length){
+        //       if(this.failedAttempts.length){
                 
-                this.failedAttemptsMessage.push(
-                `${this.requestDetail.students - this.failedAttempts.length} 
-                trainee's are Enrolled successfully. please try other trainee later. ${this.failedAttempts.toString().replace(',', ', ')}`);
+        //         this.failedAttemptsMessage.push(
+        //         `${this.requestDetail.students - this.failedAttempts.length} 
+        //         trainee's are Enrolled successfully. please try other trainee later. ${this.failedAttempts.toString().replace(',', ', ')}`);
     
-              } else {
-                this.showEnrollSpinner = false;
-                this.requestDetail.status = 'Enrolled';
-                this.toastr.success(`${this.requestDetail.students - this.failedAttempts.length} trainee's are Enrolled successfully`, 'Success');
+        //       } else {
+        //         this.showEnrollSpinner = false;
+        //         this.requestDetail.status = 'Enrolled';
+        //         this.toastr.success(`${this.requestDetail.students - this.failedAttempts.length} trainee's are Enrolled successfully`, 'Success');
         
-              }
+        //       }
               
-            } else {
-              this.toastr.error(response.message, 'Error');
+        //     } else {
+        //       this.toastr.error(response.message, 'Error');
     
-            }
-        });
+        //     }
+        // });
 
       }
     }
 
   }
 
+
+  fakeApiCall(element: any, data: any, index: any){
+    this.service
+    .mainCanvas(`lovers/${this.requestDetail.course_id}`, 'post', data)
+    .subscribe((response: any) => {
+      if (response.status) {
+        element.status = 'success'; 
+        element.isEnrolling = false; 
+
+      } else {
+        element.status = 'failed'; 
+        element.isEnrolling = false; 
+
+        this.failedAttempts.push(element.name);
+        this.remainingTrainees.push(element);
+      }
+
+    });
+  }
 
 
   closeMessage(){
