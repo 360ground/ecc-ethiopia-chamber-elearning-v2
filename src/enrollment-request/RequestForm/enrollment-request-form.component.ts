@@ -209,10 +209,10 @@ export class EnrollmentRequestFormComponent implements OnInit {
     let url = `${environment.baseUrlBackend}/uploads/requests/${this.state.id}`;
 
     if(attachment == 'bankSlip'){
-      window.open(`${url}/bankSlip.jpeg`, '_blank');
+      window.open(`${url}/bankSlip.pdf`, '_blank');
       
     } else {
-      window.open(`${url}/traineelist.jpeg`, '_blank');
+      window.open(`${url}/traineelist.pdf`, '_blank');
     }
   }
 
