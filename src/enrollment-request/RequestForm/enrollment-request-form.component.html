@@ -23,11 +23,16 @@
                     <form [formGroup]="formGroup">
                         <div class="mb-4">
                             <label>Course</label>
-                            <select class="form-control form-control-lg" formControlName="course_id">
+                            <ejs-dropdownlist id='ddlelement' [dataSource]='service.loadedCourses' 
+                                formControlName="course_id" [allowFiltering]="true" placeholder="-- select course here --"
+                                [fields]="fields" cssClass="e-outline">
+                            </ejs-dropdownlist>
+
+                            <!-- <select class="form-control form-control-lg" formControlName="course_id">
                                 <option *ngFor="let course of service.loadedCourses; let i as index" [value]="course.id">
                                     {{ course.name | titlecase }}
                                 </option>
-                            </select>
+                            </select> -->
                             <p *ngIf="formSubmitted && getControls('course_id').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
@@ -38,7 +43,7 @@
                         <div class="mb-4">
                             <div class="row">
                                 <div class="col-sm-12 col-md-10 col-lg-10">
-                                    <input type="email" class="form-control form-control-lg" formControlName="email" />
+                                    <input type="email" class="form-control form-control-lg" placeholder="Email address" formControlName="email" />
                                 </div>
                                 <div class="col-sm-12 col-md-2 col-lg-2">
                                     <button class="searchBtn btn btn-primary btn-block btn-lg" [disabled]="isSearching" type="button"
@@ -108,7 +113,7 @@
                                             </span>
                                         </div>
                                         <div class="col-md-3 col-sm-12 col-lg-3 nameLable">
-                                            <span class="enrollmentStatus" [ngClass]="
+                                            <span title={{student.message}} class="enrollmentStatus" [ngClass]="
                                                 student?.status == 'pending' ? 'pendingStatus' : 
                                                 student?.status == 'success' ? 'successStatus': 'failedStatus'">
                                                     {{ student?.status }}
@@ -143,8 +148,10 @@
                         </div> -->
                         <div class="mb-4">
                             <label>Remarks</label>
-                            <textarea rows="5" class="form-control form-control-lg" formControlName="remark"></textarea>
+                            <textarea rows="5" class="form-control form-control-lg" 
+                            placeholder="Write your remarks here ..." formControlName="remark"></textarea>
                         </div>
+
                         <div class="mb-4 row">
                             <div class="col-sm-12" [ngClass]="traineelist ? 'col-md-11 col-lg-11' : 'col-md-12 col-lg-12'">
                                 <label>please attache the trainee list here.</label>

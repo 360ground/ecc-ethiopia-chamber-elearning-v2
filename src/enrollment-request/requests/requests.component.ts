@@ -5,6 +5,9 @@ import { concatMap, from } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/service/api.service';
 
+import { Observable, forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
 @Component({
   selector: 'app-requests',
   templateUrl: './requests.component.html',
@@ -23,6 +26,7 @@ export class RequestsComponent implements OnInit {
   public remainingTrainees: any[] = [];
   public enrolledTrainees: any[] = [];
   public failedAttempts: any[] = [];
+  public isFiltering: boolean = false;
 
 
   constructor(
@@ -32,6 +36,10 @@ export class RequestsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.loadRequest();
+  }
+
+  loadRequest(){
     this.service
       .mainCanvas(`getAllEnrollmentRequest`, 'get', {})
       .subscribe((response: any) => {
@@ -124,85 +132,102 @@ export class RequestsComponent implements OnInit {
           }
         };
 
-        var i = 0;
+        // collection of requests for fork request
+        let requests: any[] = [];
 
         this.requestDetail.students.forEach(async (element: any, index: any) => {
-          data.enrollment.user_id = element.id;
-          element.isEnrolling = true; 
-  
-          // selfEnroll
-          await this.fakeApiCall(element, data, index);
-          i ++;
-          
+          data.enrollment.user_id = element.id; element.isEnrolling = true; 
+          requests.push(this.service.mainCanvas(`selfEnroll/${this.requestDetail.course_id}/${index}`, 'post', data));
         });
 
-        console.log(this.requestDetail.students.length);
-        console.log(i);
+        // make all the requests as a collection and wait for all responses as a whore response array
 
-        if(i == this.requestDetail.students.length - 1){
-          console.log(this.requestDetail.students);
-        }
+        forkJoin(requests).subscribe((responses: any) => {
+          // iterate the result as a loop and update the students status
+          responses.forEach((element: any) => {
+            this.requestDetail.students[element.index].message = element.message; 
 
-        // let payload:any = {
-        //   id: this.requestDetail.id,
-        //   students: JSON.stringify(Object.assign({}, this.requestDetail.students)),
-        // };
+            if (element.status) {
+              this.requestDetail.students[element.index].status = 'success'; 
+              this.requestDetail.students[element.index].isEnrolling = false; 
+      
+            } else {
+              this.requestDetail.students[element.index].status = 'failed'; 
+              this.requestDetail.students[element.index].isEnrolling = false; 
+      
+              this.failedAttempts.push(this.requestDetail.students[element.index].name);
+              this.remainingTrainees.push(this.requestDetail.students[element.index]);
+            }
+          });
+
+          let payload:any = {
+            id: this.requestDetail.id,
+            students: JSON.stringify(Object.assign({}, this.requestDetail.students)),
+          };
+      
+          !this.failedAttempts.length ? payload.status = 'Enrolled' : null;   
+      
+          this.service.mainCanvas(`updateEnrollmentRequest`, 'post', payload).subscribe((response: any) => {
+            if (response.status) {
+              this.toastr.success(response.message, 'Success');
     
-        // !this.failedAttempts.length ? payload.status = 'Enrolled' : null;   
-    
-        // this.service
-        //   .mainCanvas(`updateEnrollmentRequest`, 'post', payload)
-        //   .subscribe((response: any) => {
-    
-        //     if (response.status) {
-        //       this.toastr.success(response.message, 'Success');
-    
-        //       this.showEnrollSpinner = false;
+              this.showEnrollSpinner = false;
         
-        //       if(this.failedAttempts.length){
+              if(this.failedAttempts.length){
                 
-        //         this.failedAttemptsMessage.push(
-        //         `${this.requestDetail.students - this.failedAttempts.length} 
-        //         trainee's are Enrolled successfully. please try other trainee later. ${this.failedAttempts.toString().replace(',', ', ')}`);
+                this.failedAttemptsMessage.push(
+                `${this.requestDetail.students - this.failedAttempts.length} 
+                trainee's are Enrolled successfully. please try other trainee later. ${this.failedAttempts.toString().replace(',', ', ')}`);
     
-        //       } else {
-        //         this.showEnrollSpinner = false;
-        //         this.requestDetail.status = 'Enrolled';
-        //         this.toastr.success(`${this.requestDetail.students - this.failedAttempts.length} trainee's are Enrolled successfully`, 'Success');
+              } else {
+                this.showEnrollSpinner = false;
+                this.requestDetail.status = 'Enrolled';
+                this.toastr.success(`${this.requestDetail.students - this.failedAttempts.length} trainee's are Enrolled successfully`, 'Success');
         
-        //       }
+              }
               
-        //     } else {
-        //       this.toastr.error(response.message, 'Error');
-    
-        //     }
-        // });
+            } else {
+              this.toastr.error(response.message, 'Error');
+            }
+          });
 
+        });
       }
+
     }
 
   }
 
 
-  fakeApiCall(element: any, data: any, index: any){
-    this.service
-    .mainCanvas(`lovers/${this.requestDetail.course_id}`, 'post', data)
-    .subscribe((response: any) => {
-      if (response.status) {
-        element.status = 'success'; 
-        element.isEnrolling = false; 
+  filterRequests($event: any){
+    if($event.value){
+      let payload = { 
+        startDate: new Date($event.value[0] + 'UTC'), 
+        endDate: new Date($event.value[1] + 'UTC') 
+      };
+      
+      this.isFiltering = true;
+      
+      this.service
+      .mainCanvas(`filterEnrollmentRequest/${this.service.userData.id}`, 'post', payload)
+      .subscribe((response: any) => {
+        if (response.status) {
+          this.requests = response;
+          
+        } else {
+          this.toastr.error(response.message, 'Error');
+        }
+  
+      });
 
-      } else {
-        element.status = 'failed'; 
-        element.isEnrolling = false; 
-
-        this.failedAttempts.push(element.name);
-        this.remainingTrainees.push(element);
+    } else {
+      if(this.isFiltering){
+        this.loadRequest();
       }
 
-    });
+    }
+  
   }
-
 
   closeMessage(){
     this.failedAttemptsMessage = [];
@@ -226,3 +251,7 @@ export class RequestsComponent implements OnInit {
 
 
 }
+function loadrequest() {
+  throw new Error('Function not implemented.');
+}
+

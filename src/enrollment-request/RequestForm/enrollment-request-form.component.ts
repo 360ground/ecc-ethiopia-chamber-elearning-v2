@@ -30,6 +30,9 @@ export class EnrollmentRequestFormComponent implements OnInit {
   public showTraineeListDeleteSpinner: boolean = false;
   public showbBankslipDeleteSpinner: boolean = false;
 
+  public fields: any = { text: 'name',value: 'id' };
+
+
 
   constructor(
     public service: ApiService,
@@ -62,12 +65,14 @@ export class EnrollmentRequestFormComponent implements OnInit {
       this.isOnEditing = true;
       this.status = this.state.status;
 
+      this.fields = { text: 'name',value: 'id' };
+
       this.state.students = Object.values(JSON.parse(this.state.students));
   
       this.state.students.forEach((element:any) => {
         this.addStudent(element, true);
       });
-  
+      this.state.course_id = +this.state.course_id;
       this.formGroup.patchValue(this.state);
     
       if(this.state.status !== 'pending'){
@@ -132,7 +137,8 @@ export class EnrollmentRequestFormComponent implements OnInit {
         id: student.id,
         avatar_url: student.avatar_url,
         status: 'pending',
-        isEnrolling: false
+        isEnrolling: false,
+        message: 'pending request'
       };
   
       if(index < 0){

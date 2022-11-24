@@ -8,8 +8,9 @@ import { SharedModule } from 'src/shared/shared.module';
 import { MyRequestComponent } from './my-request/my-request.component';
 import { RequestsComponent } from './requests/requests.component';
 import { EnrollmentRequestFormComponent } from './RequestForm/enrollment-request-form.component';
-
-
+import { UploaderModule } from '@syncfusion/ej2-angular-inputs';
+import { DateRangePickerModule } from '@syncfusion/ej2-angular-calendars';
+import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 
 const routes: Routes = [
   {
@@ -32,6 +33,9 @@ const routes: Routes = [
     SharedModule,
     CommonModule,
     MatIconModule,
+    UploaderModule,
+    DateRangePickerModule,
+    DropDownListModule,
     RouterModule.forChild(routes),
   ],
   exports: [RouterModule],

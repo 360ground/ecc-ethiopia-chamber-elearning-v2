@@ -15,26 +15,42 @@
                         <span><h1 class="topHeader">Enrollment request's</h1></span>
                     </p>
                     <p><span><hr /></span></p>
-                    <div class="mb-4" *ngIf="requests.length">
-                        <ul class="list-group">
-                            <li class="list-group-item lists" *ngFor="let request of requests; let i = index"
-                             (click)="viewDetail(i,request)">
-                                <div>
-                                    <p class="requestCourseName">{{ request.course_name | titlecase }}</p>
-                                    <p class="requestInstitutionName">{{ request?.institution_name }}</p>
-                                    <p class="courseFooter">
-                                        <span class="requestDate">request date : {{ request.createdAt | date }}</span>
-                                        <span class="requestStatus" [ngClass]="
-                                        request?.status == 'pending' ? 'pendingStatus' : 
-                                        request?.status == 'Approved' ? 'successStatus': 
-                                        request?.status == 'Enrolled' ? 'successStatus' : 'failedStatus'"
 
-                                        >{{ request.status }}</span>
-                                    </p>
-                                </div>  
-                            </li>
-                        </ul>
-                    </div>  
+                        <div class="mb-4" *ngIf="requests.length">
+                            <label class="mb-4">Filter requests by date</label>
+                            <p>
+                                <ejs-daterangepicker cssClass="e-outline" 
+                                placeholder="-- select date range to filter requests --"
+                                (change)="filterRequests($event)"></ejs-daterangepicker>
+                            </p>
+                            <p><span><hr /></span></p>
+
+                            <ul class="list-group">
+                                <li class="list-group-item lists" *ngFor="let request of requests; let i = index"
+                                 (click)="viewDetail(i,request)">
+                                    <div>
+                                        <p class="requestCourseName">{{ request.course_name | titlecase }}</p>
+                                        <p class="requestInstitutionName">{{ request?.institution_name }}</p>
+                                        <p class="courseFooter">
+                                            <span class="requestDate">request date : {{ request.createdAt | date }}</span>
+                                            <span class="requestStatus" [ngClass]="
+                                            request?.status == 'pending' ? 'pendingStatus' : 
+                                            request?.status == 'Approved' ? 'successStatus': 
+                                            request?.status == 'Enrolled' ? 'successStatus' : 'failedStatus'"
+    
+                                            >{{ request.status }}</span>
+                                        </p>
+                                    </div>  
+                                </li>
+                            </ul>
+                        </div> 
+                        <div *ngIf="!requests.length">
+                            <ul class="list-group">
+                                <li class="list-group-item lists" style="text-align: center !important;">
+                                    -- no request found --
+                                </li>
+                            </ul>
+                        </div> 
                 </div>
             </div>
             <!-- for request detail -->
@@ -114,7 +130,7 @@
                                             </div>
                                          
                                             <div class="col-sm-12 col-md-3 col-lg-3">
-                                                <span class="enrollmentStatus" [ngClass]="
+                                                <span title={{student.message}} class="enrollmentStatus" [ngClass]="
                                                 student?.status == 'pending' ? 'pendingStatus' : 
                                                 student?.status == 'success' ? 'successStatus': 'failedStatus'">
                                                     {{ student?.status }}

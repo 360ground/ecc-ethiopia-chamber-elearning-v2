@@ -70,3 +70,10 @@ small {
 .topHeader {
     font-weight: lighter !important;
 }
+
+label{
+    color: gray !important;
+    font-weight: lighter; 
+    margin-bottom: 10px !important;
+    font-size: 17px !important;
+}

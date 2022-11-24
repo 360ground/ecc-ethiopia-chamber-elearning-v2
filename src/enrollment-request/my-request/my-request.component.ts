@@ -10,6 +10,8 @@ import { ApiService } from 'src/service/api.service';
 })
 export class MyRequestComponent implements OnInit {
   public myrequest: any[] = [];
+  public teporaryMyRequest: any[] = [];
+  public isFiltering: boolean = false;
 
   constructor(
     public service: ApiService,
@@ -72,4 +74,34 @@ export class MyRequestComponent implements OnInit {
     }
   }
 
+  filterRequests($event: any){
+    
+    if($event.value){
+      let payload = { 
+        startDate: new Date($event.value[0] + 'UTC'), 
+        endDate: new Date($event.value[1] + 'UTC') 
+      };
+
+      this.isFiltering = true;
+      
+      this.service
+      .mainCanvas(`filterEnrollmentRequest/${this.service.userData.id}`, 'post', payload)
+      .subscribe((response: any) => {
+        if (response.status) {
+          this.myrequest = response;
+          
+        } else {
+          this.toastr.error(response.message, 'Error');
+        }
+  
+      });
+
+    } else {
+      if(this.isFiltering){
+        this.loadRequests();
+      }
+
+    }
+  
+  }
 }

@@ -8,6 +8,16 @@
                         <span><h1 class="topHeader">My Enrollment request</h1></span>
                     </p>
                     <p><span><hr /></span></p>
+                    <div  *ngIf="myrequest.length">
+                        <label class="mb-4">Filter requests by date</label>
+                        <p>
+                            <ejs-daterangepicker cssClass="e-outline" 
+                            placeholder="-- select date range to filter requests --"
+                            (change)="filterRequests($event)"></ejs-daterangepicker>
+                        </p>
+                        <p><span><hr /></span></p>
+                    </div>
+
                     <p>
                         <button class="btn btn-success" (click)="navigate()">
                             <span>
@@ -47,7 +57,7 @@
                     </div> 
                     <div class="mb-4" *ngIf="!myrequest.length">
                         <ul class="list-group">
-                            <li class="list-group-item lists"> -- No request found --</li>
+                            <li class="list-group-item lists" style="text-align: center !important;"> -- No request found --</li>
                         </ul>    
                     </div>  
                 </div>
