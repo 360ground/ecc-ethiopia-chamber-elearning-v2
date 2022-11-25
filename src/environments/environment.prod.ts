@@ -15,6 +15,9 @@ export const environment = {
 
   applicationUrl: `${window.location.origin}`,  
 
+  passwordResetLink: `${window.location.origin}/account/setnewpassword`,
+
+
   // back end
   baseUrlBackend: 'http://3.125.158.58:4000',
   paymentSuccessCallbackUrl: 'http://3.125.158.58:4000',

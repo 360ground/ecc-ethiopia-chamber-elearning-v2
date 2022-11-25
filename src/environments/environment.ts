@@ -21,6 +21,7 @@ export const environment = {
 
   // backend express
   baseUrlBackend: 'http://localhost:4000',
+  passwordResetLink: 'http://localhost:4200/account/setnewpassword',
   paymentSuccessCallbackUrl: 'https://21a3-196-188-51-250.in.ngrok.io',
 
   // medapay

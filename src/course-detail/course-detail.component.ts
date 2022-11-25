@@ -181,6 +181,8 @@ export class CourseDetailComponent implements OnInit {
           this.router.navigate(['/mycourse']);
           this.toastr.success(response.message, 'Success');
 
+          window.open(`${environment.canvasUrl}/courses/${this.id}`, '_blank');
+
         } else {
           this.toastr.error(response.message, 'Error');
         }

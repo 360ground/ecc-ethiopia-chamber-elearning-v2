@@ -26,7 +26,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'change-password',
+    path: 'changePassword',
     component: ChangePasswordComponent,
     canActivate: [AuthGuard],
   },
@@ -39,7 +39,7 @@ const routes: Routes = [
     component: ConfirmComponent,
   },
   {
-    path: 'setnewpassword/:token/:id',
+    path: 'setnewpassword/:id',
     component: NewPasswordComponent,
   },
 ];

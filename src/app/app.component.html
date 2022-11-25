@@ -61,6 +61,10 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
         <a class="btn btn-primary" (click)="redirectToAdmin()">Manage Courses</a>
       </span>  
 
+      <span class="nav-item forgetPassword" *ngIf="!service.userData" [routerLink]="['/account/forget']">
+        Forget Password ?
+      </span>
+
       <span class="navbar-text" style="margin-right: 32px;">
         <span *ngIf="service.userData" class="white">
             <div ngbDropdown class="d-inline-block">
@@ -68,12 +72,15 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
                   <img [src]="service.userData?.avatar_url" style="width: 29px; height: 30px;border-radius: 50%;margin-right: 5px;" />
                   Welcome, {{ service.userData?.short_name }} 
               </span>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1" 
+                  style="margin-left: 27% !important;">
                 <a ngbDropdownItem [routerLink]="['/mycourse']" *ngIf="service.userData && service?.isIndividual">My learning plan</a>
                 <!-- <a ngbDropdownItem [routerLink]="['/myeducation']" *ngIf="service.userData && service?.isIndividual">My Education</a> -->
                 <a ngbDropdownItem [routerLink]="['/mycertificate']" *ngIf="service.userData && service?.isIndividual">My certification</a>
                 <a ngbDropdownItem  [routerLink]="['/account/profile']"
                   *ngIf="service.userData?.sis_user_id !== 'admin'">Update profile</a>
+                <a ngbDropdownItem  [routerLink]="['/account/changePassword']"
+                  *ngIf="service.userData?.sis_user_id !== 'admin'">Change Password</a>
                 <!-- <a ngbDropdownItem  [routerLink]="['/account/change-password']">Change Password</a> -->
                 <div class="dropdown-divider"></div>
                 <span ngbDropdownItem href="#" (click)="logout()" style="cursor: pointer !important;">
@@ -84,11 +91,12 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
         </span>
 
         <span *ngIf="!service.userData">
-          <a class="nav-link white"
+          <a class="nav-link login"
           href="{{variables.canvasUrl}}/login/oauth2/auth?client_id={{variables.canvasClient_id}}&response_type=code&redirect_uri={{variables.redirectUrlAfterLoginIncanvas}}" aria-current="page">Login</a>
           <!-- [routerLink]="['/account/login']" -->
         </span>
       </span>
+
       <span class="navbar-text" style="margin-right: 32px;">
         <span *ngIf="!service.userData">
           <a class="nav-link btn btn-primary signupBtn" [routerLink]="['/account/signup']" aria-current="page">Sign up</a>
@@ -178,6 +186,11 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
 
             <span class="list-group-item" *ngIf="service.userData?.sis_user_id == 'admin'">
               <a class="btn btn-primary manageCoursebtn" (click)="redirectToAdmin()">Manage Courses</a>
+            </span>
+
+            <span class="list-group-item forgetPassword" *ngIf="!service.userData" 
+              (click)="navigate(true,'/account/forget')" [routerLink]="['/account/forget']">
+              Forget Password ?
             </span>
         
             <li class="list-group-item" style="width: fit-content;"  *ngIf="!service.userData">

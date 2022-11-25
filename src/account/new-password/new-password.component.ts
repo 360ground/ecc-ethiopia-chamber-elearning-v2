@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/service/api.service';
+import { CustomValidators } from '../signup/password-validators';
 
 @Component({
   selector: 'app-new-password',
@@ -11,71 +13,101 @@ import { ApiService } from 'src/service/api.service';
 export class NewPasswordComponent implements OnInit {
   public formGroup: FormGroup;
   public formSubmitted = false;
-  public showLoading: boolean = false;
-  public passwordChangeSuccess: Boolean = false;
-  public passwordChangeErrors: any[] = [];
-  public token: any;
+  public disable: boolean = false;
+  public account_id: any;
+  public login_id: any;
+ 
   public userid: any;
 
   constructor(
     public service: ApiService,
     private router: Router,
-    public actRoute: ActivatedRoute
+    public actRoute: ActivatedRoute,
+    public toastr: ToastrService,
   ) {
-    this.token = this.actRoute.snapshot.paramMap.get('token');
     this.userid = this.actRoute.snapshot.paramMap.get('id');
 
     this.formGroup = new FormGroup({
-      password: new FormControl(null, [Validators.required]),
+      password: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(10),
+        CustomValidators.patternValidator(new RegExp('(?=.*[0-9])'), {
+          requiresDigit: true,
+        }),
+        CustomValidators.patternValidator(new RegExp('(?=.*[A-Z])'), {
+          requiresUppercase: true,
+        }),
+        CustomValidators.patternValidator(new RegExp('(?=.*[a-z])'), {
+          requiresLowercase: true,
+        }),
+        CustomValidators.patternValidator(new RegExp('(?=.*[$@^!%*?&])'), {
+          requiresSpecialChars: true,
+        })
+      ]),
       repassword: new FormControl(null, Validators.required),
-    });
+    },[CustomValidators.MatchValidator('password', 'repassword')]);
+    
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if(this.userid !== undefined){
+      this.getUserLoginDetail();
+    }
+  }
 
   public getControls(name: any): FormControl {
     return this.formGroup.get(name) as FormControl;
   }
 
   Submit() {
+    this.formSubmitted = true;
+
     if (!this.formGroup.valid) {
       return;
+
     } else {
-      if (
-        this.getControls('password').value ==
-        this.getControls('repassword').value
-      ) {
-        const formData = new FormData();
+      this.disable = true;
 
-        formData.append('users[0][id]', this.userid);
-        formData.append(
-          'users[0][password]',
-          this.getControls('password').value
-        );
+      let payload = {
+        login: { 
+          password: this.getControls('password').value
+        }
+      };
+      
+      let url: any = `changePassword/${this.account_id}/${this.login_id}`;
 
-        formData.append('wstoken', this.token);
-        formData.append('wsfunction', 'core_user_update_users');
-        formData.append('moodlewsrestformat', 'json');
+      this.service.mainCanvas(url,'post',payload).subscribe((response: any) => {
 
-        this.service.main(formData).subscribe((response: any) => {
-          if (!response.warnings.length) {
-            this.formGroup.reset();
-            this.passwordChangeSuccess = true;
-            this.router.navigateByUrl('/account/login');
-            this.passwordChangeErrors = [];
-          } else {
-            this.passwordChangeErrors = [];
-            this.passwordChangeSuccess = false;
-            this.passwordChangeErrors = response.warnings;
-          }
+        if (response.status) {
+           this.toastr.success(response.message, 'Success');
+           this.formGroup.reset();
+           this.router.navigateByUrl('/');
 
-          this.showLoading = false;
-        });
-      } else {
-        this.passwordChangeErrors.push({
-          message: 'password is not same.',
-        });
-      }
+        } else {
+          this.toastr.error(response.message, 'Error');
+
+        }
+
+        this.disable = false;
+      });
+   
     }
   }
+
+
+  getUserLoginDetail(){
+    this.service.mainCanvas(`getUserLogin/${this.userid}`,'get',null).subscribe((response: any) => {
+      if (response.status) {
+         this.account_id = response.message.account_id;
+         this.login_id = response.message.id;
+
+      } else {
+        this.toastr.error(response.message, 'Error');
+      }
+    });
+  }
+
+
+
 }

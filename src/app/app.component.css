@@ -118,3 +118,24 @@
     margin-right: 25px !important;
     
   }
+
+  .login:hover {
+    /* color: white !important; */
+    color: #0d6efd !important;
+    font-weight: 400 !important;
+  }
+
+  .white:hover {
+    font-weight:600 !important;
+  }
+
+  .forgetPassword {
+    text-decoration: none !important;
+    margin-right: 32px !important;
+    cursor: pointer !important;
+    color: gray !important;
+  }
+
+  .forgetPassword:hover {
+    color: #0d6efd !important;
+  }
