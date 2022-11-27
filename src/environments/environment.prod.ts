@@ -15,7 +15,7 @@ export const environment = {
 
   applicationUrl: `${window.location.origin}`,  
 
-  passwordResetLink: `${window.location.origin}/account/setnewpassword`,
+  passwordResetLink: `${window.location.origin}/account/setnewpassword/`,
 
 
   // back end

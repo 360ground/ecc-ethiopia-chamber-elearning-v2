@@ -25,7 +25,9 @@ export class NewPasswordComponent implements OnInit {
     public actRoute: ActivatedRoute,
     public toastr: ToastrService,
   ) {
-    this.userid = this.actRoute.snapshot.paramMap.get('id');
+
+    let query: any = this.actRoute.snapshot.queryParams;
+    this.userid = query.user_id;
 
     this.formGroup = new FormGroup({
       password: new FormControl(null, [

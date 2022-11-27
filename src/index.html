@@ -24,10 +24,13 @@
     } else if(params.get('paymentCancel')) {
       window.history.replaceState('data', 'Ethiopia Chamber of Commerce - Digital School',`${window.location.origin}`);
 
+    } else if(params.get('user_id')) {
+      window.history.replaceState('data', 'Ethiopia Chamber of Commerce - Digital School',`${window.location.origin}/account/setnewpassword/?user_id=` + params.get('user_id'));
+
     } else {
       window.history.replaceState('data', 'Ethiopia Chamber of Commerce - Digital School',`${window.location.origin}`);
 
-    }
+    }   
   </script>
 </body>
 </html>

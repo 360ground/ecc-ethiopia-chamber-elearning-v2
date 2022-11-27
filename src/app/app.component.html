@@ -148,6 +148,11 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
               [ngClass]="url == '/account/profile' ? 'bottomBorder' : ''"
               >My profile</a>
             </li>
+            <li class="list-group-item" style="width: fit-content;" *ngIf="service.userData">
+              <a  class="nav-link white" (click)="navigate(true,'/account/changePassword')"
+              [ngClass]="url == '/account/changePassword' ? 'bottomBorder' : ''"
+              >Change Password</a>
+            </li>
             <!-- <li class="list-group-item" *ngIf="service.userData">
               <a class="nav-link white" (click)="navigate(true,'/account/change-password')">Change Password</a>
             </li>  -->

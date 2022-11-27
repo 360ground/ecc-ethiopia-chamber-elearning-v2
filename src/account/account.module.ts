@@ -39,7 +39,7 @@ const routes: Routes = [
     component: ConfirmComponent,
   },
   {
-    path: 'setnewpassword/:id',
+    path: 'setnewpassword',
     component: NewPasswordComponent,
   },
 ];
