@@ -39,6 +39,7 @@ export class AppComponent implements OnInit {
     if (
       confirm(`${this.service.userData.name} are you sure want to logout ?`)
     ) {
+      this.service.isLoggingout = true;
 
       let id = this.service.userData.sis_user_id == 'admin' ? 'admin' :  this.service.userData.id;
 
@@ -50,11 +51,14 @@ export class AppComponent implements OnInit {
             this.service.myCourses = null;
             this.service.token = null;
             this.cookieService.delete('access_token');
-            
+            this.service.isLoggingout = false;
+
             window.location.reload();
 
           } else {
-            alert(response.message);
+            this.toastr.error(response.message, 'Error');
+            this.service.isLoggingout = false;
+
           }
         });
     }

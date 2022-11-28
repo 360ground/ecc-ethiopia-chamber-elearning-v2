@@ -20,6 +20,8 @@ export class ApiService {
   public isIndividual: Boolean = true;
   public isAdmin: Boolean = false;
   public isAuthenticating: Boolean = false;
+  public isLoggingout: Boolean = false;
+
   public MyCertificates: any[] = [];
 
   public missingProfileFields: any[] = [];

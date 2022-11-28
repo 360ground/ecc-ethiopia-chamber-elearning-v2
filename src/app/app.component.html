@@ -1,5 +1,5 @@
 
-<nav *ngIf="!service.isAuthenticating" id="wider" class="navbar navbar-expand-lg bg-light fixed-top header-text" 
+<nav *ngIf="!service.isAuthenticating && !service.isLoggingout" id="wider" class="navbar navbar-expand-lg bg-light fixed-top header-text" 
 style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
   <div class="container-fluid">
     <a class="navbar-brand white" [routerLink]="['/']">
@@ -106,7 +106,7 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
   </div>
 </nav>
 
-<div *ngIf="!service.isAuthenticating" id="smaller">
+<div *ngIf="!service.isAuthenticating && !service.isLoggingout" id="smaller">
   <mat-drawer-container class="example-container" hasBackdrop="true">
     <mat-drawer #drawer mode="over">
       <div class="customContent">
@@ -240,6 +240,15 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
       <i class='fa fa-spinner fa-spin fa-3x fa-fw isAuthenticating' aria-hidden="true" 
       style="font-size: 24px !important"></i>
       authenticating user ...
+    </h3>
+  </span>
+</div>
+<div *ngIf="service?.isLoggingout">
+  <span>
+    <h3 class="isAuthenticating">    
+      <i class='fa fa-spinner fa-spin fa-3x fa-fw isAuthenticating' aria-hidden="true" 
+      style="font-size: 24px !important"></i>
+      logging out user ...
     </h3>
   </span>
 </div>
