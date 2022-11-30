@@ -136,7 +136,8 @@ export class RequestsComponent implements OnInit {
         let requests: any[] = [];
 
         this.requestDetail.students.forEach(async (element: any, index: any) => {
-          data.enrollment.user_id = element.id; element.isEnrolling = true; 
+          data.enrollment.user_id = element.id; element.isEnrolling = true; element.index = index;
+          
           requests.push(this.service.mainCanvas(`selfEnroll/${this.requestDetail.course_id}/${index}`, 'post', data));
         });
 
@@ -212,7 +213,7 @@ export class RequestsComponent implements OnInit {
       .mainCanvas(`filterEnrollmentRequest/${this.service.userData.id}`, 'post', payload)
       .subscribe((response: any) => {
         if (response.status) {
-          this.requests = response;
+          this.requests = response.message;
           
         } else {
           this.toastr.error(response.message, 'Error');
@@ -251,7 +252,3 @@ export class RequestsComponent implements OnInit {
 
 
 }
-function loadrequest() {
-  throw new Error('Function not implemented.');
-}
-

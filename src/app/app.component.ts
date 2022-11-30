@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
 
   public logoUrl: any = environment.logoUrl;
   public usericonUrl: any = environment.usericonUrl;
-  public url: any = 'courses';
+  public url: any = '';
 
   @ViewChild('drawer') drawer: MatSidenav | undefined;
 
@@ -28,6 +28,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoggedIn();
+    this.loadSlideImages();
   }
 
   ngAfterViewChecked(){
@@ -35,16 +36,17 @@ export class AppComponent implements OnInit {
     this.cdr.detectChanges();
  }
 
-  logout() {
+  async logout() {
     if (
       confirm(`${this.service.userData.name} are you sure want to logout ?`)
     ) {
       this.service.isLoggingout = true;
 
       let id = this.service.userData.sis_user_id == 'admin' ? 'admin' :  this.service.userData.id;
-
+      let UserId = await this.cookieService.get('UserId');
+      
       this.service
-        .mainCanvas(`logout/${id}/${this.cookieService.get('access_token')}`, 'delete', null)
+        .mainCanvas(`logout/${id}/${UserId}`, 'delete', null)
         .subscribe((response: any) => {
           if (response.status) {
             this.service.userData = null;
@@ -78,13 +80,13 @@ export class AppComponent implements OnInit {
     window.open(`${environment.canvasUrl}`, '_blank');
   }
 
-  isLoggedIn(){
+  async isLoggedIn(){
     
-    let access_token = this.cookieService.get('access_token');
-
+    var userId = await this.cookieService.get('UserId');
+    
     this.service
     .mainCanvas('isLoggedIn', 'post', {
-      access_token: access_token !== "" ? access_token:  "nokey"
+      userId: userId !== "" ? userId:  "noUserId"
     })
     .subscribe((response: any) => {
       if(response.status){
@@ -163,6 +165,19 @@ export class AppComponent implements OnInit {
 
 
   
+      }
+    });
+  }
+
+  loadSlideImages(){
+    this.service.mainCanvas('getSlidePhotos', 'get', null)
+    .subscribe((response: any) => {
+      if(response.status){
+        this.service.slideImages = response.message;
+
+      } else {
+        this.toastr.error(response.message,'Error while loading slide images');
+
       }
     });
   }

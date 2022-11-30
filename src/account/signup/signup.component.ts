@@ -34,7 +34,7 @@ export class SignupComponent implements OnInit {
       individual: new FormGroup({
         firstname: new FormControl(null, Validators.required),
         lastname: new FormControl(null, Validators.required),
-        // username: new FormControl(null, Validators.required),
+        sex: new FormControl(null, Validators.required),
         email: new FormControl(null, [Validators.required, Validators.email]),
         phonenumber: new FormControl(null, [
           Validators.required,
@@ -69,7 +69,7 @@ export class SignupComponent implements OnInit {
       company: new FormGroup({
         firstname: new FormControl('', Validators.required),
         lastname: new FormControl('', Validators.required),
-        // username: new FormControl(null, Validators.required),
+        sex: new FormControl(null, Validators.required),
         email: new FormControl(null, [Validators.required, Validators.email]),
         phonenumber: new FormControl(null, [
           Validators.required,
@@ -201,6 +201,8 @@ export class SignupComponent implements OnInit {
           data: {
             phonenumber: this.getControls(`${name}.phonenumber`).value,
             accountType: 'individual',
+            sex: this.getControls(`${name}.sex`).value,
+
           },
         },
       };
@@ -247,6 +249,7 @@ export class SignupComponent implements OnInit {
             NoOfEmployee: this.getControls(`${name}.NoOfEmployee`).value,
             isaMember: this.getControls(`${name}.isaMember`).value,
             membershipType: this.getControls(`${name}.membershipType`).value,
+            sex: this.getControls(`${name}.sex`).value,
             accountType: 'company',
           },
         },

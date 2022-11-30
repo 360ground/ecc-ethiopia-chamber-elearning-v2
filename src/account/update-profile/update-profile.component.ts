@@ -57,6 +57,7 @@ export class UpdateProfileComponent implements OnInit {
       individual: new FormGroup({
         firstname: new FormControl(names[0], Validators.required),
         lastname: new FormControl(names[1], Validators.required),
+        sex: new FormControl(null, Validators.required),
         email: new FormControl(this.service.userData.email, [Validators.required, Validators.email]),
         phonenumber: new FormControl(this.service.userData.phonenumber, [
           Validators.required,
@@ -83,6 +84,7 @@ export class UpdateProfileComponent implements OnInit {
       company: new FormGroup({
         firstname: new FormControl(names[0], Validators.required),
         lastname: new FormControl(names[1], Validators.required),
+        sex: new FormControl(null, Validators.required),
         email: new FormControl(this.service.userData.email, [Validators.required, Validators.email]),
         phonenumber: new FormControl(null, [
           Validators.required,
@@ -234,7 +236,6 @@ export class UpdateProfileComponent implements OnInit {
       this.getControls('company.memberId').enable();
     }
   }
-
 
   saveChanges(){
     this.isOnEdit ? this.updateEducation() : this.addEducation();

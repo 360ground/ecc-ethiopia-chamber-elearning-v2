@@ -9,6 +9,9 @@ import {
   NgbModalConfig,
 } from '@ng-bootstrap/ng-bootstrap';
 
+import { NgbCarousel, NgbSlideEvent, NgbSlideEventSource } from '@ng-bootstrap/ng-bootstrap';
+
+
 @Component({
   selector: 'app-courses',
   templateUrl: './courses.component.html',
@@ -22,6 +25,7 @@ export class CoursesComponent implements OnInit {
   public courseCategories: any;
   public isLoadingCourseCategories: Boolean = false;
   public adminToken: any = environment.adminToken;
+  public baseImageUrl: any = environment.baseUrlBackend;
 
   public missingProfileFields:any [] = [];
 
@@ -46,6 +50,18 @@ export class CoursesComponent implements OnInit {
   public selectedcertificate: any[] = [];
   public selectedCourseLength: any[] = [];
   public messages: any[] | undefined;
+
+  @ViewChild('carousel', { static: true })
+  carousel!: NgbCarousel;
+
+
+	public paused = false;
+	public unpauseOnArrow = false;
+	public pauseOnIndicator = false;
+	public pauseOnHover = true;
+	public pauseOnFocus = true;
+
+
 
   constructor(
     public service: ApiService,
@@ -92,6 +108,29 @@ export class CoursesComponent implements OnInit {
     }
 
   }
+
+
+  togglePaused() {
+		if (this.paused) {
+			this.carousel.cycle();
+		} else {
+			this.carousel.pause();
+		}
+		this.paused = !this.paused;
+	}
+
+	onSlide(slideEvent: NgbSlideEvent) {
+		if (
+			this.unpauseOnArrow &&
+			slideEvent.paused &&
+			(slideEvent.source === NgbSlideEventSource.ARROW_LEFT || slideEvent.source === NgbSlideEventSource.ARROW_RIGHT)
+		) {
+			this.togglePaused();
+		}
+		if (this.pauseOnIndicator && !slideEvent.paused && slideEvent.source === NgbSlideEventSource.INDICATOR) {
+			this.togglePaused();
+		}
+	}
 
   openModal() {
     const modalRef = this.modalService.open(NgbdModalContent);

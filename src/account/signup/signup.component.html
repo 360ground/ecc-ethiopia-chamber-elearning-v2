@@ -45,6 +45,20 @@
                                 <small> * required</small>
                             </p>
                         </div>
+
+                        <div formGroupName="individual" class="mb-4">
+                            <label>Sex</label>
+                            <select formControlName="sex" required class="form-control form-control-lg"
+                                placeholder="--select --">
+                                <option value="femal">
+                                    <small>Female</small>
+                                </option>
+                                <option value="male">
+                                    <small>Male</small>
+                                </option>
+                            </select>
+                        </div>
+
                         <!-- <div formGroupName="individual" class="mb-4">
                             <label>User Name</label>
         
@@ -125,6 +139,18 @@
                             <p *ngIf="formSubmitted && getControls('company.lastname').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
+                        </div>
+                        <div formGroupName="company" class="mb-4">
+                            <label>Sex</label>
+                            <select formControlName="sex" required class="form-control form-control-lg"
+                                placeholder="--select --">
+                                <option value="femal">
+                                    <small>Female</small>
+                                </option>
+                                <option value="male">
+                                    <small>Male</small>
+                                </option>
+                            </select>
                         </div>
                         <div formGroupName="company" class="mb-4">
                             <label>Organization Name</label>

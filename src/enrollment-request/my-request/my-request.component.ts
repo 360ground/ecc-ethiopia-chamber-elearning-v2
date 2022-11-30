@@ -88,7 +88,7 @@ export class MyRequestComponent implements OnInit {
       .mainCanvas(`filterEnrollmentRequest/${this.service.userData.id}`, 'post', payload)
       .subscribe((response: any) => {
         if (response.status) {
-          this.myrequest = response;
+          this.myrequest = response.message;
           
         } else {
           this.toastr.error(response.message, 'Error');

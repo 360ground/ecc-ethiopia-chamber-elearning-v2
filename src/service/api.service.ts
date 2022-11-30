@@ -27,6 +27,8 @@ export class ApiService {
   public missingProfileFields: any[] = [];
   public missingProfileFieldsMessage: any[] = [];
 
+  public slideImages: any[] = [];
+
 
   constructor(public http: HttpClient) {}
 

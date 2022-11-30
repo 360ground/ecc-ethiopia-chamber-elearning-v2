@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit {
           this.service.token = response.message.access_token;
 
           this.service.userData = response.message;
-          this.cookieService.set('access_token', response.message.access_token,1,'/');
+          this.cookieService.set('UserId', response.message.id,1,'/');
   
           if('profile' in response.message){
 

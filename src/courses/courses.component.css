@@ -68,9 +68,18 @@
     .header_subtitle {
         font-size: 1.8rem !important;
     }
+
+    .slideImage {
+      height: 100% !important;
+    }
+
   }
 
  
+  .slideImage {
+    height: 600px;
+    height: fit-content !important;
+  }
 
   .customSidebar {
     width: 341px;

@@ -1,6 +1,6 @@
 
 <nav *ngIf="!service.isAuthenticating && !service.isLoggingout" id="wider" class="navbar navbar-expand-lg bg-light fixed-top header-text" 
-style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
+  style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
   <div class="container-fluid">
     <a class="navbar-brand white" [routerLink]="['/']">
       <img style="width: 218px !important;"
@@ -102,10 +102,11 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
           <a class="nav-link btn btn-primary signupBtn" [routerLink]="['/account/signup']" aria-current="page">Sign up</a>
         </span>
       </span>
-    </div>
+    </div>    
   </div>
 </nav>
 
+<!-- For smaller devices -->
 <div *ngIf="!service.isAuthenticating && !service.isLoggingout" id="smaller">
   <mat-drawer-container class="example-container" hasBackdrop="true">
     <mat-drawer #drawer mode="over">
@@ -234,6 +235,7 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
   </mat-drawer-container>
 </div>
 
+<!-- For authnticate and logout -->
 <div *ngIf="service.isAuthenticating">
   <span>
     <h3 class="isAuthenticating">    

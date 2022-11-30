@@ -12,6 +12,34 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"></div>
     </div>
+
+    <!-- caraouse container start -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <!-- For carousel -->
+                <ngb-carousel
+                #carousel
+                [interval]="2000"
+                [pauseOnHover]="pauseOnHover"
+                [pauseOnFocus]="pauseOnFocus"
+                (slide)="onSlide($event)"
+                >
+                <ng-template ngbSlide *ngFor="let img of service?.slideImages; let i = index">
+                    <!-- <div class="carousel-caption">
+                        <h3>{{ img }}</h3>
+                    </div> -->
+                    <div class="picsum-img-wrapper">
+                        <img src="{{baseImageUrl}}/{{img}}" class="slideImages rounded img-thumbnail" alt="{{img}}" width="100%" height="500px" />
+                    </div>
+                    
+                </ng-template>
+                </ngb-carousel>
+            </div>
+        </div>
+    </div>
+    <!-- caraouse container end -->
+    
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"></div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -22,7 +50,9 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
     </div>
+
 </div>
+
 
 <div class="container" style="margin-top: 112px !important;">
     <div id="wider" *ngIf="courses.length" style="margin-top: 64px !important;">
