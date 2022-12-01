@@ -1,0 +1,124 @@
+<div class="row top">
+    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+    <div class="col-sm-12 col-md-10 col-lg-10">
+        <div class="card">
+            <div class="card-body">
+                <p>
+                    <span><h1 class="topHeader">
+                        {{ isEditing ? 'Edit' : 'Create' }} Course Extra Information</h1></span>
+                </p>
+                <p><span><hr /></span></p>
+                <form [formGroup]="formGroup">
+
+                <div class="mb-4">
+                    <label>Course</label>
+                    <ejs-dropdownlist id='ddlelement' [dataSource]='service.loadedCourses' 
+                        formControlName="courseId" [allowFiltering]="true" placeholder="-- select course here --"
+                        [fields]="fields" cssClass="e-outline" (change)="loadData($event)">
+                    </ejs-dropdownlist>
+                    <p *ngIf="formSubmitted && getControls('courseId').hasError('required')" class="error">
+                        <small> * required</small>
+                    </p>
+                </div>  
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-6" formGroupName="info">
+                        <div class="mb-4">
+                            <label>Modules</label><br />
+                            <input type="number" class="form-control form-control-lg" min="1"
+                            placeholder="Total number of modules" formControlName="totalModules" />
+                            <p *ngIf="formSubmitted && getControls('info.totalModules').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                            <label>Estimated Course Completion Hour</label><br />
+                            <input type="number" class="form-control form-control-lg" min="1"
+                            placeholder="Enter hour" formControlName="estimatedCompletionHour" />
+                            <p *ngIf="formSubmitted && getControls('info.estimatedCompletionHour').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                            <label>Target Audience</label><br />
+                            <input type="text" class="form-control form-control-lg" 
+                            placeholder="For example 'Beginners'" formControlName="targetAudience" />
+                            <p *ngIf="formSubmitted && getControls('info.targetAudience').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                            <label>Price</label><br />
+                            <input type="number" class="form-control form-control-lg" min="1"
+                            placeholder="Please enter a valid number > 0" formControlName="price" />
+                            <p *ngIf="formSubmitted && getControls('info.price').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <div class="mb-4">
+                            <div class="row">
+                                <label>Enter Course Features here.</label><br />
+                                <div class="col-sm-12 col-md-10 col-lg-10">
+                                    <input type="text" class="form-control form-control-lg"
+                                    formControlName="features" />
+                                    <p *ngIf="formSubmitted && getControls('features').hasError('required')" class="error">
+                                        <small> * required</small>
+                                    </p>
+                                </div>  
+                                <div class="col-sm-12 col-md-2 col-lg-2">
+                                    <Button class="btn btn-success btn-block" style="width: 100%;" 
+                                    (click)="addFeatures()">
+                                        <span>
+                                            <i class="fa fa-plus mr-4" aria-hidden="true"></i>
+                                        </span>
+                                        <span>
+                                            Add
+                                        </span>
+                                    </Button>
+                                </div>   
+                            </div>
+                        </div>
+                        <p><span><hr /></span></p>
+                        <div>
+                            <ul class="list-group" *ngIf="features.length">
+                                <li class="list-group-item" 
+                                    *ngFor="let feature of features; let i = index">
+                                        <span>
+                                            ({{i + 1}}) - {{ feature }}
+                                        </span>
+                                        <span (click)="removeFeatues(feature, i)">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </span>
+                                    
+
+                                </li>
+                            </ul>  
+                            <ul class="list-group" *ngIf="!features.length">
+                                <li class="list-group-item" 
+                                style="text-align: center !important;">
+                                    -- no features --
+                                </li>
+                            </ul>  
+                        </div>
+                    </div>
+                </div> 
+                <div class="mb-4 row">
+                    <Button type="submit" class="btn btn-primary btn-lg btn-block" 
+                    (click)="Submit()" [disabled]="disable">
+                        <span *ngIf="showSpinner">
+                            <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
+                            style="margin-right: 10px !important; font-size: 24px !important;" aria-hidden="true"></i>
+                        </span>
+                        <span *ngIf="!showSpinner">
+                            {{ isEditing ? 'Update' : 'Create'}}
+                        </span>
+                    </Button>
+                </div>   
+                </form>
+            </div>
+        </div>
+    </div>  
+    <div class="col-sm-12 col-md-1 col-lg-1"></div> 
+</div>             

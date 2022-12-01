@@ -1,0 +1,27 @@
+.top {
+    margin-top: 109px !important;
+}
+
+.topHeader {
+    font-weight: lighter !important;
+}
+
+label{
+    color: gray !important;
+    font-weight: lighter; 
+    margin-bottom: 10px !important;
+    font-size: 17px !important;
+}
+
+.error {
+    color: red !important;
+}
+
+.fa-times {
+    /* margin-top: 44px; */
+    font-size: 22px !important;
+    color: red !important;
+    font-weight: 200 !important;
+    cursor: pointer !important;
+    float: right !important;
+}
