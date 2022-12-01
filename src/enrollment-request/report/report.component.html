@@ -1,0 +1,25 @@
+    <div class="row top">
+        <div class="col-sm-12 col-md-1 col-lg-1"></div>
+        <div class="col-sm-12 col-md-10 col-lg-10">
+            <div class="card">
+                
+                <div class="card-body">
+                    <p>
+                        <span><h1 class="topHeader">Financial Reports of Course Payment's</h1></span>
+                    </p>
+                    <p><span><hr /></span></p>
+                    <label class="mb-4">Filter reports by date</label>
+                    <p>
+                        <ejs-daterangepicker cssClass="e-outline" 
+                        placeholder="-- select date range to filter requests --"
+                        (change)="filterRequests($event)"></ejs-daterangepicker>
+                    </p>
+                    <p><span><hr /></span></p>
+
+                    <app-grid [data]='data' [columens]='columes'></app-grid>
+                </div>
+            </div>
+        </div>  
+        <div class="col-sm-12 col-md-1 col-lg-1">  
+    </div>
+            

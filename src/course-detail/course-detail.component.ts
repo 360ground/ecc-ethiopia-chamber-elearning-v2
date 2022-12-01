@@ -215,6 +215,7 @@ export class CourseDetailComponent implements OnInit {
 
     let data = {
       studentId: this.service.userData.id,
+      traineeName:this.service.userData.short_name,
       courseId: this.id,
       courseTitle: this.state.name,
       courseCode: this.state.course_code,

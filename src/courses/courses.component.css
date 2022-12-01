@@ -70,15 +70,15 @@
     }
 
     .slideImage {
-      height: 100% !important;
+      /* height: 100% !important; */
     }
 
   }
 
  
   .slideImage {
-    height: 600px;
-    height: fit-content !important;
+    /* height: 600px; */
+    /* height: fit-content !important; */
   }
 
   .customSidebar {

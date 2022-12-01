@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CoursesComponent } from './courses.component';
 import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from 'src/shared/shared.module';
-import { AuthGuard } from 'src/service/AuthGuard';
 import { MatIconModule } from '@angular/material/icon';
 
 import {
@@ -12,6 +11,7 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
+import { PhotoSlideComponent } from 'src/app/photo-slide/photo-slide.component';
 
 const routes: Routes = [
   {
@@ -21,15 +21,15 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [CoursesComponent],
-  imports: [
-    SharedModule,
-    CommonModule,
-    MatIconModule,
-    MatSidenavModule,
-    RouterModule.forChild(routes),
-  ],
-  exports: [RouterModule],
-  providers: [NgbModal, NgbActiveModal, NgbModalConfig],
+    declarations: [CoursesComponent,PhotoSlideComponent],
+    exports: [RouterModule],
+    providers: [NgbModal, NgbActiveModal, NgbModalConfig],
+    imports: [
+        SharedModule,
+        CommonModule,
+        MatIconModule,
+        MatSidenavModule,
+        RouterModule.forChild(routes),
+    ]
 })
 export class CoursesModule {}

@@ -1,0 +1,268 @@
+
+<nav *ngIf="!service.isAuthenticating && !service.isLoggingout" id="wider"
+ class="navbar navbar-expand-lg bg-light fixed-top header-text" 
+style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
+<div class="container-fluid">
+  <a class="navbar-brand white" [routerLink]="['/']">
+    <img style="width: 218px !important;"
+      [src]="logoUrl" alt="ecc logo" />
+  </a>
+
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false"
+    aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="service.userData?.sis_user_id !== 'admin'">
+      <li class="nav-item">
+        <a class="nav-link white" [routerLink]="['/about-us']" (click)="navigate(false, 'about-us')"  
+        [ngClass]="url == 'about-us' ? 'bottomBorder' : ''"
+        aria-current="page">About us</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link white" [routerLink]="['/contact-us']" (click)="navigate(false, 'contact-us')" 
+        [ngClass]="url == 'contact-us' ? 'bottomBorder' : ''"
+        aria-current="page">Contact us</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link white" [routerLink]="['/faq']" (click)="navigate(false, 'faq')" 
+        [ngClass]="url == 'faq' ? 'bottomBorder' : ''"
+        aria-current="page">Help & FAQ</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link white" [routerLink]="['/courses']" (click)="navigate(false, 'courses')" 
+        [ngClass]="url == 'courses' ? 'bottomBorder' : ''"
+        aria-current="page">Online courses</a>
+        <!-- <hr class="bottomBorder" /> -->
+      </li>
+      <!-- [ngClass]="url == 'courses' ? 'bottomBorder' : ''" -->
+
+      <li class="nav-item" *ngIf="service.userData?.profile?.accountType == 'company'">
+        <a class="nav-link white" [routerLink]="['/enrollment/myrequest']" (click)="navigate(false, 'enrollment/myrequest')"  
+         [ngClass]="url == 'enrollment/myrequest' ? 'bottomBorder' : ''" aria-current="page"
+         *ngIf="service.userData && !service?.isIndividual">My Enrollment Request</a>
+      </li>
+    
+      <li class="nav-item" *ngIf="service.userData">
+        <a class="nav-link white" [routerLink]="['/mycourse']" (click)="navigate(false, 'mycourse')" 
+        [ngClass]="url == 'mycourse' ? 'bottomBorder' : ''"
+        *ngIf="service.userData && service?.isIndividual">My learning plan</a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="service.userData?.sis_user_id == 'admin'">
+        <li class="nav-item">
+            <a class="nav-link white" [routerLink]="['/enrollment/requests']" (click)="navigate(false, 'enrollment/requests')"  
+             [ngClass]="url == 'enrollment/requests' ? 'bottomBorder' : ''" aria-current="page"
+             >Enrollment Request</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link white" routerLink="" (click)="redirectToAdmin()" aria-current="page"
+             >Manage Courses</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link white" [routerLink]="['/reports']" (click)="navigate(false, 'reports')"  
+             [ngClass]="url == 'reports' ? 'bottomBorder' : ''" aria-current="page"
+             >Financial reports</a>
+        </li>
+    </ul>
+
+    <span class="nav-item forgetPassword" *ngIf="!service.userData" [routerLink]="['/account/forget']">
+      Forget Password ?
+    </span>
+
+    <span class="navbar-text" style="margin-right: 32px;">
+      <span *ngIf="service.userData" class="white">
+          <div ngbDropdown class="d-inline-block">
+            <span type="button"  id="dropdownBasic1" ngbDropdownToggle>
+                <img [src]="service.userData?.avatar_url" style="width: 29px; height: 30px;border-radius: 50%;margin-right: 5px;" />
+                hey, {{ service.userData?.short_name }} 
+            </span>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" *ngIf="service.userData?.sis_user_id !== 'admin'"
+                style="margin-left: 27% !important;background: whitesmoke !important;">
+              <a ngbDropdownItem [routerLink]="['/mycourse']" *ngIf="service.userData && service?.isIndividual">My learning plan</a>
+              <!-- <a ngbDropdownItem [routerLink]="['/myeducation']" *ngIf="service.userData && service?.isIndividual">My Education</a> -->
+              <a ngbDropdownItem [routerLink]="['/mycertificate']" *ngIf="service.userData && service?.isIndividual">My certification</a>
+              <a ngbDropdownItem  [routerLink]="['/account/profile']"
+                >Update profile</a>
+              <a ngbDropdownItem  [routerLink]="['/account/changePassword']"
+                >Change Password</a>
+              <!-- <a ngbDropdownItem  [routerLink]="['/account/change-password']">Change Password</a> -->
+              <div class="dropdown-divider"></div>
+              <span ngbDropdownItem href="#" (click)="logout()" style="cursor: pointer !important;">
+                Logout
+              </span>
+            </div>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" *ngIf="service.userData?.sis_user_id == 'admin'"
+              style="margin-left: 27% !important;background: whitesmoke !important;">
+              <span ngbDropdownItem href="#" (click)="logout()" style="cursor: pointer !important;">
+                Logout
+              </span>
+            </div>
+          </div>
+      </span>
+
+      <span *ngIf="!service.userData">
+        <a class="nav-link login"
+        href="{{variables.canvasUrl}}/login/oauth2/auth?client_id={{variables.canvasClient_id}}&response_type=code&redirect_uri={{variables.redirectUrlAfterLoginIncanvas}}" aria-current="page">Login</a>
+        <!-- [routerLink]="['/account/login']" -->
+      </span>
+    </span>
+
+    <span class="navbar-text" style="margin-right: 32px;">
+      <span *ngIf="!service.userData">
+        <a class="nav-link btn btn-primary signupBtn" [routerLink]="['/account/signup']" aria-current="page">Sign up</a>
+      </span>
+    </span>
+  </div>    
+</div>
+</nav>
+
+<!-- For smaller devices -->
+<div *ngIf="!service.isAuthenticating && !service.isLoggingout" id="smaller">
+<mat-drawer-container class="example-container" hasBackdrop="true">
+  <mat-drawer #drawer mode="over">
+    <div class="customContent">
+      <div class="customNavbarInner">
+        <span class="ml-4">
+          <a class="navbar-brand white" [routerLink]="['/']">
+            <img style="width: 218px !important;
+            margin-top: 2px;
+            margin-left: 15px;"
+              [src]="logoUrl" alt="ecc logo" />
+          </a>
+        </span>
+      </div>
+      <div>
+        <p></p>
+        <ul class="list-group list-group-flush" style="padding-left: 14PX;
+        padding-right: 14px;">
+          <li class="list-group-item" style="width: fit-content;">
+            <a class="nav-link white" (click)="navigate(true,'/courses')"  
+            [ngClass]="url == '/courses' ? 'bottomBorder' : ''"
+            aria-current="page">Online Courses</a>
+          </li>
+          <li class="list-group-item"style="width: fit-content;"  *ngIf="service.userData && service?.isIndividual">
+            <a class="nav-link white" (click)="navigate(true,'mycourse')" 
+            [ngClass]="url == 'mycourse' ? 'bottomBorder' : ''">My learning plan</a>
+          </li>
+          <!-- <li class="list-group-item" *ngIf="service.userData && service?.isIndividual">
+            <a  class="nav-link white" (click)="navigate(true,'myeducation')">My Education</a>
+          </li> -->
+          <li class="list-group-item" style="width: fit-content;" *ngIf="service.userData && service?.isIndividual">
+            <a class="nav-link white" (click)="navigate(true,'mycertificate')" 
+            [ngClass]="url == 'mycertificate' ? 'bottomBorder' : ''"
+           >
+              My certification
+            </a>
+          </li>
+          <li class="list-group-item" style="width: fit-content;" *ngIf="service.userData">
+            <a  class="nav-link white" (click)="navigate(true,'/account/profile')"
+            [ngClass]="url == '/account/profile' ? 'bottomBorder' : ''"
+            >My profile</a>
+          </li>
+          <li class="list-group-item" style="width: fit-content;" *ngIf="service.userData">
+            <a  class="nav-link white" (click)="navigate(true,'/account/changePassword')"
+            [ngClass]="url == '/account/changePassword' ? 'bottomBorder' : ''"
+            >Change Password</a>
+          </li>
+          <!-- <li class="list-group-item" *ngIf="service.userData">
+            <a class="nav-link white" (click)="navigate(true,'/account/change-password')">Change Password</a>
+          </li>  -->
+          <li class="list-group-item" style="width: fit-content;">
+            <a class="nav-link white" (click)="navigate(true,'/about-us')"
+            [ngClass]="url == '/about-us' ? 'bottomBorder' : ''" 
+            aria-current="page">About us</a>
+          </li>
+          <li class="list-group-item" style="width: fit-content;">
+            <a class="nav-link white" (click)="navigate(true,'/contact-us')" 
+            [ngClass]="url == '/contact-us' ? 'bottomBorder' : ''"
+            aria-current="page">Contact us</a>
+          </li>
+          <li class="list-group-item" style="width: fit-content;">
+            <a class="nav-link white" (click)="navigate(true,'/faq')" 
+            [ngClass]="url == '/faq' ? 'bottomBorder' : ''"
+            aria-current="page">Help & FAQ</a>
+          </li>
+
+          <hr />
+
+
+          <li class="list-group-item" *ngIf="service.userData?.profile?.accountType == 'company'">
+            <a class="nav-link white" [routerLink]="['/enrollment/myrequest']" 
+            (click)="navigate(true, 'enrollment/myrequest')"  
+            [ngClass]="url == 'enrollment/myrequest' ? 'bottomBorder' : ''" aria-current="page"
+            *ngIf="service.userData && !service?.isIndividual">My Enrollment Request</a>
+          </li>
+
+          <li class="list-group-item" *ngIf="service.userData?.sis_user_id == 'admin'">
+            <a class="nav-link white" [routerLink]="['/enrollment/requests']" 
+            (click)="navigate(true, 'enrollment/requests')"  
+            [ngClass]="url == 'enrollment/requests' ? 'bottomBorder' : ''" aria-current="page"
+            *ngIf="service.userData && !service?.isIndividual">Enrollment Request</a>
+          </li>
+
+          <span class="list-group-item" *ngIf="service.userData?.sis_user_id == 'admin'">
+            <a class="btn btn-primary manageCoursebtn" (click)="redirectToAdmin()">Manage Courses</a>
+          </span>
+
+          <span class="list-group-item forgetPassword" *ngIf="!service.userData" 
+            (click)="navigate(true,'/account/forget')" [routerLink]="['/account/forget']">
+            Forget Password ?
+          </span>
+      
+          <li class="list-group-item" style="width: fit-content;"  *ngIf="!service.userData">
+            <a class="nav-link white" (click)="navigate(true,'/account/login')" style="text-align: center;margin-left: 148% !important;"
+            [ngClass]="url == '/account/login' ? 'bottomBorder' : ''"
+            aria-current="page">Login</a>
+          </li>
+          <li class="list-group-item" style="width: 100% !important"  *ngIf="!service.userData">
+            <a class="nav-link btn btn-primary signupBtn" (click)="navigate(true,'/account/signup')" aria-current="page">Sign up</a>
+          </li>
+          <li class="list-group-item" *ngIf="service.userData">
+            <a (click)="logout()">
+              Sign out
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content>
+    <div class="customNavbar">
+      <span style="color: gray !important; font-size: 21px !important; margin-left: 10px !important;">
+        <i mat-raised-button (click)="drawer.toggle()" class="fa fa-bars" aria-hidden="true"></i>
+      </span>
+      <span class="ml-4">
+        <a class="navbar-brand white" [routerLink]="['/']">
+          <img style="width: 218px !important;
+          margin-top: 2px;
+          margin-left: 15px;"
+            [src]="logoUrl" alt="ecc logo" />
+        </a>
+      </span>
+    </div>
+    
+  </mat-drawer-content>
+</mat-drawer-container>
+</div>
+
+<!-- For authnticate and logout -->
+<div *ngIf="service.isAuthenticating">
+<span>
+  <h3 class="isAuthenticating">    
+    <i class='fa fa-spinner fa-spin fa-3x fa-fw isAuthenticating' aria-hidden="true" 
+    style="font-size: 24px !important"></i>
+    authenticating user ...
+  </h3>
+</span>
+</div>
+<div *ngIf="service?.isLoggingout">
+    <span>
+    <h3 class="isAuthenticating">    
+        <i class='fa fa-spinner fa-spin fa-3x fa-fw isAuthenticating' aria-hidden="true" 
+        style="font-size: 24px !important"></i>
+        logging out user ...
+    </h3>
+    </span>
+</div>

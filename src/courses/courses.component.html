@@ -14,30 +14,7 @@
     </div>
 
     <!-- caraouse container start -->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12">
-                <!-- For carousel -->
-                <ngb-carousel
-                #carousel
-                [interval]="2000"
-                [pauseOnHover]="pauseOnHover"
-                [pauseOnFocus]="pauseOnFocus"
-                (slide)="onSlide($event)"
-                >
-                <ng-template ngbSlide *ngFor="let img of service?.slideImages; let i = index">
-                    <!-- <div class="carousel-caption">
-                        <h3>{{ img }}</h3>
-                    </div> -->
-                    <div class="picsum-img-wrapper">
-                        <img src="{{baseImageUrl}}/{{img}}" class="slideImages rounded img-thumbnail" alt="{{img}}" width="100%" height="500px" />
-                    </div>
-                    
-                </ng-template>
-                </ngb-carousel>
-            </div>
-        </div>
-    </div>
+    <app-photo-slide></app-photo-slide>
     <!-- caraouse container end -->
     
     <div class="row">

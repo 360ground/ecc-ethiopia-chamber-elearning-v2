@@ -1,0 +1,9 @@
+<ejs-grid [dataSource]='data' allowFiltering="true" allowPaging="true" 
+    allowSorting="true" allowFiltering="true"
+     pageSettings="pageSettings">
+    <e-columns>
+        <e-column   *ngFor="let columen of columens;"
+        [field]='columen?.field' [headerText]='columen?.headerText' 
+        textAlign='left' [width]='columen?.width' [format]='columen?.format'></e-column>
+</e-columns>
+</ejs-grid>

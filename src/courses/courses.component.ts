@@ -11,7 +11,6 @@ import {
 
 import { NgbCarousel, NgbSlideEvent, NgbSlideEventSource } from '@ng-bootstrap/ng-bootstrap';
 
-
 @Component({
   selector: 'app-courses',
   templateUrl: './courses.component.html',
@@ -60,8 +59,6 @@ export class CoursesComponent implements OnInit {
 	public pauseOnIndicator = false;
 	public pauseOnHover = true;
 	public pauseOnFocus = true;
-
-
 
   constructor(
     public service: ApiService,

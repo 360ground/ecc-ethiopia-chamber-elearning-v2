@@ -17,9 +17,10 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
 import { FaqComponent } from './faq/faq.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
-  declarations: [AppComponent, AboutUsComponent, ContactUsComponent, FaqComponent],
+  declarations: [AppComponent, AboutUsComponent, ContactUsComponent, FaqComponent, NavbarComponent],
   imports: [
     BrowserModule,
     CommonModule,

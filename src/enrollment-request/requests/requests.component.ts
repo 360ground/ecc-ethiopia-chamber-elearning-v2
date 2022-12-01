@@ -204,7 +204,8 @@ export class RequestsComponent implements OnInit {
     if($event.value){
       let payload = { 
         startDate: new Date($event.value[0] + 'UTC'), 
-        endDate: new Date($event.value[1] + 'UTC') 
+        endDate: new Date($event.value[1] + 'UTC'),
+        institutionId: this.service.userData.id
       };
       
       this.isFiltering = true;

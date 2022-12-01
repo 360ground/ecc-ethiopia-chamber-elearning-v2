@@ -11,6 +11,7 @@ import { EnrollmentRequestFormComponent } from './RequestForm/enrollment-request
 import { UploaderModule } from '@syncfusion/ej2-angular-inputs';
 import { DateRangePickerModule } from '@syncfusion/ej2-angular-calendars';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+import { ReportComponent } from './report/report.component';
 
 const routes: Routes = [
   {
@@ -28,17 +29,18 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [EnrollmentRequestFormComponent, MyRequestComponent, RequestsComponent],
-  imports: [
-    SharedModule,
-    CommonModule,
-    MatIconModule,
-    UploaderModule,
-    DateRangePickerModule,
-    DropDownListModule,
-    RouterModule.forChild(routes),
-  ],
-  exports: [RouterModule],
-  providers: [NgbModal, NgbActiveModal, NgbModalConfig],
+    declarations: [EnrollmentRequestFormComponent, MyRequestComponent, RequestsComponent, ReportComponent],
+    exports: [RouterModule],
+    providers: [NgbModal, NgbActiveModal, NgbModalConfig],
+    imports: [
+        SharedModule,
+        CommonModule,
+        MatIconModule,
+        UploaderModule,
+        DateRangePickerModule,
+        DropDownListModule,
+        RouterModule.forChild(routes),
+        SharedModule
+    ]
 })
 export class EnrollmentRequestModule { }

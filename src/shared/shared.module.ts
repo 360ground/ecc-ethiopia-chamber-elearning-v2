@@ -15,9 +15,13 @@ import {
 
 import { MatTabsModule } from '@angular/material/tabs';
 import { TimeStampPipe } from 'src/app/timestamp.pipe';
+import { GridComponent } from './grid/grid.component';
+
+import { GridModule } from '@syncfusion/ej2-angular-grids';
+import { PageService, SortService, FilterService, GroupService } from '@syncfusion/ej2-angular-grids';
 
 @NgModule({
-  declarations: [HtmlSanitaizerPipe, TimeStampPipe],
+  declarations: [HtmlSanitaizerPipe, TimeStampPipe, GridComponent],
   imports: [
     CommonModule,
     HttpClientModule,
@@ -26,6 +30,7 @@ import { TimeStampPipe } from 'src/app/timestamp.pipe';
     MatCheckboxModule,
     MatTabsModule,
     NgbModule,
+    GridModule,
   ],
   exports: [
     CommonModule,
@@ -37,7 +42,12 @@ import { TimeStampPipe } from 'src/app/timestamp.pipe';
     HtmlSanitaizerPipe,
     TimeStampPipe,
     NgbModule,
+    GridModule,
+    GridComponent
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard,PageService,
+    SortService,
+    FilterService,
+    GroupService],
 })
 export class SharedModule {}
