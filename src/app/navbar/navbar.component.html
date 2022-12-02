@@ -50,21 +50,34 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
       </li>
     </ul>
 
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="service.userData?.sis_user_id == 'admin'">
+    <!-- *ngIf="service.userData?.sis_user_id == 'admin'" -->
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-            <a class="nav-link white" [routerLink]="['/enrollment/requests']" (click)="navigate(false, 'enrollment/requests')"  
-             [ngClass]="url == 'enrollment/requests' ? 'bottomBorder' : ''" aria-current="page"
+            <a class="nav-link white" [routerLink]="['/admin/enrollment-requests']" (click)="navigate(false, 'admin/enrollment-requests')"  
+             [ngClass]="url == 'admin/enrollment-requests' ? 'bottomBorder' : ''" aria-current="page"
              >Enrollment Request</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link white" routerLink="" (click)="redirectToAdmin()" aria-current="page"
-             >Manage Courses</a>
+          <a class="nav-link white" [routerLink]="['/admin/financial-reports']"
+           (click)="navigate(false, '/admin/financial-reports')"  
+           [ngClass]="url == '/admin/financial-reports' ? 'bottomBorder' : ''" aria-current="page"
+           >Financial reports</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link white" [routerLink]="['/reports']" (click)="navigate(false, 'reports')"  
-             [ngClass]="url == 'reports' ? 'bottomBorder' : ''" aria-current="page"
-             >Financial reports</a>
+        <li class="nav-item" style="margin-top: 10px !important; margin-left: 15px !important;">
+          <div ngbDropdown class="d-inline-block">
+            <span type="button" id="dropdownBasic2" ngbDropdownToggle>
+              Admin
+            </span>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic2" >
+              <a ngbDropdownItem [routerLink]="['/admin/course-extra-info']">
+                Course Extra Information
+              </a>
+              <a ngbDropdownItem routerLink="/" (click)="redirectToAdmin()"
+              >Manage Course's</a>
+            </div>
+          </div>
         </li>
+        
     </ul>
 
     <span class="nav-item forgetPassword" *ngIf="!service.userData" [routerLink]="['/account/forget']">
@@ -196,9 +209,9 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
           </li>
 
           <li class="list-group-item" *ngIf="service.userData?.sis_user_id == 'admin'">
-            <a class="nav-link white" [routerLink]="['/enrollment/requests']" 
-            (click)="navigate(true, 'enrollment/requests')"  
-            [ngClass]="url == 'enrollment/requests' ? 'bottomBorder' : ''" aria-current="page"
+            <a class="nav-link white" [routerLink]="['/admin/requests']" 
+            (click)="navigate(true, 'admin/requests')"  
+            [ngClass]="url == 'admin/requests' ? 'bottomBorder' : ''" aria-current="page"
             *ngIf="service.userData && !service?.isIndividual">Enrollment Request</a>
           </li>
 
