@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/service/api.service';
 
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -19,11 +20,16 @@ export class NavbarComponent implements OnInit {
   public usericonUrl: any = environment.usericonUrl;
   public url: any = '';
 
+  public currentUrl: any;
+
   @ViewChild('drawer') drawer: MatSidenav | undefined;
 
   constructor(public service: ApiService, public router: Router,
     public toastr: ToastrService,
-    private cookieService: CookieService, private cdr: ChangeDetectorRef) {}
+    private cookieService: CookieService, 
+    private cdr: ChangeDetectorRef) {
+    
+    }
 
   ngOnInit(): void {
     this.isLoggedIn();

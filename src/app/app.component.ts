@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { ApiService } from 'src/service/api.service';
 
 import { ToastrService } from 'ngx-toastr';
+import {filter} from 'rxjs/operators';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +13,27 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AppComponent implements OnInit {
   constructor(public service: ApiService, public router: Router,
-    public toastr: ToastrService) {}
+    public toastr: ToastrService
+    ,private breakpointObserver: BreakpointObserver,
+    ) {
+      this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd)
+    )
+        .subscribe((event: any) => {
+          this.service.currentUrl = event.url;
+        });
+
+    // detect screen size changes
+    this.breakpointObserver.observe([
+      "(max-width: 768px)"
+    ]).subscribe((result: BreakpointState) => {
+      if (result.matches) {
+        this.service.largeScreen = false;  
+      } else {
+        this.service.largeScreen = true;  
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.loadSlideImages();

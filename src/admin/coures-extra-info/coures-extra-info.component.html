@@ -22,12 +22,12 @@
                 </div>  
 
                 <div class="row">
-                    <div class="col-sm-12 col-md-6 col-lg-6" formGroupName="info">
+                    <div class="col-sm-12 col-md-6 col-lg-6" formGroupName="attributes">
                         <div class="mb-4">
                             <label>Modules</label><br />
                             <input type="number" class="form-control form-control-lg" min="1"
                             placeholder="Total number of modules" formControlName="totalModules" />
-                            <p *ngIf="formSubmitted && getControls('info.totalModules').hasError('required')" class="error">
+                            <p *ngIf="formSubmitted && getControls('attributes.totalModules').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
                         </div>
@@ -35,7 +35,7 @@
                             <label>Estimated Course Completion Hour</label><br />
                             <input type="number" class="form-control form-control-lg" min="1"
                             placeholder="Enter hour" formControlName="estimatedCompletionHour" />
-                            <p *ngIf="formSubmitted && getControls('info.estimatedCompletionHour').hasError('required')" class="error">
+                            <p *ngIf="formSubmitted && getControls('attributes.estimatedCompletionHour').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
                         </div>
@@ -43,15 +43,15 @@
                             <label>Target Audience</label><br />
                             <input type="text" class="form-control form-control-lg" 
                             placeholder="For example 'Beginners'" formControlName="targetAudience" />
-                            <p *ngIf="formSubmitted && getControls('info.targetAudience').hasError('required')" class="error">
+                            <p *ngIf="formSubmitted && getControls('attributes.targetAudience').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
                         </div>
                         <div class="mb-4">
                             <label>Price</label><br />
-                            <input type="number" class="form-control form-control-lg" min="1"
-                            placeholder="Please enter a valid number > 0" formControlName="price" />
-                            <p *ngIf="formSubmitted && getControls('info.price').hasError('required')" class="error">
+                            <input type="number" class="form-control form-control-lg" min="0"
+                            placeholder="Enter 0 if the course if Free" formControlName="courseFee" />
+                            <p *ngIf="formSubmitted && getControls('attributes.courseFee').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
                         </div>
@@ -69,7 +69,7 @@
                                 </div>  
                                 <div class="col-sm-12 col-md-2 col-lg-2">
                                     <Button class="btn btn-success btn-block" style="width: 100%;" 
-                                    (click)="addFeatures()">
+                                    (click)="addFeatures()" [disabled]="disable">
                                         <span>
                                             <i class="fa fa-plus mr-4" aria-hidden="true"></i>
                                         </span>
@@ -91,8 +91,6 @@
                                         <span (click)="removeFeatues(feature, i)">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </span>
-                                    
-
                                 </li>
                             </ul>  
                             <ul class="list-group" *ngIf="!features.length">
@@ -105,16 +103,34 @@
                     </div>
                 </div> 
                 <div class="mb-4 row">
-                    <Button type="submit" class="btn btn-primary btn-lg btn-block" 
-                    (click)="Submit()" [disabled]="disable">
-                        <span *ngIf="showSpinner">
-                            <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
-                            style="margin-right: 10px !important; font-size: 24px !important;" aria-hidden="true"></i>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <span>
+                            <Button type="submit" class="btn btn-primary btn-lg btn-block" 
+                            (click)="Submit()" [disabled]="disable">
+                                <span *ngIf="showSpinner">
+                                    <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
+                                    style="margin-right: 10px !important; font-size: 18px !important;" aria-hidden="true"></i>
+                                </span>
+                                <span *ngIf="!showSpinner">
+                                    {{ isEditing ? 'Update' : 'Create'}}
+                                </span>
+                            </Button>
                         </span>
-                        <span *ngIf="!showSpinner">
-                            {{ isEditing ? 'Update' : 'Create'}}
+                        <span *ngIf="isEditing" style="margin-left: 20px !important;">
+                            <Button type="button" class="btn btn-danger btn-lg btn-block" 
+                            (click)="Delete()" [disabled]="disable">
+                                <span *ngIf="showSpinnerDelete">
+                                    <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
+                                    style="margin-right: 10px !important; font-size: 18px !important;" aria-hidden="true"></i>
+                                </span>
+                                <span *ngIf="!showSpinnerDelete">
+                                    Delete
+                                </span>
+                            </Button>
                         </span>
-                    </Button>
+                    </div>  
+                    <div class="col-sm-12 col-md-6 col-lg-6"></div>
+  
                 </div>   
                 </form>
             </div>

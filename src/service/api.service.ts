@@ -29,6 +29,9 @@ export class ApiService {
 
   public slideImages: any[] = [];
 
+  public currentUrl: any = null;
+
+  public largeScreen: boolean = true;
 
   constructor(public http: HttpClient) {}
 

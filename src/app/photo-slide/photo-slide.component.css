@@ -2,3 +2,8 @@
     /* height: 600px; */
     /* height: fit-content !important; */
   }
+
+  .largeScreen {
+    height: 600px !important;
+    width: 100% !important;
+  }

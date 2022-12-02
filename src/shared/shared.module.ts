@@ -17,7 +17,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { TimeStampPipe } from 'src/app/timestamp.pipe';
 import { GridComponent } from './grid/grid.component';
 
-import { GridModule } from '@syncfusion/ej2-angular-grids';
+import { GridModule, ResizeService, SearchService, ToolbarService } from '@syncfusion/ej2-angular-grids';
 import { PageService, SortService, FilterService, GroupService } from '@syncfusion/ej2-angular-grids';
 
 @NgModule({
@@ -45,9 +45,14 @@ import { PageService, SortService, FilterService, GroupService } from '@syncfusi
     GridModule,
     GridComponent
   ],
-  providers: [AuthGuard,PageService,
+  providers: [AuthGuard,
+    PageService,
     SortService,
     FilterService,
-    GroupService],
+    GroupService,
+    SearchService, 
+    ToolbarService,
+    ResizeService
+  ],
 })
 export class SharedModule {}

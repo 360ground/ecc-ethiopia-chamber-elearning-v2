@@ -36,7 +36,7 @@ export class CourseDetailComponent implements OnInit {
 
   public readmore: boolean = true;
   public isExtraInfoLoading: boolean = false;
-  public course_fee: any;
+  public courseFee: any;
   queryParam: any;
   paymentId: any;
   public enrolling: boolean = false;
@@ -120,10 +120,9 @@ export class CourseDetailComponent implements OnInit {
       if (this.isEnrolledForThisCourse) {
         window.open(`${environment.canvasUrl}/courses/${this.id}`, '_blank');
       } else {
-        this.course_fee = this.state.extraInfo.attributes.course_fee;
-        this.course_fee = this.course_fee == 'Free' ? 0 : +this.course_fee;
+        this.courseFee = this.state.extraInfo.attributes.courseFee;
 
-        if (this.course_fee == 0) {
+        if (this.courseFee == 0) {
           // check the login status and call start enrolling
           if (confirm(`are you sure want to start learning ?`)) {
             this.enroll();
@@ -138,7 +137,7 @@ export class CourseDetailComponent implements OnInit {
           } else {
 
             // start calling the meda pay after confirmation
-            let message = `this course is costs you ${this.course_fee} ETB. would you like to continue ?`;
+            let message = `this course is costs you ${this.courseFee} ETB. would you like to continue ?`;
             
             if (
               confirm(message)
@@ -267,7 +266,7 @@ export class CourseDetailComponent implements OnInit {
           purchaseDetails: {
             orderId: 'Not Required',
             description: `Payment For the course : ${this.state.name}`,
-            amount: +this.course_fee,
+            amount: +this.courseFee,
             customerName: this.service.userData.name,
             customerPhoneNumber: this.service.userData.profile.phonenumber,
           },
@@ -316,14 +315,22 @@ export class CourseDetailComponent implements OnInit {
     this.service
       .mainCanvas(`getCourseExtraInfo/${this.id}`, 'get', null)
       .subscribe((response: any) => {
-        response.features = Object.values(response.features);
-        this.state.extraInfo = response;
-        this.service.loadedCourses[this.index].extraInfo = response;
 
-        if(response.attributes?.course_fee !== 'Free') {
-          this.isFree = false;
+        let message = response.message;
+
+        if(message.length){
+          message[0].attributes = JSON.parse(message[0].attributes);
+          message[0].features = Object.values(JSON.parse(message[0].features));
+
+          this.state.extraInfo = message[0];
+          this.service.loadedCourses[this.index].extraInfo = message[0];
+  
+          if(!+message[0].attributes?.courseFee) {
+            this.isFree = false;
+          }
+
         }
-
+        
         this.isExtraInfoLoading = false;
       });
   }

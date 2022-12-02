@@ -14,7 +14,9 @@
                     <h3>{{ img }}</h3>
                 </div> -->
                 <div class="picsum-img-wrapper">
-                    <img src="{{baseImageUrl}}/{{img}}" class="slideImages" alt="{{img}}" width="100%"  />
+                    <img src="{{baseImageUrl}}/{{img}}" class="slideImages"
+                    [ngClass]="service.largeScreen ? 'largeScreen' : 'smallScreen'"
+                    alt="{{img}}" width="100%"  />
                 </div>
                 
             </ng-template>

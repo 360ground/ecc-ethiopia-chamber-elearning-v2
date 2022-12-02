@@ -14,7 +14,7 @@ export class ContactUsComponent implements OnInit {
   public formSubmitted = false;
   public error: boolean = false;
   public success: boolean = false;
-  public errorMessage: any;
+  public messages: any [] = [];
   public disable: boolean = false;
 
   constructor(
@@ -36,6 +36,10 @@ export class ContactUsComponent implements OnInit {
     return this.formGroup.get(name) as FormControl;
   }
 
+  closeMessage(index: any){
+    this.messages.splice(index,1);
+  }
+
   Submit() {
     this.formSubmitted = true;
     if (!this.formGroup.valid) {
@@ -49,8 +53,10 @@ export class ContactUsComponent implements OnInit {
           if (response.status) {
             this.success = true;
             this.disable = false;
+            this.formGroup.reset();
+            this.messages.push({ message: response.message, type: 'success' });
           } else {
-            this.errorMessage = response.message;
+            this.messages.push({ message: response.message, type: 'danger' });
             this.error = true;
             this.disable = false;
           }

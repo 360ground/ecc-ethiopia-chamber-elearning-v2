@@ -1,7 +1,8 @@
 <ejs-grid #grid
-gridLines="Both"
-[dataSource]='data' [allowFiltering]="true" [allowPaging]="true" 
-    [allowSorting]="true" [allowFiltering]="true"
+    gridLines="Both"
+    [dataSource]='data' [allowFiltering]="true" [allowPaging]="true" 
+    [allowSorting]="true" [allowFiltering]="true" [toolbar]="toolbar" 
+    [searchSettings]="searchOptions" [allowReordering]="true" [allowResizing]="true"
      pageSettings="pageSettings">
     <e-columns>
         <e-column   *ngFor="let columen of columens;"

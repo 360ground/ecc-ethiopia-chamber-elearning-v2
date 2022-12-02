@@ -74,27 +74,27 @@
                                 <p class="lists">
                                     <span><i class="icons1 fa fa-bars" aria-hidden="true"></i>
                                     </span>
-                                    <span>Modules : {{ state?.extraInfo?.attributes.total_number_of_topic }}</span>
+                                    <span>Modules : {{ state?.extraInfo?.attributes.totalModules }}</span>
                                 </p>
                                 <p class="lists">
                                     <span><i class="icons1 fa fa-clock-o" aria-hidden="true"></i>
                                     </span>
-                                    <span>Esti. Hours : {{ state?.extraInfo?.attributes.eastimated_completion_hour }}</span>
+                                    <span>Esti. Hours : {{ state?.extraInfo?.attributes.estimatedCompletionHour }}</span>
                                 </p>
                                 <p class="lists">
                                     <span><i class="icons1 fa fa-user" aria-hidden="true"></i>
                                     </span>
-                                    <span>{{ state?.extraInfo?.attributes.course_belongs_to }}</span>
+                                    <span>{{ state?.extraInfo?.attributes.targetAudience }}</span>
                                 </p>
                                 <p class="lists">
                                     <span><i class="icons1 fa fa-money" aria-hidden="true"></i>
                                     </span>
-                                    <span *ngIf="state?.extraInfo?.attributes.course_fee == 'Free'">
+                                    <span *ngIf="!state?.extraInfo?.attributes.courseFee">
                                         Free
                                     </span>
 
-                                    <span *ngIf="state?.extraInfo?.attributes.course_fee !== 'Free'">
-                                        {{ state?.extraInfo?.attributes.course_fee | number }} ETB
+                                    <span *ngIf="state?.extraInfo?.attributes.courseFee">
+                                        {{ state?.extraInfo?.attributes.courseFee | number }} ETB
                                     </span>
                                 </p>
                             </div>

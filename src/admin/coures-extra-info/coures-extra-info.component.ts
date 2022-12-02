@@ -14,8 +14,12 @@ export class CouresExtraInfoComponent implements OnInit {
   public formGroup: FormGroup;
   public formSubmitted = false;
   public disable: boolean = false;
+  public disableDelete: boolean = false;
+
   public isEditing: boolean = false;
+
   public showSpinner: boolean = false;
+  public showSpinnerDelete: boolean = false;
 
   public features: any[] = [];
 
@@ -27,11 +31,11 @@ export class CouresExtraInfoComponent implements OnInit {
       this.formGroup = new FormGroup({
         id: new FormControl(null),
         courseId: new FormControl(null),
-        info: new FormGroup({
+        attributes: new FormGroup({
           totalModules: new FormControl(null, Validators.required),
           estimatedCompletionHour: new FormControl(null, Validators.required),
           targetAudience: new FormControl(null, Validators.required),
-          price: new FormControl(null, Validators.required),
+          courseFee: new FormControl(null, Validators.required),
         }),
         features: new FormControl(null, Validators.required)
 
@@ -47,9 +51,15 @@ export class CouresExtraInfoComponent implements OnInit {
   }
 
   loadData(event: any){
+    this.getControls('attributes').reset();
+    this.features = [];
+    this.formGroup.disable();
+    this.disable = true;
+    this.isEditing = false;
+
     this.service
     .mainCanvas(`getCourseExtraInfoDetail/${event.value}`, 'get', null)
-    .subscribe(async (response: any) => {
+    .subscribe((response: any) => {
       this.disable = false;
       if (response.status) {
         let message = response.message;
@@ -57,25 +67,41 @@ export class CouresExtraInfoComponent implements OnInit {
         if(message.length){
           this.isEditing = true;
 
-          message.info = await JSON.parse(message.info);
-          message.features = await JSON.parse(message.features);
+          message[0].attributes = JSON.parse(message[0].attributes);
+          message[0].features = Object.values(JSON.parse(message[0].features));
 
-          this.formGroup.patchValue(message);
-        } 
+          this.getControls('attributes').patchValue(message[0].attributes);
+          this.getControls('id').setValue(message[0].id);
+          this.getControls('courseId').setValue(message[0].courseId);
+
+          message[0].features.forEach((element: any) => {
+            this.addFeatures(element);
+          });
+
+        } else {
+          this.toastr.info(`No extra detail for this course`, 'Information');
+        }
         
       } else {
-        this.toastr.info(`no data, 'Info'`);
+        this.toastr.error(response.message, 'Error');
       }
+
+      this.formGroup.enable();
+      this.disable = false;
     });
   }
 
-  addFeatures(){
-    if(this.getControls('features').valid){
-      this.features.push(this.getControls('features').value);
-      this.getControls('features').reset();
+  addFeatures(value: any = null){
+    if(value){
+      this.features.push(value);
+
+    } else {
+      if(this.getControls('features').valid){
+        this.features.push(this.getControls('features').value);
+        this.getControls('features').reset();
+      }
     }
   }
-
 
   removeFeatues(feature: any, index: any){
     if(confirm(`are you sure want to remove ${feature} featue`)){
@@ -85,6 +111,9 @@ export class CouresExtraInfoComponent implements OnInit {
  
   Submit() {
     this.formSubmitted = true;
+
+    this.getControls('features').clearValidators();
+    this.getControls('features').updateValueAndValidity();
 
     if (!this.formGroup.valid) {
       return;
@@ -99,29 +128,54 @@ export class CouresExtraInfoComponent implements OnInit {
         let payload = this.formGroup.value;
   
         payload.features = JSON.stringify(Object.assign({}, this.features));
-        payload.info = JSON.stringify(payload.info);
+        payload.attributes = JSON.stringify(payload.attributes);
   
         this.service
-        .mainCanvas(this.isEditing ? 'updateEnrollmentRequest' :`createEnrollmentRequest`, 'post', payload)
+        .mainCanvas(this.isEditing ? 'updateCourseExtraInfoDetail' :`createCourseExtraInfoDetail`, 'post', payload)
         .subscribe((response: any) => {
           if (response.status) {
-            this.disable = false;
-            this.showSpinner = false;
             this.toastr.success(response.message, 'Success');
+
           } else {
-            this.disable = false;
-            this.showSpinner = false;
             this.toastr.error(response.message, 'Error');
-  
           }
+
+          this.disable = false;
+          this.showSpinner = false;
+
         });
 
       } else {
-        this.toastr.error('Please add a features.', 'Error');
+        this.toastr.error('Please add a course feature\'s.', 'Error');
       }
     }
+  }
 
+  Delete(){
+    if(confirm('are you sure want to delete ?')){
+      this.disableDelete = true;
+      this.showSpinnerDelete = true;
+      this.disable = true;
 
+      this.service
+      .mainCanvas(`deleteCourseExtraInfoDetail/${this.getControls('id').value}`, 'delete', {})
+      .subscribe((response: any) => {
+        if (response.status) {
+          this.toastr.success(response.message, 'Success');
+          this.formGroup.reset();
+          this.features = [];
+          this.isEditing = false;
+
+        } else {
+          this.toastr.error(response.message, 'Error');
+        }
+
+        this.disableDelete = false;
+        this.showSpinnerDelete = false;
+        this.disable = false;
+
+      });
+    }
   }
 
 }

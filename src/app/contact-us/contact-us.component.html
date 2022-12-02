@@ -7,33 +7,31 @@
                 <div class="card-body">
                     <h1>Contact Us Form</h1>
                     <hr />
-                    <ngb-alert type="success" [dismissible]="false" *ngIf="success">
+                    <ngb-alert [dismissible]="true" 
+                    *ngFor="let message of messages; let i = index" [type]="message.type"
+                    (closed)="closeMessage(i)"
+                    >
                         <p>
-                           <b>Thanks for your message. we will contact you soon.</b>
-                        </p>   
-                    </ngb-alert>
-                    <ngb-alert type="danger" [dismissible]="false" *ngIf="error">
-                        <p>
-                           <b>{{ errorMessage | titlecase }}</b>
+                           <b>{{ message.message }}</b>
                         </p>   
                     </ngb-alert>
                     <form [formGroup]="formGroup">
                         <div class="mb-4">
-                            <label>Full Name</label>
+                            <label class="mb-4">Full Name</label><br />
                             <input required class="form-control form-control-lg" formControlName="fullName" />
                             <p *ngIf="formSubmitted && getControls('fullName').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
                         </div>
                         <div class="mb-4">
-                            <label>Phone Number</label>
+                            <label class="mb-4">Phone Number</label><br />
                             <input required class="form-control form-control-lg" formControlName="phoneNumber" />
                             <p *ngIf="formSubmitted && getControls('phoneNumber').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
                         </div>
                         <div class="mb-4">
-                            <label>Email address</label>
+                            <label class="mb-4">Email address</label><br />
             
                             <input required type="email" class="form-control form-control-lg" formControlName="email" />
                             <p *ngIf="formSubmitted && getControls('email').hasError('required')" class="error">
@@ -44,7 +42,7 @@
                             </p>
                         </div>
                         <div class="mb-4">
-                            <label>Message</label>
+                            <label class="mb-4">Message</label><br />
             
                             <textarea equired type="text" class="form-control form-control-lg" formControlName="message">
     

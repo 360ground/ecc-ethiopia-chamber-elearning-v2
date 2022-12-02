@@ -87,7 +87,9 @@ export class CoursesComponent implements OnInit {
 
           this.courses.forEach((element: any) => {
             if (location.protocol == 'http:'){
-              element.image_download_url = element.image_download_url.replace('https', 'http');
+              if(element.image_download_url){
+                element.image_download_url = element.image_download_url.replace('https', 'http');
+              }
             }
 
           });  
@@ -218,7 +220,8 @@ export class CoursesComponent implements OnInit {
         <h2
           style="color: gray;font-weight: lighter; text-align: center; margin-top: 12px;"
         >
-          Loading Courses <i class="fa fa-spinner" aria-hidden="true"></i>
+          Loading Courses <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
+          style="font-size: 24px !important"></i> 
         </h2>
       </div>
     </div>
