@@ -8,14 +8,14 @@ export const environment = {
   logoUrl: '/assets/logo.png',
   emptyCertificateUrl: '/assets/emptyCertificate.png',
   usericonUrl: '/assets/user_icon.png',
-  baseUrlCanvas: 'http://3.122.238.52/api/v1/',
-  canvasUrl: 'http://3.122.238.52',
-  canvasClient_id: '10000000000004',
+  baseUrlCanvas: 'http://3.216.95.39/api/v1/',
+  canvasUrl: 'http://3.216.95.39',
+  canvasClient_id: '10000000000001',
   canvasClient_secret:
-    'a1tqQmIaA6RWluysJGVhePsU7ZEz9Du7i33jWttYfHIXl77lAQqDmKPmcJ8XbMrf',
+    'biZJ8hh9durwy4D82KeuKIZelnwI8739xII4lILjsgdQNSq8e7MvkNthFyNRJVVY',
   redirectUrlAfterLoginIncanvas: 'http://localhost:4200/account/login',
   tokenCanvas:
-    'hE4zb714iUtLDvgqXQrUtnbMlU8yT4gFaFykeAC8mrQ6E5QdpfjKSEboljgDAaSV',
+    'xBNfZYaVzkltBoU12RPeuRl0IBgOxwJ6FzSb1IbBDsJcj6foBSYeM0McMMvxXNin',
     
   applicationUrl: 'http://localhost:4200',
 

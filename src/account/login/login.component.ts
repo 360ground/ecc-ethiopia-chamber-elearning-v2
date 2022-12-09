@@ -57,6 +57,8 @@ export class LoginComponent implements OnInit {
   }
 
   login(code: any) {
+    // let previousUrl:any = localStorage.getItem(`previousUrl`);
+    let previousUrl:any = '/';
 
     let data: any = {
       grant_type: 'authorization_code',
@@ -104,7 +106,7 @@ export class LoginComponent implements OnInit {
                 this.router.navigateByUrl('/account/profile');
 
               } else {
-                this.router.navigateByUrl('/');
+                this.router.navigateByUrl(previousUrl);
 
               }
         
@@ -132,7 +134,7 @@ export class LoginComponent implements OnInit {
                 this.router.navigateByUrl('/account/profile');
 
               } else {
-                this.router.navigateByUrl('/');
+                this.router.navigateByUrl(previousUrl);
 
               }
             }
@@ -140,7 +142,7 @@ export class LoginComponent implements OnInit {
           } else {
             this.service.isIndividual = false;
             this.service.isAdmin = true;
-            this.router.navigateByUrl('/');
+            this.router.navigateByUrl(previousUrl);
 
             // window.location.replace(environment.baseUrlCanvas)
 

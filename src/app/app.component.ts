@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, RoutesRecognized } from '@angular/router';
 import { ApiService } from 'src/service/api.service';
 
 import { ToastrService } from 'ngx-toastr';
-import {filter} from 'rxjs/operators';
+import {filter, pairwise} from 'rxjs/operators';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
@@ -16,11 +16,10 @@ export class AppComponent implements OnInit {
     public toastr: ToastrService
     ,private breakpointObserver: BreakpointObserver,
     ) {
-      this.router.events.pipe(
-        filter(event => event instanceof NavigationEnd)
-    )
+      this.router.events.pipe(filter((evt: any) => evt instanceof RoutesRecognized), pairwise())
         .subscribe((event: any) => {
-          this.service.currentUrl = event.url;
+          localStorage.setItem('previousUrl', event[0].url)
+          this.service.currentUrl = event[1].url;
         });
 
     // detect screen size changes
