@@ -172,15 +172,39 @@ export class CourseDetailComponent implements OnInit {
       .mainCanvas(`selfEnroll/${this.id}`, 'post', data)
       .subscribe((response: any) => {
         if (response.status) {
-          // add course to local variable
-          this.state.percentage = 0;
-          this.state.modules_published = true;
-          this.service.myCourses.inprogress.push(this.state);
-          this.disabled = false;
-          this.router.navigate(['/mycourse']);
-          this.toastr.success(response.message, 'Success');
+          // id, userId, courseId, courseTitle, requiredModules,
+          // completedModules, status, traineeName, traineeSex, traineeLocation, createdAt, updatedAt
+          let data = {
+            userId: this.service.userData.id,
+            courseId: this.id,
+            courseTitle: this.state.name,
+            requiredModules: 0,
+            completedModules: 0,
+            status: 'pending',
+            traineeName: this.service.userData.short_name,
+            traineeSex: this.service.userData.profile.sex,
+            traineeLocation: `${this.service.userData.profile.city}, ${this.service.userData.profile.city}`
+          }
 
-          window.open(`${environment.canvasUrl}/courses/${this.id}`, '_blank');
+          this.service
+          .mainCanvas(`createEnrollmentSideEffect`, 'post', data)
+          .subscribe((result: any) => {
+            
+            if(!result.status){
+              this.toastr.error(result.message, 'Error');
+            }
+            
+            // add course to local variable
+            this.state.percentage = 0;
+            this.state.modules_published = true;
+            this.service.myCourses.inprogress.push(this.state);
+            this.disabled = false;
+            this.router.navigate(['/mycourse']);
+            this.toastr.success(response.message, 'Success');
+  
+            window.open(`${environment.canvasUrl}/courses/${this.id}`, '_blank');
+
+          });
 
         } else {
           this.toastr.error(response.message, 'Error');
