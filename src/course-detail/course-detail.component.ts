@@ -73,7 +73,7 @@ export class CourseDetailComponent implements OnInit {
 
     this.state = this.location.getState();
     
-    this.state.short = this.state.public_description.substring(0, 200);
+    this.state.short = this.state.public_description !== undefined  ? this.state.public_description?.substring(0, 200) : '';
   
     if(this.service.userData){
       this.checkPaymnetSettlement();
@@ -120,7 +120,7 @@ export class CourseDetailComponent implements OnInit {
       if (this.isEnrolledForThisCourse) {
         window.open(`${environment.canvasUrl}/courses/${this.id}`, '_blank');
       } else {
-        this.courseFee = this.state.extraInfo.attributes.courseFee;
+        this.courseFee = this.state.extraInfo?.attributes.courseFee;
 
         if (this.courseFee == 0) {
           // check the login status and call start enrolling

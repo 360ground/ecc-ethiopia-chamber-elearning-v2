@@ -138,7 +138,7 @@ export class RequestsComponent implements OnInit {
         this.requestDetail.students.forEach(async (element: any, index: any) => {
           data.enrollment.user_id = element.id; element.isEnrolling = true; element.index = index;
           
-          requests.push(this.service.mainCanvas(`selfEnroll/${this.requestDetail.course_id}/${index}`, 'post', data));
+          requests.push(this.service.mainCanvas(`selfEnroll/${this.requestDetail.course_id}`, 'post', data));
         });
 
         // make all the requests as a collection and wait for all responses as a whore response array
