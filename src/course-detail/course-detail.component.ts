@@ -172,15 +172,14 @@ export class CourseDetailComponent implements OnInit {
       .mainCanvas(`selfEnroll/${this.id}`, 'post', data)
       .subscribe((response: any) => {
         if (response.status) {
-          // id, userId, courseId, courseTitle, requiredModules,
-          // completedModules, status, traineeName, traineeSex, traineeLocation, createdAt, updatedAt
+         
           let data = {
             userId: this.service.userData.id,
             courseId: this.id,
             courseTitle: this.state.name,
             requiredModules: 0,
             completedModules: 0,
-            status: 'pending',
+            progress: 0,
             traineeName: this.service.userData.short_name,
             traineeSex: this.service.userData.profile.sex,
             traineeLocation: `${this.service.userData.profile.city}, ${this.service.userData.profile.city}`

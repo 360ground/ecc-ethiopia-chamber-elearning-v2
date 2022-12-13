@@ -4,6 +4,8 @@ import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 import { io } from 'socket.io-client';
+import { ToastrService } from 'ngx-toastr';
+import { Observable, forkJoin, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +25,7 @@ export class ApiService {
   public isLoggingout: Boolean = false;
 
   public MyCertificates: any[] = [];
+  public enrollmentSideEffectData: any[] = [];
 
   public missingProfileFields: any[] = [];
   public missingProfileFieldsMessage: any[] = [];
@@ -33,7 +36,7 @@ export class ApiService {
 
   public largeScreen: boolean = true;
 
-  constructor(public http: HttpClient) {}
+  constructor(public http: HttpClient,public toastr: ToastrService) {}
 
   // login to the moodle site
   login(data: any) {
@@ -105,102 +108,144 @@ export class ApiService {
               });
             });
 
-            this.separate(extractedCourses, userId);
+            this.getEnrollmentSideeffect(userId, extractedCourses);
           });
       });
   }
 
+  getEnrollmentSideeffect(userId: any, extractedCourses:any){
+    this.mainCanvas(`getEnrollmentSideEffect/${userId}`, 'get', {})
+    .subscribe((response: any) => {
+      if(response.status){
+        this.enrollmentSideEffectData = response.message;
+
+        this.separate(extractedCourses, userId);
+      }
+    });
+  }
   
   separate(data: any, userId: any) {
     let completed: any[] = [];
     let inprogress: any[] = [];
+    let enrollmentRequestSideeffectRequests: any[] = [];
+
 
     this.mainCanvas(`getAllCertificates/${userId}`, 'get', {})
-      .subscribe((response: any) => {
+    .subscribe((response: any) => {
 
-       this.MyCertificates = response.status ? response.message : []; 
-       
-        data.forEach((element: any, index: any) => {
-          let progress = element.course_progress;
+      this.MyCertificates = response.status ? response.message : []; 
+      
+      data.forEach((element: any, index: any) => {
+        let progress = element.course_progress;
 
-          if (location.protocol == 'http:'){
-            element.image_download_url = element.image_download_url.replace('https', 'http');
+        if (location.protocol == 'http:'){
+          element.image_download_url = element.image_download_url.replace('https', 'http');
+        }
+  
+        if ('requirement_count' in progress) {
+          element.percentage =
+            (progress.requirement_completed_count / progress.requirement_count) *
+            100;
+          element.modules_published = true;
+
+          // extract the enrollment side effect data
+          let index = this.enrollmentSideEffectData.findIndex((ele) => {+ele.courseId == element.id})
+          console.log(index)
+          if(index > -1){
+            
+            this.enrollmentSideEffectData[index].requiredModules = progress.requirement_count;
+            this.enrollmentSideEffectData[index].completedModules = progress.requirement_completed_count;
+            this.enrollmentSideEffectData[index].progress = element.percentage;
+            this.enrollmentSideEffectData[index].courseTitle = element.name;
+    
+            enrollmentRequestSideeffectRequests.push(
+            this.mainCanvas(`updateEnrollmentSideEffect`, 'post', this.enrollmentSideEffectData[index]));
           }
-    
-          if ('requirement_count' in progress) {
-            element.percentage =
-              (progress.requirement_completed_count / progress.requirement_count) *
-              100;
-            element.modules_published = true;
-            if (
-              progress.requirement_count == progress.requirement_completed_count
-            ) {
-              
-              let certificate = this.MyCertificates.find((certi: any)=> +certi.courseId == element.id);
-             
-              // if the certificate for the specified course is found
-              if(certificate !== undefined){
-    
-                element.canGenerateCertificate = false;
-                element.canViewCertificate = true;
-                element.certificateId = certificate.id;
-                element.isGeneratingCertificate = false;
 
-                completed.push(element);
-
-              } else {
-              
-                  let payload = {
-                    courseId: element.id,
-                    courseCode: element.course_code,
-                    courseName: element.name,
-                    studentName: this.userData.short_name,
-                    studentId: this.userData.id,
-                    email: this.userData.email
-                  };
-              
-                  this
-                  .mainCanvas(
-                    `generateCertificate/`,
-                    'post',
-                    payload
-                  )
-                  .subscribe((response: any) => {
-                    if (response.status) {
-                      element.canViewCertificate = true;
-                      element.canGenerateCertificate = false;
-                      element.certificateId = response.message.id;
-                      element.isGeneratingCertificate = false;
-
-                    } else {
-                      element.canGenerateCertificate = true;
-                      element.canViewCertificate = false;
-                      element.certificateId = null;
-                      element.isGeneratingCertificate = false;
-                    }
-
-                    completed.push(element);
-              
-                  });    
-              }
-        
-            } else {
+          if (
+            progress.requirement_count == progress.requirement_completed_count
+          ) {
+            
+            let certificate = this.MyCertificates.find((certi: any)=> +certi.courseId == element.id);
+            
+            // if the certificate for the specified course is found
+            if(certificate !== undefined){
+  
+              element.canGenerateCertificate = false;
               element.canViewCertificate = true;
-              inprogress.push(element);
-    
-            }
-          } else {
-            element.percentage = 0;
-            element.modules_published = false;
-            inprogress.push(element);
-          }
-        });
-       
-      });
+              element.certificateId = certificate.id;
+              element.isGeneratingCertificate = false;
 
+              completed.push(element);
+
+            } else {
+            
+                let payload = {
+                  courseId: element.id,
+                  courseCode: element.course_code,
+                  courseName: element.name,
+                  studentName: this.userData.short_name,
+                  studentId: this.userData.id,
+                  email: this.userData.email
+                };
+            
+                this
+                .mainCanvas(
+                  `generateCertificate/`,
+                  'post',
+                  payload
+                )
+                .subscribe((response: any) => {
+                  if (response.status) {
+                    element.canViewCertificate = true;
+                    element.canGenerateCertificate = false;
+                    element.certificateId = response.message.id;
+                    element.isGeneratingCertificate = false;
+
+                  } else {
+                    element.canGenerateCertificate = true;
+                    element.canViewCertificate = false;
+                    element.certificateId = null;
+                    element.isGeneratingCertificate = false;
+                  }
+
+                  completed.push(element);
+            
+                });    
+            }
+      
+          } else {
+            element.canViewCertificate = true;
+            inprogress.push(element);
+  
+          }
+        } else {
+          element.percentage = 0;
+          element.modules_published = false;
+          inprogress.push(element);
+        }
+      });
+    
+     this.updateEnrollmentSideeffect(enrollmentRequestSideeffectRequests) 
+
+    });
 
     this.myCourses.completed = completed;
     this.myCourses.inprogress = inprogress;
   }
 
+  updateEnrollmentSideeffect(requests: any){
+    forkJoin(requests).subscribe((responses: any) => {
+      if(!responses.status){
+        this.toastr.error(responses.message,'Error');
+      }
+    });
+
+  }
+
+
 }
+
+
+
+     

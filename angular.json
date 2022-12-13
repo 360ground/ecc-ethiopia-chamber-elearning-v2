@@ -30,8 +30,7 @@
               "src/styles.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/font-awesome/css/font-awesome.css",
-              "./src/assets/customCSS/bootstrap5.css",
-              "./src/assets/customCSS/bootstrap5(WithGrid).css"
+              "./src/assets/customCSS/bootstrap5.css"
             ],
             "scripts": [
               "node_modules/popper.js/dist/umd/popper.min.js",
@@ -49,8 +48,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "20kb",
-                  "maximumError": "40kb"
+                  "maximumWarning": "100mb",
+                  "maximumError": "100mb"
                 }
               ],
               "fileReplacements": [
