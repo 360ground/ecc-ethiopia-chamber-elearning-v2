@@ -2,14 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/service/api.service';
-import { data } from '../../shared/grid/data';
 
 @Component({
-  selector: 'app-report',
-  templateUrl: './report.component.html',
-  styleUrls: ['./report.component.css']
+  selector: 'app-finaicial-report',
+  templateUrl: './financial-report.component.html',
+  styleUrls: ['./financial-report.component.css']
 })
-export class ReportComponent implements OnInit {
+export class FinancialReportComponent implements OnInit {
   public columes:any[] = [];
   public data: any;
   public isFiltering: boolean = false;

@@ -56,12 +56,30 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
              [ngClass]="'/admin/enrollment-requests' == service.currentUrl ? 'bottomBorder' : ''" aria-current="page"
              >Enrollment Request</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link white" [routerLink]="['/admin/financial-reports']"
-           (click)="navigate(false, '/admin/financial-reports')"  
-           [ngClass]="'/admin/financial-reports' == service.currentUrl ? 'bottomBorder' : ''" aria-current="page"
-           >Financial reports</a>
-        </li>
+    
+        <li class="nav-item" style="margin-top: 10px !important; margin-left: 15px !important;">
+          <div ngbDropdown class="d-inline-block">
+            <span type="button" id="dropdownBasic2" ngbDropdownToggle>
+              Reports
+            </span>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic2" >
+              <a ngbDropdownItem [routerLink]="['/admin/financial-reports']" [state]="{type: 'financial'}" class="nav-link white"
+              (click)="navigate(false, '/admin/financial-reports')"  
+              [ngClass]="'/admin/financial-reports' == service.currentUrl ? 'bottomBorder' : ''" aria-current="page"
+              >Financial reports</a>
+
+              <a ngbDropdownItem [routerLink]="['/admin/trainee-performance-reports']" [state]="{type: 'performance'}" class="nav-link white"
+              (click)="navigate(false, '/admin/trainee-performance-reports')"y
+              [ngClass]="'/admin/trainee-performance-reports' == service.currentUrl ? 'bottomBorder' : ''" aria-current="page"
+              >Trainee performance</a>
+              <a ngbDropdownItem [routerLink]="['/admin/trainee-list-reports']" class="nav-link white"
+              (click)="navigate(false, '/admin/trainee-list-reports')"  
+              [ngClass]="'/admin/trainee-list-reports' == service.currentUrl ? 'bottomBorder' : ''" aria-current="page"
+              >Trainee list</a>
+            </div>  
+          </div>
+        </li>    
+
         <li class="nav-item" style="margin-top: 10px !important; margin-left: 15px !important;">
           <div ngbDropdown class="d-inline-block">
             <span type="button" id="dropdownBasic2" ngbDropdownToggle>

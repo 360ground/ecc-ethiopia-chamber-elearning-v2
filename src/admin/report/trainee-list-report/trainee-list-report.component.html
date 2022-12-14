@@ -1,0 +1,53 @@
+<div class="row top">
+    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+    <div class="col-sm-12 col-md-10 col-lg-10">
+        <div class="card">
+            
+            <div class="card-body">
+                <p>
+                    <span><h1 class="topHeader">Trainee performance Reports</h1></span>
+                </p>
+                <p><span><hr /></span></p>
+
+                <form [formGroup]="formGroup">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            <label class="mb-4">Course</label>
+                            <ejs-dropdownlist id='ddlelement' [dataSource]='service.loadedCourses' #course
+                                formControlName="courseId"    
+                                [allowFiltering]="true"
+                                [fields]="fields" cssClass="e-outline">
+                            </ejs-dropdownlist>
+                            <p *ngIf="formSubmitted && getControls('courseId').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            <label class="mb-4">Date Range</label>
+                            <ejs-daterangepicker cssClass="e-outline" 
+                            formControlName="dateRange" 
+                        ></ejs-daterangepicker>
+                        <p *ngIf="formSubmitted && getControls('dateRange').hasError('required')" class="error">
+                            <small> * required</small>
+                        </p>
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            <label class="mb-4"></label><br />
+                            <button class="btn btn-primary btn-lg btn-block filterBtn" [disabled]="disable"
+                             (click)="filterDate()">Filter</button>
+                        </div>
+                    </div>
+                </form>
+                
+                <p>
+            
+                </p>
+                <p><span><hr /></span></p>
+
+                <app-grid [data]='data' [columens]='columes'></app-grid>
+            </div>
+        </div>
+    </div>  
+    <div class="col-sm-12 col-md-1 col-lg-1">  
+</div>
+        
