@@ -1,0 +1,22 @@
+.top {
+    margin-top: 109px !important;
+}
+
+.topHeader {
+    font-weight: lighter !important;
+}
+
+label{
+    color: gray !important;
+    font-weight: lighter; 
+    margin-bottom: 10px !important;
+    font-size: 17px !important;
+}
+
+.filterBtn {
+    margin-top: 10px !important;
+}
+
+.error {
+    color: red !important;
+}

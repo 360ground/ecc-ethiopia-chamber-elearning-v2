@@ -182,7 +182,7 @@ export class CourseDetailComponent implements OnInit {
             progress: 0,
             traineeName: this.service.userData.short_name,
             traineeSex: this.service.userData.profile.sex,
-            traineeLocation: `${this.service.userData.profile.city}, ${this.service.userData.profile.city}`
+            traineeLocation: `${this.service.userData.profile.city}, ${this.service.userData.profile.country}`
           }
 
           this.service

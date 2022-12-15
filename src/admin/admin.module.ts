@@ -9,6 +9,7 @@ import { SharedModule } from 'src/shared/shared.module';
 import { TraineePerformanceReportComponent } from './report/trainee-performance-report/trainee-performance-report.component';
 import { TraineeListReportComponent } from './report/trainee-list-report/trainee-list-report.component';
 import { FinancialReportComponent } from './report/financial-report/financial-report.component';
+import { TotalTraineeReportsComponent } from './report/total-trainee-reports/total-trainee-reports.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,10 @@ const routes: Routes = [
     component: TraineeListReportComponent,
   },
   {
+    path: 'trainee-total-reports',
+    component: TotalTraineeReportsComponent,
+  },
+  {
     path: 'course-extra-info',
     component: CouresExtraInfoComponent,
   },
@@ -34,7 +39,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [RequestsComponent, FinancialReportComponent, CouresExtraInfoComponent, TraineePerformanceReportComponent, TraineeListReportComponent],
+  declarations: [RequestsComponent, FinancialReportComponent, CouresExtraInfoComponent, TraineePerformanceReportComponent, TraineeListReportComponent, TotalTraineeReportsComponent],
     exports: [RouterModule],
     providers: [],
     imports: [

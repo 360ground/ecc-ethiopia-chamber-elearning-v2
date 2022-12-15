@@ -95,7 +95,7 @@ export class ApiService {
       .subscribe((enrollments: any[]) => {
         this
           .mainCanvas(`getAllEnrolledCourses/${userId}`, 'get', {})
-          .subscribe((courses: any[]) => {
+          .subscribe(async(courses: any[]) => {
             enrollments.forEach((enrollment: any) => {
               courses.forEach((course: any) => {
                 if (
@@ -108,21 +108,22 @@ export class ApiService {
               });
             });
 
-            this.getEnrollmentSideeffect(userId, extractedCourses);
+            // this.getEnrollmentSideeffect(userId, extractedCourses);
+            await this.separate(extractedCourses, userId);
+
           });
       });
   }
 
-  getEnrollmentSideeffect(userId: any, extractedCourses:any){
-    this.mainCanvas(`getEnrollmentSideEffect/${userId}`, 'get', {})
-    .subscribe((response: any) => {
-      if(response.status){
-        this.enrollmentSideEffectData = response.message;
-
-        this.separate(extractedCourses, userId);
-      }
-    });
-  }
+  // getEnrollmentSideeffect(userId: any, extractedCourses:any){
+  //   this.mainCanvas(`getEnrollmentSideEffect/${userId}`, 'get', {})
+  //   .subscribe(async (response: any) => {
+  //     if(response.status){
+  //       this.enrollmentSideEffectData = response.message;
+  //       await this.separate(extractedCourses, userId);
+  //     }
+  //   });
+  // }
   
   separate(data: any, userId: any) {
     let completed: any[] = [];
@@ -134,7 +135,7 @@ export class ApiService {
     .subscribe((response: any) => {
 
       this.MyCertificates = response.status ? response.message : []; 
-      
+
       data.forEach((element: any, index: any) => {
         let progress = element.course_progress;
 
@@ -146,20 +147,23 @@ export class ApiService {
           element.percentage =
             (progress.requirement_completed_count / progress.requirement_count) *
             100;
+
           element.modules_published = true;
 
           // extract the enrollment side effect data
-          let index = this.enrollmentSideEffectData.findIndex((ele) => {+ele.courseId == element.id})
-          console.log(index)
-          if(index > -1){
-            
-            this.enrollmentSideEffectData[index].requiredModules = progress.requirement_count;
-            this.enrollmentSideEffectData[index].completedModules = progress.requirement_completed_count;
-            this.enrollmentSideEffectData[index].progress = element.percentage;
-            this.enrollmentSideEffectData[index].courseTitle = element.name;
-    
-            enrollmentRequestSideeffectRequests.push(
-            this.mainCanvas(`updateEnrollmentSideEffect`, 'post', this.enrollmentSideEffectData[index]));
+
+          if(progress.requirement_count !== progress.requirement_completed_count){
+            let data = {
+              requiredModules: progress.requirement_count,
+              completedModules: progress.requirement_completed_count,
+              progress: element.percentage,
+              courseTitle: element.name,
+              userId: this.userData.id,
+              courseId: element.id
+            }
+        
+            enrollmentRequestSideeffectRequests.push(this.mainCanvas(`updateEnrollmentSideEffect`, 'post', data));
+
           }
 
           if (
@@ -225,20 +229,27 @@ export class ApiService {
           inprogress.push(element);
         }
       });
-    
-     this.updateEnrollmentSideeffect(enrollmentRequestSideeffectRequests) 
 
+      // call update side effect update requests only if there is an updates.
+
+      if(enrollmentRequestSideeffectRequests.length){
+        this.updateEnrollmentSideeffect(enrollmentRequestSideeffectRequests) 
+      }
+    
     });
 
     this.myCourses.completed = completed;
     this.myCourses.inprogress = inprogress;
   }
 
+
   updateEnrollmentSideeffect(requests: any){
     forkJoin(requests).subscribe((responses: any) => {
-      if(!responses.status){
-        this.toastr.error(responses.message,'Error');
-      }
+      responses.forEach((element: any) => {
+        if(!element.status){
+          this.toastr.error(element.message,'Error');
+        }
+      });
     });
 
   }

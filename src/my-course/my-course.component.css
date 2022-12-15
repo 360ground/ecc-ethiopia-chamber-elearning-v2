@@ -79,15 +79,15 @@
     top: 16px;
     z-index: 3;
     cursor: pointer !important;
-    color: #80868b;
-    font-size: 20px !important;
+    color: red;
+    font-size: 27px !important;
     opacity: .6;
     transition: color .35s ease;
 }
 
 .removeButton:hover{
-    color: #0b5ed7 !important;
-    border-color: #0b5ed7 !important;
+    color: red !important;
+    border-color: red !important;
 }
 
 @media only screen and (max-width: 760px) {

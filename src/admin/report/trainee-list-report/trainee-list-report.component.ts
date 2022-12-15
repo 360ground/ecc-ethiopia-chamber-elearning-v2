@@ -25,7 +25,7 @@ export class TraineeListReportComponent implements OnInit {
   ) { 
     this.formGroup = new FormGroup({
       courseId: new FormControl(null, Validators.required),
-      dateRange: new FormControl(null, Validators.required)
+      dateRange: new FormControl(null)
     })
   }
 
@@ -60,10 +60,13 @@ export class TraineeListReportComponent implements OnInit {
       
       let payload = this.formGroup.value;
 
-      payload.dateRange[0]  = new Date(payload.dateRange[0] + 'UTC'); 
-      payload.dateRange[1]  = new Date(payload.dateRange[1] + 'UTC');
+      if(payload.dateRange){
+        payload.dateRange[0]  = new Date(payload.dateRange[0] + 'UTC'); 
+        payload.dateRange[1]  = new Date(payload.dateRange[1] + 'UTC');
+      }
 
       this.disable = true;
+      
       this.service
         .mainCanvas(`getAllTraineeListReports`, 'post', payload)
         .subscribe((response: any) => {

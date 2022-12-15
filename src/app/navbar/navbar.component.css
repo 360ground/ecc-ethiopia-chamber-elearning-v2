@@ -28,6 +28,11 @@
     padding-bottom: 8px !important;
 }
 
+.show {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 @media only screen and (max-width: 760px) {
     #wider {
         display: none !important;

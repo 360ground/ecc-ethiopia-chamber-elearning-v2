@@ -59,33 +59,37 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
     
         <li class="nav-item" style="margin-top: 10px !important; margin-left: 15px !important;">
           <div ngbDropdown class="d-inline-block">
-            <span type="button" id="dropdownBasic2" ngbDropdownToggle>
+            <span type="button" id="dropdownBasic2" class="white" ngbDropdownToggle>
               Reports
             </span>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic2" >
-              <a ngbDropdownItem [routerLink]="['/admin/financial-reports']" [state]="{type: 'financial'}" class="nav-link white"
+              <a ngbDropdownItem [routerLink]="['/admin/financial-reports']" [state]="{type: 'financial'}" class="nav-link"
               (click)="navigate(false, '/admin/financial-reports')"  
               [ngClass]="'/admin/financial-reports' == service.currentUrl ? 'bottomBorder' : ''" aria-current="page"
               >Financial reports</a>
 
-              <a ngbDropdownItem [routerLink]="['/admin/trainee-performance-reports']" [state]="{type: 'performance'}" class="nav-link white"
+              <a ngbDropdownItem [routerLink]="['/admin/trainee-performance-reports']" [state]="{type: 'performance'}" class="nav-link"
               (click)="navigate(false, '/admin/trainee-performance-reports')"y
               [ngClass]="'/admin/trainee-performance-reports' == service.currentUrl ? 'bottomBorder' : ''" aria-current="page"
-              >Trainee performance</a>
-              <a ngbDropdownItem [routerLink]="['/admin/trainee-list-reports']" class="nav-link white"
+              >Trainee performance reports</a>
+              <a ngbDropdownItem [routerLink]="['/admin/trainee-list-reports']" class="nav-link"
               (click)="navigate(false, '/admin/trainee-list-reports')"  
               [ngClass]="'/admin/trainee-list-reports' == service.currentUrl ? 'bottomBorder' : ''" aria-current="page"
-              >Trainee list</a>
+              >Trainee list reports</a>
+              <a ngbDropdownItem [routerLink]="['/admin/trainee-total-reports']" class="nav-link"
+              (click)="navigate(false, '/admin/trainee-total-reports')"  
+              [ngClass]="'/admin/trainee-total-reports' == service.currentUrl ? 'bottomBorder' : ''" aria-current="page"
+              >Total Trainee Averages reports</a>
             </div>  
           </div>
         </li>    
 
-        <li class="nav-item" style="margin-top: 10px !important; margin-left: 15px !important;">
+        <li class="nav-item white" style="margin-top: 10px !important; margin-left: 15px !important;">
           <div ngbDropdown class="d-inline-block">
-            <span type="button" id="dropdownBasic2" ngbDropdownToggle>
+            <span type="button" id="dropdownBasic3" ngbDropdownToggle>
               Admin
             </span>
-            <div ngbDropdownMenu aria-labelledby="dropdownBasic2" >
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic3" >
               <a ngbDropdownItem [routerLink]="['/admin/course-extra-info']" 
                 [ngClass]="'/admin/course-extra-info' == service.currentUrl ? 'bottomBorder' : ''">
                 Course Extra Information
