@@ -223,7 +223,7 @@ export class CourseDetailComponent implements OnInit {
     this.service
       .mainCanvas(`checkPaymnetSettlement`, 'post', data)
       .subscribe((response: any) => {
-        if (response.status) {``
+        if (response.status) {
           this.paymnetSettlement = response.message;
           
         } else {
@@ -343,12 +343,14 @@ export class CourseDetailComponent implements OnInit {
 
         if(message.length){
           message[0].attributes = JSON.parse(message[0].attributes);
+          message[0].attributes.courseFee = +message[0].attributes.courseFee;
+
           message[0].features = Object.values(JSON.parse(message[0].features));
 
           this.state.extraInfo = message[0];
           this.service.loadedCourses[this.index].extraInfo = message[0];
-  
-          if(!+message[0].attributes?.courseFee) {
+
+          if(this.state.extraInfo.attributes.courseFee > 0) {
             this.isFree = false;
           }
 

@@ -56,7 +56,16 @@
                 </div> 
                 <div class="mb-4" *ngIf="!myrequest.length">
                     <ul class="list-group">
-                        <li class="list-group-item lists" style="text-align: center !important;"> -- No request found --</li>
+                        <li class="list-group-item lists" style="text-align: center !important;"> 
+                            <span *ngIf="isLoading">
+                                <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
+                                style="margin-right: 10px !important; font-size: 24px !important;" aria-hidden="true"></i> 
+                                Loading ...
+                            </span>
+                            <span *ngIf="!isLoading">
+                                -- No request found --
+                            </span>
+                        </li>
                     </ul>    
                 </div>  
             </div>

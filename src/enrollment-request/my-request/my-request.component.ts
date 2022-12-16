@@ -12,6 +12,7 @@ export class MyRequestComponent implements OnInit {
   public myrequest: any[] = [];
   public teporaryMyRequest: any[] = [];
   public isFiltering: boolean = false;
+  public isLoading: boolean = false;
 
   constructor(
     public service: ApiService,
@@ -24,6 +25,8 @@ export class MyRequestComponent implements OnInit {
   }
 
   loadRequests(){
+    this.isLoading = true;
+
     this.service
     .mainCanvas(`getMyEnrollmentRequest/${this.service.userData.id}`, 'get', null)
     .subscribe((response: any) => {
@@ -33,6 +36,8 @@ export class MyRequestComponent implements OnInit {
       } else {
         this.toastr.error(response.message, 'Error');
       }
+
+      this.isLoading = false;
 
     });
   }

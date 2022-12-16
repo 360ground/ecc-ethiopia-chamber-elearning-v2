@@ -27,6 +27,7 @@ export class RequestsComponent implements OnInit {
   public enrolledTrainees: any[] = [];
   public failedAttempts: any[] = [];
   public isFiltering: boolean = false;
+  public isLoading: boolean = false;
 
 
   constructor(
@@ -40,6 +41,8 @@ export class RequestsComponent implements OnInit {
   }
 
   loadRequest(){
+    this.isLoading = true;
+
     this.service
       .mainCanvas(`getAllEnrollmentRequest`, 'get', {})
       .subscribe((response: any) => {
@@ -50,6 +53,8 @@ export class RequestsComponent implements OnInit {
           this.toastr.error(response.message, 'Error');
 
         }
+
+        this.isLoading = false;
       });
   }
 
