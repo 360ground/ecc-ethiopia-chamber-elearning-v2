@@ -23,7 +23,10 @@ export class TraineePerformanceReportComponent implements OnInit {
   ngOnInit(): void {
     this.columes = [
       {
-        field: 'traineeName', headerText: 'Trainee Full name', width: '120'
+        field: 'courseTitle', headerText: 'Course Title', width: '80'
+      },
+      {
+        field: 'traineeName', headerText: 'Trainee Full name', width: '80'
       },
       {
         field: 'traineeSex', headerText: 'Sex', width: '40'

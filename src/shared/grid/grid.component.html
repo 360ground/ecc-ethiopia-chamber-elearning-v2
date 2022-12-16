@@ -2,6 +2,8 @@
     gridLines="Both"
     [dataSource]='data' [allowFiltering]="true" [allowPaging]="true" 
     [allowSorting]="true" [allowFiltering]="true" [toolbar]="toolbar" 
+    [allowExcelExport]='true' [allowPdfExport]='true' (toolbarClick)='toolbarClick($event)'
+    (excelExportComplete)='excelExportComplete()' (pdfExportComplete)='pdfExportComplete()'
     [searchSettings]="searchOptions" [allowReordering]="true" [allowResizing]="true"
      pageSettings="pageSettings">
     <e-columns>

@@ -36,6 +36,9 @@ export class TraineeListReportComponent implements OnInit {
   ngOnInit(): void {
     this.columes = [
       {
+        field: 'courseTitle', headerText: 'Course Title', width: '120'
+      },
+      {
         field: 'traineeName', headerText: 'Trainee Full name', width: '120'
       },
       {

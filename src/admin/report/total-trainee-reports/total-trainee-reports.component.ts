@@ -24,6 +24,9 @@ export class TotalTraineeReportsComponent implements OnInit {
   ngOnInit(): void {
     this.columes = [
       {
+        field: 'courseTitle', headerText: 'Course Title', width: '120'
+      },
+      {
         field: 'averageProgress', headerText: 'Average Progress', width: '120'
       },
       {
