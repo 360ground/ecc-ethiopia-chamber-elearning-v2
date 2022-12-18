@@ -22,7 +22,7 @@ export class NavbarComponent implements OnInit {
 
   public currentUrl: any;
 
-  @ViewChild('drawer') drawer: MatSidenav | undefined;
+  @ViewChild('drawer') drawer: MatSidenav | any;
 
   constructor(public service: ApiService, public router: Router,
     public toastr: ToastrService,
@@ -78,6 +78,11 @@ export class NavbarComponent implements OnInit {
     if(isSmallScreen){
       this.drawer?.toggle();
     }
+  }
+
+  toggle(){
+    console.log(this.drawer)
+    this.drawer.toggle();
   }
 
   redirectToAdmin(){

@@ -1,11 +1,11 @@
-<div class="container" style="margin-top: 45px !important;">
+<div class="container" style="margin-top: 111px !important;">
     <div class="row">
         <div class="col-sm-12 col-md-3 col-lg-3"></div>
     
         <div class="col-sm-12 col-md-6 col-lg-6" *ngIf="!registrationSuccess">
             <form [formGroup]="formGroup" 
                 ngSubmit="isIndividual ? Submit('individual') : Submit('company')">
-                <div class="card" style="padding: 22px; margin-top: 86px;">
+                <div class="card" style="padding: 22px; margin-top: -13px;">
                     <div *ngIf="backendSignupError.length">
                         <div *ngFor="let alert of backendSignupError">
                             <ngb-alert type="danger" [dismissible]="false">{{ alert }}</ngb-alert>

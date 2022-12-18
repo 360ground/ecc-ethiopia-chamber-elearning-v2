@@ -138,7 +138,9 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
 </nav>
 
 <!-- For smaller devices -->
-<div *ngIf="!service.isAuthenticating && !service.isLoggingout" id="smaller">
+<div *ngIf="!service.isAuthenticating 
+  && !service.isLoggingout 
+  && !service.largeScreen" id="smaller">
 <mat-drawer-container class="example-container" hasBackdrop="true">
   <mat-drawer #drawer mode="over">
     <div class="customContent">
@@ -261,7 +263,9 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
         </a>
       </span>
     </div>
-    
+    <div style="margin-top: -15px !important;">
+      <router-outlet *ngIf="!service?.largeScreen"></router-outlet>
+    </div>
   </mat-drawer-content>
 </mat-drawer-container>
 </div>
@@ -276,6 +280,7 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
   </h3>
 </span>
 </div>
+
 <div *ngIf="service?.isLoggingout">
     <span>
     <h3 class="isAuthenticating">    
