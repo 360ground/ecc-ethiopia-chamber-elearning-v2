@@ -68,13 +68,13 @@
     left: 0;
     max-width: none;
     padding: 0;
-    position: fixed;
+    position: fixed !important;
     right: 0;
     top: 0;
     transform: none;
     transition: transform .2s ease-out;
     width: 100%;
-    z-index: 100;
+    z-index: 99999;
     padding: 20px !important;
   }
 
@@ -143,4 +143,8 @@
 
   .forgetPassword:hover {
     color: #0d6efd !important;
+  }
+
+  .example-container{
+    height: 1000px !important;
   }

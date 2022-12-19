@@ -1,4 +1,4 @@
 <app-navbar></app-navbar>
-<div *ngIf="!service?.isLoggingout" class="mainContainer">
+<div *ngIf="!service?.isLoggingout && service.largeScreen" class="mainContainer">
     <router-outlet></router-outlet>
 </div>
