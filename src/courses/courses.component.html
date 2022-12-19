@@ -51,7 +51,7 @@
                         <div style="color: gray; padding-left: 5px !important">
                             <p *ngFor="let option of paymentOptions">
                                 <mat-checkbox color="primary" class="example-margin" 
-                                    (change)="setFilterPayment($event.checked,option.value)">
+                                    (change)="setFilterCategories($event.checked,option.value)">
                                     {{option.title|titlecase}}
                                 </mat-checkbox>
                             </p>
@@ -62,7 +62,7 @@
                         <div style="color: gray; padding-left: 5px !important">
                             <p *ngFor="let option of certificationOptions">
                                 <mat-checkbox color="primary" class="example-margin" 
-                                    (change)="setFiltercertificate($event.checked,option.value)">
+                                    (change)="setFilterCategories($event.checked,option.value)">
                                     {{option.title|titlecase}}
                                 </mat-checkbox>
                             </p>
@@ -73,7 +73,7 @@
                         <div style="color: gray; padding-left: 5px !important">
                             <p *ngFor="let option of courseLengthOptions">
                                 <mat-checkbox color="primary" class="example-margin" 
-                                    (change)="setFilterCourseLength($event.checked,option.value)">
+                                    (change)="setFilterCategories($event.checked,option.value)">
                                     {{option.title|titlecase}}
                                 </mat-checkbox>
                             </p>

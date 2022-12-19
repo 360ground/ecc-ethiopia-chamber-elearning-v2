@@ -57,6 +57,9 @@
                                     <small>Male</small>
                                 </option>
                             </select>
+                            <p *ngIf="formSubmitted && getControls('individual.sex').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
 
                         <!-- <div formGroupName="individual" class="mb-4">
@@ -151,6 +154,9 @@
                                     <small>Male</small>
                                 </option>
                             </select>
+                            <p *ngIf="formSubmitted && getControls('company.sex').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
                         <div formGroupName="company" class="mb-4">
                             <label>Organization Name</label>

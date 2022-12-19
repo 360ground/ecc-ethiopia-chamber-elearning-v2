@@ -159,7 +159,10 @@ export class ApiService {
               progress: element.percentage,
               courseTitle: element.name,
               userId: this.userData.id,
-              courseId: element.id
+              courseId: element.id,
+              traineeName: this.userData.short_name,
+              traineeSex: this.userData.profile.sex,
+              traineeLocation: `${this.userData.profile.city}, ${this.userData.profile.country}`
             }
         
             enrollmentRequestSideeffectRequests.push(this.mainCanvas(`updateEnrollmentSideEffect`, 'post', data));

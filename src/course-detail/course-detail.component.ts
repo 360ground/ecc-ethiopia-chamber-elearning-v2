@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Location } from '@angular/common';
@@ -11,6 +11,8 @@ import {
 } from '@angular/material/snack-bar';
 
 import { ToastrService } from 'ngx-toastr';
+import { NgbActiveModal, NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationService } from 'src/shared/confirmation.service';
 
 @Component({
   selector: 'app-course-detail',
@@ -48,7 +50,9 @@ export class CourseDetailComponent implements OnInit {
     public location: Location,
     public router: Router,
     public _snackBar: MatSnackBar,
-    public toastr: ToastrService
+    public toastr: ToastrService,
+    public confirmation: ConfirmationService
+
   ) {}
  
 
@@ -113,9 +117,12 @@ export class CourseDetailComponent implements OnInit {
 
   startLearning() {
     if (!this.service.userData) {
-      this.router.navigate(['/account/login'], {
-        state: { returnUrl: `/detail/${this.id}`, course: this.state },
-      });
+    this.confirmation.confirm('Confirm', 'Are you registerd user or new user ?','Existing User','New User','lg')
+    .then((confirmed) => {
+     confirmed ? this.login() : this.signup();
+    })
+    .catch(() => null);
+
     } else {
       if (this.isEnrolledForThisCourse) {
         window.open(`${environment.canvasUrl}/courses/${this.id}`, '_blank');
@@ -379,9 +386,13 @@ export class CourseDetailComponent implements OnInit {
   }
 
   login(){
-    this.router.navigateByUrl('/account/login');
+    this.router.navigate(['/account/login'], {
+      state: { returnUrl: `/detail/${this.id}`, course: this.state },
+    });
   }
 
-
+  signup(){
+    this.router.navigateByUrl('/account/signup');
+  }
 
 }
