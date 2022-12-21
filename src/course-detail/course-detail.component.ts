@@ -43,6 +43,7 @@ export class CourseDetailComponent implements OnInit {
   paymentId: any;
   public enrolling: boolean = false;
   public paymnetSettlement: any[] = [];
+  public courseQuizzes: any[] = [];
 
   constructor(
     public service: ApiService,
@@ -117,7 +118,7 @@ export class CourseDetailComponent implements OnInit {
 
   startLearning() {
     if (!this.service.userData) {
-    this.confirmation.confirm('Confirm', 'Are you registerd user or new user ?','Existing User','New User','lg')
+    this.confirmation.confirm('Confirmation', 'Are you registerd user or new user ?','Existing User','New User','lg')
     .then((confirmed) => {
      confirmed ? this.login() : this.signup();
     })
@@ -131,28 +132,37 @@ export class CourseDetailComponent implements OnInit {
 
         if (this.courseFee == 0) {
           // check the login status and call start enrolling
-          if (confirm(`are you sure want to start learning ?`)) {
-            this.enroll();
-          }
+          this.confirmation.confirm('Confirmation', 'Are you sure want to start learning ?','Yes','No','lg')
+          .then((confirmed) => {
+           confirmed ? this.enroll() : null
+          })
+          .catch(() => null);
+
+
         } else {
           // check if the user is payed or not for the course
 
           if(this.paymnetSettlement.length){
-            if (confirm(`are you sure want to start learning ?`)) {
-              this.enroll();
-            }
+            this.confirmation.confirm('Confirmation', 'Are you sure want to start learning ?','Yes','No','lg')
+            .then((confirmed) => {
+            confirmed ? this.enroll() : null
+            })
+            .catch(() => null);
+
           } else {
 
             // start calling the meda pay after confirmation
             let message = `this course is costs you ${this.courseFee} ETB. would you like to continue ?`;
-            
-            if (
-              confirm(message)
-            ) {
+      
+            this.confirmation.confirm('Confirmation', message,'Yes','No','lg')
+            .then((confirmed) => {
+             if(confirmed) {
               this.enrolling = true;
               // start calling mega pay
                 this.createPaymentSideEffect();
-            }
+             }
+            })
+            .catch(() => null);
 
           }
 
@@ -195,6 +205,30 @@ export class CourseDetailComponent implements OnInit {
           this.service
           .mainCanvas(`createEnrollmentSideEffect`, 'post', data)
           .subscribe((result: any) => {
+
+            let data = {
+              moduleName: modules.name,
+              assessmentName: item.title,
+              quizId: item.id,
+              courseId: course.courseId,
+              courseTitle: course.courseTitle,
+              userId: this.userData.id,
+              traineeName: this.userData.short_name,
+              traineeSex: this.userData.profile.sex,
+              traineeLocation: `${this.userData.profile.city}, ${this.userData.profile.country}`
+            };
+
+            this.service
+            .mainCanvas(`createAssessmentSideEffect`, 'post', data)
+            .subscribe((result: any) => {
+
+            });
+
+
+
+
+
+
             
             if(!result.status){
               this.toastr.error(result.message, 'Error');

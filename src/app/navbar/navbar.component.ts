@@ -5,6 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/service/api.service';
+import { ConfirmationService } from 'src/shared/confirmation.service';
 
 
 @Component({
@@ -26,8 +27,9 @@ export class NavbarComponent implements OnInit {
 
   constructor(public service: ApiService, public router: Router,
     public toastr: ToastrService,
-    private cookieService: CookieService, 
-    private cdr: ChangeDetectorRef) {
+    public cookieService: CookieService, 
+    public confirmation: ConfirmationService,
+    public cdr: ChangeDetectorRef) {
     
     }
 
@@ -41,9 +43,9 @@ export class NavbarComponent implements OnInit {
  }
 
   async logout() {
-    if (
-      confirm(`${this.service.userData.name} are you sure want to logout ?`)
-    ) {
+    this.confirmation.confirm('Confirmation', `${this.service.userData.name} are you sure want to logout ?`,'Yes','No','lg')
+    .then(async (confirmed) => {
+     if(confirmed) {
       this.service.isLoggingout = true;
 
       let id = this.service.userData.sis_user_id == 'admin' ? 'admin' :  this.service.userData.id;
@@ -67,7 +69,9 @@ export class NavbarComponent implements OnInit {
 
           }
         });
-    }
+     }
+    })
+    .catch(() => null);
   }
 
   navigate(isSmallScreen: boolean = true, url: any) {

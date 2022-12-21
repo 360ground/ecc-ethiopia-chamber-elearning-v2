@@ -72,23 +72,14 @@ export class ApiService {
     }
   }
 
-  //socket io
-  // socket = io('http://localhost:4000');
-
-  public sendMessage(message: any) {
-    // this.socket.emit('message', message);
-  }
-
   public getNewMessage = () => {
-    // this.socket.on('message', (message) => {
-    //   this.message$.next(message);
-    // });
-
     return this.message$.asObservable();
   };
 
   getEnrolledCourses(userId: any) {
     let extractedCourses: any[] = [];
+    let moduleRequests: any[] = []; 
+    let sideEffectCourses: any[] = [];
 
     this
       .mainCanvas(`getUserEnrollment/${userId}`, 'get', {})
@@ -97,33 +88,74 @@ export class ApiService {
           .mainCanvas(`getAllEnrolledCourses/${userId}`, 'get', {})
           .subscribe(async(courses: any[]) => {
             enrollments.forEach((enrollment: any) => {
+              moduleRequests.push(this.mainCanvas(`getAllModules/${enrollment.course_id}?studentId=${this.userData.id}`, 'get', {}));
               courses.forEach((course: any) => {
                 if (
                   enrollment.course_id == course.id &&
                   enrollment.type == 'StudentEnrollment'
-                ) {
-                  course.enrollment_id = enrollment.id;
-                  extractedCourses.push(course);
+                  ) {
+                    course.enrollment_id = enrollment.id;
+                    extractedCourses.push(course);
+
+                    sideEffectCourses.push({
+                      courseId: enrollment.course_id,
+                      courseTitle: course.name
+                    });
                 }
               });
             });
 
-            // this.getEnrollmentSideeffect(userId, extractedCourses);
+            await this.getTraineeAssessments(moduleRequests, sideEffectCourses);
             await this.separate(extractedCourses, userId);
 
           });
       });
+
   }
 
-  // getEnrollmentSideeffect(userId: any, extractedCourses:any){
-  //   this.mainCanvas(`getEnrollmentSideEffect/${userId}`, 'get', {})
-  //   .subscribe(async (response: any) => {
-  //     if(response.status){
-  //       this.enrollmentSideEffectData = response.message;
-  //       await this.separate(extractedCourses, userId);
-  //     }
-  //   });
-  // }
+  getTraineeAssessments(requests: any, courses: any[]){
+    let quizzes: any[] = [];
+
+    forkJoin(requests).subscribe(async(responses: any) => {
+      let index: number = 0;
+
+      await responses.forEach((element: any) => {
+        let course = courses[index];
+      
+        element.forEach((modules: any) => {
+
+          modules.items.forEach((item:any) => {
+            
+            if(item.type == 'Quiz'){  
+              if(!item.completion_requirement?.completed){
+                quizzes.push(
+                {
+                  moduleName: modules.name,
+                  assessmentName: item.title,
+                  quizId: item.id,
+                  courseId: course.courseId,
+                  courseTitle: course.courseTitle,
+                  userId: this.userData.id,
+                  traineeName: this.userData.short_name,
+                  traineeSex: this.userData.profile.sex,
+                  traineeLocation: `${this.userData.profile.city}, ${this.userData.profile.country}`
+                 }
+                );
+              }
+
+            }
+          });
+
+        });
+
+        index = index + 1;
+
+      });
+
+      console.log(quizzes)
+    });
+
+  }
   
   separate(data: any, userId: any) {
     let completed: any[] = [];
