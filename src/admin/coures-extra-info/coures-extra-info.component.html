@@ -22,39 +22,51 @@
                 </div>  
 
                 <div class="row">
-                    <div class="col-sm-12 col-md-6 col-lg-6" formGroupName="attributes">
-                        <div class="mb-4">
-                            <label>Modules</label><br />
-                            <input type="number" class="form-control form-control-lg" min="1"
-                            placeholder="Total number of modules" formControlName="totalModules" />
-                            <p *ngIf="formSubmitted && getControls('attributes.totalModules').hasError('required')" class="error">
-                                <small> * required</small>
-                            </p>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <div formGroupName="attributes">
+                            <div class="mb-4">
+                                <label>Modules</label><br />
+                                <input type="number" class="form-control form-control-lg" min="1"
+                                placeholder="Total number of modules" formControlName="totalModules" />
+                                <p *ngIf="formSubmitted && getControls('attributes.totalModules').hasError('required')" class="error">
+                                    <small> * required</small>
+                                </p>
+                            </div>
+                            <div class="mb-4">
+                                <label>Estimated Course Completion Hour</label><br />
+                                <input type="number" class="form-control form-control-lg" min="1"
+                                placeholder="Enter hour" formControlName="estimatedCompletionHour" />
+                                <p *ngIf="formSubmitted && getControls('attributes.estimatedCompletionHour').hasError('required')" class="error">
+                                    <small> * required</small>
+                                </p>
+                            </div>
+                            <div class="mb-4">
+                                <label>Target Audience</label><br />
+                                <input type="text" class="form-control form-control-lg" 
+                                placeholder="For example 'Beginners'" formControlName="targetAudience" />
+                                <p *ngIf="formSubmitted && getControls('attributes.targetAudience').hasError('required')" class="error">
+                                    <small> * required</small>
+                                </p>
+                            </div>
+                            <div class="mb-4">
+                                <label>Price</label><br />
+                                <input type="number" class="form-control form-control-lg" min="0"
+                                placeholder="Enter 0 if the course if Free" formControlName="courseFee" />
+                                <p *ngIf="formSubmitted && getControls('attributes.courseFee').hasError('required')" class="error">
+                                    <small> * required</small>
+                                </p>
+                            </div>
                         </div>
                         <div class="mb-4">
-                            <label>Estimated Course Completion Hour</label><br />
-                            <input type="number" class="form-control form-control-lg" min="1"
-                            placeholder="Enter hour" formControlName="estimatedCompletionHour" />
-                            <p *ngIf="formSubmitted && getControls('attributes.estimatedCompletionHour').hasError('required')" class="error">
+                            <label>Category</label>
+                            <ejs-dropdownlist id='ddlelement2' [dataSource]='categories' 
+                                formControlName="category" [allowFiltering]="true" placeholder="-- select course category"
+                                [fields]="categoryFields" cssClass="e-outline">
+                            </ejs-dropdownlist>
+                            <p *ngIf="formSubmitted && getControls('category').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
-                        </div>
-                        <div class="mb-4">
-                            <label>Target Audience</label><br />
-                            <input type="text" class="form-control form-control-lg" 
-                            placeholder="For example 'Beginners'" formControlName="targetAudience" />
-                            <p *ngIf="formSubmitted && getControls('attributes.targetAudience').hasError('required')" class="error">
-                                <small> * required</small>
-                            </p>
-                        </div>
-                        <div class="mb-4">
-                            <label>Price</label><br />
-                            <input type="number" class="form-control form-control-lg" min="0"
-                            placeholder="Enter 0 if the course if Free" formControlName="courseFee" />
-                            <p *ngIf="formSubmitted && getControls('attributes.courseFee').hasError('required')" class="error">
-                                <small> * required</small>
-                            </p>
-                        </div>
+                        </div>    
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-6">
                         <div class="mb-4">

@@ -1,0 +1,50 @@
+.top {
+    margin-top: 109px !important;
+}
+
+.topHeader {
+    font-weight: lighter !important;
+}
+
+.card {
+    margin-top: 0px !important;
+}
+
+label{
+    color: gray !important;
+    font-weight: lighter; 
+    margin-bottom: 10px !important;
+    font-size: 17px !important;
+}
+
+.error {
+    color: red !important;
+}
+
+.fa-trash {
+    /* margin-top: 44px; */
+    font-size: 22px !important;
+    color: red !important;
+    font-weight: 200 !important;
+    cursor: pointer !important;
+    float: right !important;
+}
+
+.fa-pencil {
+    /* margin-top: 44px; */
+    font-size: 22px !important;
+    color: #0a58ca !important;
+    font-weight: 200 !important;
+    cursor: pointer !important;
+    float: right !important;
+}
+
+.categoryText {
+    font-size: 22px !important;
+    padding: 15px !important;
+    font-weight: lighter !important;
+} 
+
+.actionButtonIcon {
+    margin-top: 14px !important;
+}

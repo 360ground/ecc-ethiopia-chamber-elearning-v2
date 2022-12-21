@@ -10,6 +10,7 @@ import { TraineePerformanceReportComponent } from './report/trainee-performance-
 import { TraineeListReportComponent } from './report/trainee-list-report/trainee-list-report.component';
 import { FinancialReportComponent } from './report/financial-report/financial-report.component';
 import { TotalTraineeReportsComponent } from './report/total-trainee-reports/total-trainee-reports.component';
+import { CategoryComponent } from './category/category.component';
 
 const routes: Routes = [
   {
@@ -33,13 +34,17 @@ const routes: Routes = [
     component: CouresExtraInfoComponent,
   },
   {
+    path: 'course/category',
+    component: CategoryComponent,
+  },
+  {
     path: 'enrollment-requests',
     component: RequestsComponent,
   },
 ];
 
 @NgModule({
-  declarations: [RequestsComponent, FinancialReportComponent, CouresExtraInfoComponent, TraineePerformanceReportComponent, TraineeListReportComponent, TotalTraineeReportsComponent],
+  declarations: [RequestsComponent, FinancialReportComponent, CouresExtraInfoComponent, TraineePerformanceReportComponent, TraineeListReportComponent, TotalTraineeReportsComponent, CategoryComponent],
     exports: [RouterModule],
     providers: [],
     imports: [

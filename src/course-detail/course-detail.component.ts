@@ -206,17 +206,17 @@ export class CourseDetailComponent implements OnInit {
           .mainCanvas(`createEnrollmentSideEffect`, 'post', data)
           .subscribe((result: any) => {
 
-            let data = {
-              moduleName: modules.name,
-              assessmentName: item.title,
-              quizId: item.id,
-              courseId: course.courseId,
-              courseTitle: course.courseTitle,
-              userId: this.userData.id,
-              traineeName: this.userData.short_name,
-              traineeSex: this.userData.profile.sex,
-              traineeLocation: `${this.userData.profile.city}, ${this.userData.profile.country}`
-            };
+            // let data = {
+            //   moduleName: modules.name,
+            //   assessmentName: item.title,
+            //   quizId: item.id,
+            //   courseId: course.courseId,
+            //   courseTitle: course.courseTitle,
+            //   userId: this.userData.id,
+            //   traineeName: this.userData.short_name,
+            //   traineeSex: this.userData.profile.sex,
+            //   traineeLocation: `${this.userData.profile.city}, ${this.userData.profile.country}`
+            // };
 
             this.service
             .mainCanvas(`createAssessmentSideEffect`, 'post', data)

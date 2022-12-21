@@ -10,6 +10,7 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 
 import { NgbCarousel, NgbSlideEvent, NgbSlideEventSource } from '@ng-bootstrap/ng-bootstrap';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-courses',
@@ -72,6 +73,7 @@ export class CoursesComponent implements OnInit {
       
     } else {
       this.isLoading = true;
+      let request: any [] = [];
 
       this.openModal();
 
@@ -86,8 +88,11 @@ export class CoursesComponent implements OnInit {
                 element.image_download_url = element.image_download_url.replace('https', 'http');
               }
             }
+            request.push(this.service.mainCanvas(`getCourseExtraInfo/${element.id}`, 'get', null));
+          }); 
 
-          });  
+          this.loadExtraInfo(request);
+          
           this.service.loadedCourses = this.courses;
           this.isLoading = false;
           this.closeModal();
@@ -101,6 +106,18 @@ export class CoursesComponent implements OnInit {
       );
     }
 
+  }
+
+  loadExtraInfo(request: any){
+    forkJoin(request).subscribe(async(responses: any) => {
+      responses.forEach((element: any) => {
+        let index = this.courses.findIndex((course: any) => {
+          course.id = element.courseId
+        });
+
+        this.courses[index].extraInfo = element;
+      });
+    });
   }
 
 

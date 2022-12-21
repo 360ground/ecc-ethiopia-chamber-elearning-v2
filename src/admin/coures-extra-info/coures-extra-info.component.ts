@@ -11,6 +11,8 @@ import { ApiService } from 'src/service/api.service';
 })
 export class CouresExtraInfoComponent implements OnInit {
   public fields: any = { text: 'name',value: 'id' };
+  public categoryFields: any = { text: 'category',value: 'id' };
+
   public formGroup: FormGroup;
   public formSubmitted = false;
   public disable: boolean = false;
@@ -22,6 +24,7 @@ export class CouresExtraInfoComponent implements OnInit {
   public showSpinnerDelete: boolean = false;
 
   public features: any[] = [];
+  public categories: any[] = [];
 
   constructor(
     public service: ApiService,
@@ -37,17 +40,34 @@ export class CouresExtraInfoComponent implements OnInit {
           targetAudience: new FormControl(null, Validators.required),
           courseFee: new FormControl(null, Validators.required),
         }),
-        features: new FormControl(null, Validators.required)
-
+        features: new FormControl(null, Validators.required),
+        category: new FormControl(null, Validators.required),
       });
     }
 
   ngOnInit(): void {
+    this.loadCategory();
   }
+
+
 
 
   public getControls(name: any): FormControl {
     return this.formGroup.get(name) as FormControl;
+  }
+
+  loadCategory(){
+    this.service
+    .mainCanvas(`category`, 'get', null)
+    .subscribe((response: any) => {
+      if(response.status){
+        this.categories = response.message;
+
+      } else {
+        this.toastr.error(response.message, 'Error');
+
+      }
+    });
   }
 
   loadData(event: any){
