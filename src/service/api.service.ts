@@ -4,6 +4,8 @@ import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 import { io } from 'socket.io-client';
+import { ToastrService } from 'ngx-toastr';
+import { Observable, forkJoin, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +25,7 @@ export class ApiService {
   public isLoggingout: Boolean = false;
 
   public MyCertificates: any[] = [];
+  public enrollmentSideEffectData: any[] = [];
 
   public missingProfileFields: any[] = [];
   public missingProfileFieldsMessage: any[] = [];
@@ -33,7 +36,7 @@ export class ApiService {
 
   public largeScreen: boolean = true;
 
-  constructor(public http: HttpClient) {}
+  constructor(public http: HttpClient,public toastr: ToastrService) {}
 
   // login to the moodle site
   login(data: any) {
@@ -69,138 +72,226 @@ export class ApiService {
     }
   }
 
-  //socket io
-  // socket = io('http://localhost:4000');
-
-  public sendMessage(message: any) {
-    // this.socket.emit('message', message);
-  }
-
   public getNewMessage = () => {
-    // this.socket.on('message', (message) => {
-    //   this.message$.next(message);
-    // });
-
     return this.message$.asObservable();
   };
 
   getEnrolledCourses(userId: any) {
     let extractedCourses: any[] = [];
+    let moduleRequests: any[] = []; 
+    let sideEffectCourses: any[] = [];
 
     this
       .mainCanvas(`getUserEnrollment/${userId}`, 'get', {})
       .subscribe((enrollments: any[]) => {
         this
           .mainCanvas(`getAllEnrolledCourses/${userId}`, 'get', {})
-          .subscribe((courses: any[]) => {
+          .subscribe(async(courses: any[]) => {
             enrollments.forEach((enrollment: any) => {
+              moduleRequests.push(this.mainCanvas(`getAllModules/${enrollment.course_id}?studentId=${this.userData.id}`, 'get', {}));
               courses.forEach((course: any) => {
                 if (
                   enrollment.course_id == course.id &&
                   enrollment.type == 'StudentEnrollment'
-                ) {
-                  course.enrollment_id = enrollment.id;
-                  extractedCourses.push(course);
+                  ) {
+                    course.enrollment_id = enrollment.id;
+                    extractedCourses.push(course);
+
+                    sideEffectCourses.push({
+                      courseId: enrollment.course_id,
+                      courseTitle: course.name
+                    });
                 }
               });
             });
 
-            this.separate(extractedCourses, userId);
+            await this.getTraineeAssessments(moduleRequests, sideEffectCourses);
+            await this.separate(extractedCourses, userId);
+
           });
       });
+
   }
 
+  getTraineeAssessments(requests: any, courses: any[]){
+    let quizzes: any[] = [];
+
+    forkJoin(requests).subscribe(async(responses: any) => {
+      let index: number = 0;
+
+      await responses.forEach((element: any) => {
+        let course = courses[index];
+      
+        element.forEach((modules: any) => {
+
+          modules.items.forEach((item:any) => {
+            
+            if(item.type == 'Quiz'){  
+              if(!item.completion_requirement?.completed){
+                quizzes.push(
+                {
+                  moduleName: modules.name,
+                  assessmentName: item.title,
+                  quizId: item.id,
+                  courseId: course.courseId,
+                  courseTitle: course.courseTitle,
+                  userId: this.userData.id,
+                  traineeName: this.userData.short_name,
+                  traineeSex: this.userData.profile.sex,
+                  traineeLocation: `${this.userData.profile.city}, ${this.userData.profile.country}`
+                 }
+                );
+              }
+
+            }
+          });
+
+        });
+
+        index = index + 1;
+
+      });
+
+      console.log(quizzes)
+    });
+
+  }
   
   separate(data: any, userId: any) {
     let completed: any[] = [];
     let inprogress: any[] = [];
+    let enrollmentRequestSideeffectRequests: any[] = [];
+
 
     this.mainCanvas(`getAllCertificates/${userId}`, 'get', {})
-      .subscribe((response: any) => {
+    .subscribe((response: any) => {
 
-       this.MyCertificates = response.status ? response.message : []; 
-       
-        data.forEach((element: any, index: any) => {
-          let progress = element.course_progress;
+      this.MyCertificates = response.status ? response.message : []; 
 
-          if (location.protocol == 'http:'){
-            element.image_download_url = element.image_download_url.replace('https', 'http');
-          }
-    
-          if ('requirement_count' in progress) {
-            element.percentage =
-              (progress.requirement_completed_count / progress.requirement_count) *
-              100;
-            element.modules_published = true;
-            if (
-              progress.requirement_count == progress.requirement_completed_count
-            ) {
-              
-              let certificate = this.MyCertificates.find((certi: any)=> +certi.courseId == element.id);
-             
-              // if the certificate for the specified course is found
-              if(certificate !== undefined){
-    
-                element.canGenerateCertificate = false;
-                element.canViewCertificate = true;
-                element.certificateId = certificate.id;
-                element.isGeneratingCertificate = false;
+      data.forEach((element: any, index: any) => {
+        let progress = element.course_progress;
 
-                completed.push(element);
+        if (location.protocol == 'http:'){
+          element.image_download_url = element.image_download_url.replace('https', 'http');
+        }
+  
+        if ('requirement_count' in progress) {
+          element.percentage =
+            (progress.requirement_completed_count / progress.requirement_count) *
+            100;
 
-              } else {
-              
-                  let payload = {
-                    courseId: element.id,
-                    courseCode: element.course_code,
-                    courseName: element.name,
-                    studentName: this.userData.short_name,
-                    studentId: this.userData.id,
-                    email: this.userData.email
-                  };
-              
-                  this
-                  .mainCanvas(
-                    `generateCertificate/`,
-                    'post',
-                    payload
-                  )
-                  .subscribe((response: any) => {
-                    if (response.status) {
-                      element.canViewCertificate = true;
-                      element.canGenerateCertificate = false;
-                      element.certificateId = response.message.id;
-                      element.isGeneratingCertificate = false;
+          element.modules_published = true;
 
-                    } else {
-                      element.canGenerateCertificate = true;
-                      element.canViewCertificate = false;
-                      element.certificateId = null;
-                      element.isGeneratingCertificate = false;
-                    }
+          // extract the enrollment side effect data
 
-                    completed.push(element);
-              
-                  });    
-              }
-        
-            } else {
-              element.canViewCertificate = true;
-              inprogress.push(element);
-    
+          if(progress.requirement_count !== progress.requirement_completed_count){
+            let data = {
+              requiredModules: progress.requirement_count,
+              completedModules: progress.requirement_completed_count,
+              progress: element.percentage,
+              courseTitle: element.name,
+              userId: this.userData.id,
+              courseId: element.id,
+              traineeName: this.userData.short_name,
+              traineeSex: this.userData.profile.sex,
+              traineeLocation: `${this.userData.profile.city}, ${this.userData.profile.country}`
             }
-          } else {
-            element.percentage = 0;
-            element.modules_published = false;
-            inprogress.push(element);
+        
+            enrollmentRequestSideeffectRequests.push(this.mainCanvas(`updateEnrollmentSideEffect`, 'post', data));
+
           }
-        });
-       
+
+          if (
+            progress.requirement_count == progress.requirement_completed_count
+          ) {
+            
+            let certificate = this.MyCertificates.find((certi: any)=> +certi.courseId == element.id);
+            
+            // if the certificate for the specified course is found
+            if(certificate !== undefined){
+  
+              element.canGenerateCertificate = false;
+              element.canViewCertificate = true;
+              element.certificateId = certificate.id;
+              element.isGeneratingCertificate = false;
+
+              completed.push(element);
+
+            } else {
+            
+                let payload = {
+                  courseId: element.id,
+                  courseCode: element.course_code,
+                  courseName: element.name,
+                  studentName: this.userData.short_name,
+                  studentId: this.userData.id,
+                  email: this.userData.email
+                };
+            
+                this
+                .mainCanvas(
+                  `generateCertificate/`,
+                  'post',
+                  payload
+                )
+                .subscribe((response: any) => {
+                  if (response.status) {
+                    element.canViewCertificate = true;
+                    element.canGenerateCertificate = false;
+                    element.certificateId = response.message.id;
+                    element.isGeneratingCertificate = false;
+
+                  } else {
+                    element.canGenerateCertificate = true;
+                    element.canViewCertificate = false;
+                    element.certificateId = null;
+                    element.isGeneratingCertificate = false;
+                  }
+
+                  completed.push(element);
+            
+                });    
+            }
+      
+          } else {
+            element.canViewCertificate = true;
+            inprogress.push(element);
+  
+          }
+        } else {
+          element.percentage = 0;
+          element.modules_published = false;
+          inprogress.push(element);
+        }
       });
 
+      // call update side effect update requests only if there is an updates.
+
+      if(enrollmentRequestSideeffectRequests.length){
+        this.updateEnrollmentSideeffect(enrollmentRequestSideeffectRequests) 
+      }
+    
+    });
 
     this.myCourses.completed = completed;
     this.myCourses.inprogress = inprogress;
   }
 
+
+  updateEnrollmentSideeffect(requests: any){
+    forkJoin(requests).subscribe((responses: any) => {
+      responses.forEach((element: any) => {
+        if(!element.status){
+          this.toastr.error(element.message,'Error');
+        }
+      });
+    });
+
+  }
+
+
 }
+
+
+
+     

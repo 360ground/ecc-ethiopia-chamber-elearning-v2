@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Location } from '@angular/common';
@@ -11,6 +11,8 @@ import {
 } from '@angular/material/snack-bar';
 
 import { ToastrService } from 'ngx-toastr';
+import { NgbActiveModal, NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationService } from 'src/shared/confirmation.service';
 
 @Component({
   selector: 'app-course-detail',
@@ -41,6 +43,7 @@ export class CourseDetailComponent implements OnInit {
   paymentId: any;
   public enrolling: boolean = false;
   public paymnetSettlement: any[] = [];
+  public courseQuizzes: any[] = [];
 
   constructor(
     public service: ApiService,
@@ -48,7 +51,9 @@ export class CourseDetailComponent implements OnInit {
     public location: Location,
     public router: Router,
     public _snackBar: MatSnackBar,
-    public toastr: ToastrService
+    public toastr: ToastrService,
+    public confirmation: ConfirmationService
+
   ) {}
  
 
@@ -73,7 +78,7 @@ export class CourseDetailComponent implements OnInit {
 
     this.state = this.location.getState();
     
-    this.state.short = this.state.public_description.substring(0, 200);
+    this.state.short = this.state.public_description !== undefined  ? this.state.public_description?.substring(0, 200) : '';
   
     if(this.service.userData){
       this.checkPaymnetSettlement();
@@ -113,39 +118,51 @@ export class CourseDetailComponent implements OnInit {
 
   startLearning() {
     if (!this.service.userData) {
-      this.router.navigate(['/account/login'], {
-        state: { returnUrl: `/detail/${this.id}`, course: this.state },
-      });
+    this.confirmation.confirm('Confirmation', 'Are you registerd user or new user ?','Existing User','New User','lg')
+    .then((confirmed) => {
+     confirmed ? this.login() : this.signup();
+    })
+    .catch(() => null);
+
     } else {
       if (this.isEnrolledForThisCourse) {
         window.open(`${environment.canvasUrl}/courses/${this.id}`, '_blank');
       } else {
-        this.courseFee = this.state.extraInfo.attributes.courseFee;
+        this.courseFee = this.state.extraInfo?.attributes.courseFee;
 
         if (this.courseFee == 0) {
           // check the login status and call start enrolling
-          if (confirm(`are you sure want to start learning ?`)) {
-            this.enroll();
-          }
+          this.confirmation.confirm('Confirmation', 'Are you sure want to start learning ?','Yes','No','lg')
+          .then((confirmed) => {
+           confirmed ? this.enroll() : null
+          })
+          .catch(() => null);
+
+
         } else {
           // check if the user is payed or not for the course
 
           if(this.paymnetSettlement.length){
-            if (confirm(`are you sure want to start learning ?`)) {
-              this.enroll();
-            }
+            this.confirmation.confirm('Confirmation', 'Are you sure want to start learning ?','Yes','No','lg')
+            .then((confirmed) => {
+            confirmed ? this.enroll() : null
+            })
+            .catch(() => null);
+
           } else {
 
             // start calling the meda pay after confirmation
             let message = `this course is costs you ${this.courseFee} ETB. would you like to continue ?`;
-            
-            if (
-              confirm(message)
-            ) {
+      
+            this.confirmation.confirm('Confirmation', message,'Yes','No','lg')
+            .then((confirmed) => {
+             if(confirmed) {
               this.enrolling = true;
               // start calling mega pay
                 this.createPaymentSideEffect();
-            }
+             }
+            })
+            .catch(() => null);
 
           }
 
@@ -172,23 +189,46 @@ export class CourseDetailComponent implements OnInit {
       .mainCanvas(`selfEnroll/${this.id}`, 'post', data)
       .subscribe((response: any) => {
         if (response.status) {
-          // id, userId, courseId, courseTitle, requiredModules,
-          // completedModules, status, traineeName, traineeSex, traineeLocation, createdAt, updatedAt
+         
           let data = {
             userId: this.service.userData.id,
             courseId: this.id,
             courseTitle: this.state.name,
             requiredModules: 0,
             completedModules: 0,
-            status: 'pending',
+            progress: 0,
             traineeName: this.service.userData.short_name,
             traineeSex: this.service.userData.profile.sex,
-            traineeLocation: `${this.service.userData.profile.city}, ${this.service.userData.profile.city}`
+            traineeLocation: `${this.service.userData.profile.city}, ${this.service.userData.profile.country}`
           }
 
           this.service
           .mainCanvas(`createEnrollmentSideEffect`, 'post', data)
           .subscribe((result: any) => {
+
+            let data = {
+              moduleName: modules.name,
+              assessmentName: item.title,
+              quizId: item.id,
+              courseId: course.courseId,
+              courseTitle: course.courseTitle,
+              userId: this.userData.id,
+              traineeName: this.userData.short_name,
+              traineeSex: this.userData.profile.sex,
+              traineeLocation: `${this.userData.profile.city}, ${this.userData.profile.country}`
+            };
+
+            this.service
+            .mainCanvas(`createAssessmentSideEffect`, 'post', data)
+            .subscribe((result: any) => {
+
+            });
+
+
+
+
+
+
             
             if(!result.status){
               this.toastr.error(result.message, 'Error');
@@ -224,7 +264,7 @@ export class CourseDetailComponent implements OnInit {
     this.service
       .mainCanvas(`checkPaymnetSettlement`, 'post', data)
       .subscribe((response: any) => {
-        if (response.status) {``
+        if (response.status) {
           this.paymnetSettlement = response.message;
           
         } else {
@@ -344,12 +384,14 @@ export class CourseDetailComponent implements OnInit {
 
         if(message.length){
           message[0].attributes = JSON.parse(message[0].attributes);
+          message[0].attributes.courseFee = +message[0].attributes.courseFee;
+
           message[0].features = Object.values(JSON.parse(message[0].features));
 
           this.state.extraInfo = message[0];
           this.service.loadedCourses[this.index].extraInfo = message[0];
-  
-          if(!+message[0].attributes?.courseFee) {
+
+          if(this.state.extraInfo.attributes.courseFee > 0) {
             this.isFree = false;
           }
 
@@ -378,9 +420,13 @@ export class CourseDetailComponent implements OnInit {
   }
 
   login(){
-    this.router.navigateByUrl('/account/login');
+    this.router.navigate(['/account/login'], {
+      state: { returnUrl: `/detail/${this.id}`, course: this.state },
+    });
   }
 
-
+  signup(){
+    this.router.navigateByUrl('/account/signup');
+  }
 
 }

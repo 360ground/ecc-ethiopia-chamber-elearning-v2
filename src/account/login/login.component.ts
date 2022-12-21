@@ -78,7 +78,7 @@ export class LoginComponent implements OnInit {
 
           this.service.userData = response.message;
           this.cookieService.set('UserId', response.message.id,1,'/');
-  
+            
           if('profile' in response.message){
 
             if(response.message.profile.accountType == 'individual'){

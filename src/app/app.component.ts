@@ -28,7 +28,6 @@ export class AppComponent implements OnInit {
     ]).subscribe((result: BreakpointState) => {
       if (result.matches) {
         this.service.largeScreen = false;  
-        console.log(this.service.largeScreen)
       } else {
         this.service.largeScreen = true;  
       }

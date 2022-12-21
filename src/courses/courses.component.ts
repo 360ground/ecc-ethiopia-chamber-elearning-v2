@@ -64,12 +64,7 @@ export class CoursesComponent implements OnInit {
     public service: ApiService,
     public router: Router,
     private modalService: NgbModal,
-    public activeModal: NgbActiveModal,
-    public config: NgbModalConfig
-  ) {
-    config.backdrop = 'static';
-    config.keyboard = false;
-  }
+  ) {}
 
   ngOnInit(): void {
     if (this.service.loadedCourses) {
@@ -132,7 +127,7 @@ export class CoursesComponent implements OnInit {
 	}
 
   openModal() {
-    const modalRef = this.modalService.open(NgbdModalContent);
+    this.modalService.open(NgbdModalContent);
   }
 
   closeModal() {
@@ -169,46 +164,11 @@ export class CoursesComponent implements OnInit {
     }
   }
 
-  setFilterPayment(isChecked: any, value: any) {
-    if (isChecked) {
-      this.selectedPayment.push(value);
-    } else {
-      let index = this.paymentOptions.indexOf((ele: any) => (ele.id = value));
-      this.selectedPayment.splice(index, 1);
-    }
-  }
 
-  setFiltercertificate(isChecked: any, value: any) {
-    if (isChecked) {
-      this.selectedcertificate.push(value);
-    } else {
-      let index = this.certificationOptions.indexOf(
-        (ele: any) => (ele.id = value)
-      );
-      this.selectedcertificate.splice(index, 1);
-    }
-  }
 
-  setFilterCourseLength(isChecked: any, value: any) {
-    if (isChecked) {
-      this.selectedCourseLength.push(value);
-    } else {
-      let index = this.courseLengthOptions.indexOf(
-        (ele: any) => (ele.id = value)
-      );
-      this.selectedCourseLength.splice(index, 1);
-    }
-  }
+  
 
-  getCustomeFieldValue(customFields: any[], name: any) {
-    let result = customFields.find((element) => element.shortname == name);
-
-    if (result) {
-      return result.value;
-    } else {
-      return 'N/A';
-    }
-  }
+ 
 
 }
 
@@ -227,6 +187,7 @@ export class CoursesComponent implements OnInit {
     </div>
   `,
 })
+
 export class NgbdModalContent {
   @Input() name: any;
 

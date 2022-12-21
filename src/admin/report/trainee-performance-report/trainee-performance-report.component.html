@@ -1,0 +1,27 @@
+<div class="row top">
+    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+    <div class="col-sm-12 col-md-10 col-lg-10">
+        <div class="card">
+            
+            <div class="card-body">
+                <p>
+                    <span><h1 class="topHeader">Trainee performance Reports</h1></span>
+                </p>
+                <p><span><hr /></span></p>
+                <label class="mb-4">Filter reports by course</label>
+                <p>
+                <ejs-dropdownlist id='ddlelement' [dataSource]='service.loadedCourses' #course
+                    [allowFiltering]="true" placeholder="-- select course here --"
+                    (change)="filterDate(course)"
+                    [fields]="fields" cssClass="e-outline">
+                </ejs-dropdownlist>
+                </p>
+                <p><span><hr /></span></p>
+
+                <app-grid [data]='data' [columens]='columes'></app-grid>
+            </div>
+        </div>
+    </div>  
+    <div class="col-sm-12 col-md-1 col-lg-1">  
+</div>
+        
