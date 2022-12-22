@@ -16,6 +16,7 @@
                         formControlName="courseId" [allowFiltering]="true" placeholder="-- select course here --"
                         [fields]="fields" cssClass="e-outline" (change)="loadData($event)">
                     </ejs-dropdownlist>
+                    
                     <p *ngIf="formSubmitted && getControls('courseId').hasError('required')" class="error">
                         <small> * required</small>
                     </p>
@@ -59,7 +60,7 @@
                         </div>
                         <div class="mb-4">
                             <label>Category</label>
-                            <ejs-dropdownlist id='ddlelement2' [dataSource]='categories' 
+                            <ejs-dropdownlist id='ddlelement' [dataSource]='categories' 
                                 formControlName="category" [allowFiltering]="true" placeholder="-- select course category"
                                 [fields]="categoryFields" cssClass="e-outline">
                             </ejs-dropdownlist>

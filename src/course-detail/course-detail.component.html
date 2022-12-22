@@ -250,7 +250,7 @@
                                                 </a>
                                             </span>
                                             <span *ngIf="!isEnrolledForThisCourse">
-                                                <p *ngFor="let subActivity of activity?.items; let i = index" class="moduleList" (click)="login();"
+                                                <p *ngFor="let subActivity of activity?.items; let i = index" class="moduleList" (click)="confirm();"
                                                     [title]="service.userData ? isEnrolledForThisCourse ? 'click to open' : 'Not enrolled' : 'login to open'" 
                                                     >
                                                     {{ subActivity?.title }}

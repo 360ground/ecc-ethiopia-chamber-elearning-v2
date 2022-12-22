@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/service/api.service';
+import { ConfirmationService } from 'src/shared/confirmation.service';
 
 @Component({
   selector: 'app-coures-extra-info',
@@ -30,6 +31,7 @@ export class CouresExtraInfoComponent implements OnInit {
     public service: ApiService,
     private router: Router,
     public toastr: ToastrService,
+    public confirmation: ConfirmationService,
     ) { 
       this.formGroup = new FormGroup({
         id: new FormControl(null),
@@ -93,6 +95,7 @@ export class CouresExtraInfoComponent implements OnInit {
           this.getControls('attributes').patchValue(message[0].attributes);
           this.getControls('id').setValue(message[0].id);
           this.getControls('courseId').setValue(message[0].courseId);
+          this.getControls('category').setValue(message[0].category);
 
           message[0].features.forEach((element: any) => {
             this.addFeatures(element);
@@ -172,30 +175,37 @@ export class CouresExtraInfoComponent implements OnInit {
   }
 
   Delete(){
-    if(confirm('are you sure want to delete ?')){
-      this.disableDelete = true;
-      this.showSpinnerDelete = true;
-      this.disable = true;
+    this.confirmation.confirm('Confirmation', `Are you sure want to delete ?`,'Yes','No','lg')
+    .then(async (confirmed) => {
+     if(confirmed) {
+        this.disableDelete = true;
+        this.showSpinnerDelete = true;
+        this.disable = true;
 
-      this.service
-      .mainCanvas(`deleteCourseExtraInfoDetail/${this.getControls('id').value}`, 'delete', {})
-      .subscribe((response: any) => {
-        if (response.status) {
-          this.toastr.success(response.message, 'Success');
-          this.formGroup.reset();
-          this.features = [];
-          this.isEditing = false;
+        this.service
+        .mainCanvas(`deleteCourseExtraInfoDetail/${this.getControls('id').value}`, 'delete', {})
+        .subscribe((response: any) => {
+          if (response.status) {
+            this.toastr.success(response.message, 'Success');
+            this.formGroup.reset();
+            this.features = [];
+            this.isEditing = false;
 
-        } else {
-          this.toastr.error(response.message, 'Error');
-        }
+          } else {
+            this.toastr.error(response.message, 'Error');
+          }
 
-        this.disableDelete = false;
-        this.showSpinnerDelete = false;
-        this.disable = false;
+          this.disableDelete = false;
+          this.showSpinnerDelete = false;
+          this.disable = false;
 
-      });
-    }
+        });
+
+     }
+
+    })
+    .catch(() => null);
   }
+
 
 }

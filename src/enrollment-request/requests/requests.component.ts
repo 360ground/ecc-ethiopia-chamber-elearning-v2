@@ -7,6 +7,7 @@ import { ApiService } from 'src/service/api.service';
 
 import { Observable, forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { ConfirmationService } from 'src/shared/confirmation.service';
 
 @Component({
   selector: 'app-requests',
@@ -33,7 +34,8 @@ export class RequestsComponent implements OnInit {
   constructor(
     public service: ApiService,
     private router: Router,
-    public toastr: ToastrService
+    public toastr: ToastrService,
+    public confirmation: ConfirmationService
   ) { }
 
   ngOnInit(): void {
@@ -74,7 +76,9 @@ export class RequestsComponent implements OnInit {
   }
   
   updateRequest(status: any){
-    if(confirm(`are you sure want to ${status} this request ?`)){
+    this.confirmation.confirm('Confirmation', `Are you sure want to ${status} this request ?`,'Yes','No','lg')
+    .then(async (confirmed) => {
+     if(confirmed) {
       this.disable = true;
 
       status == 'approve' ? this.showApproveSpinner = true : this.showDeclineSpinner = true;
@@ -104,8 +108,10 @@ export class RequestsComponent implements OnInit {
           }
       });
 
-    }
+     }
 
+    })
+    .catch(() => null);
   }
 
   openAttachment(attachment: any){
@@ -124,8 +130,9 @@ export class RequestsComponent implements OnInit {
       this.toastr.error('the request must be approved before enrolling the trainee`s','Error');
 
     } else {
-
-      if(confirm(`are you sure want to enroll ${this.requestDetail.students.length} trainee's  ?`)){
+      this.confirmation.confirm('Confirmation', `Are you sure want to enroll ${this.requestDetail.students.length} trainee's  ?`,'Yes','No','lg')
+      .then(async (confirmed) => {
+      if(confirmed) {
         this.showEnrollSpinner = true;
   
         let data: any = {
@@ -222,6 +229,8 @@ export class RequestsComponent implements OnInit {
 
       }
 
+      })
+      .catch(() => null);
     }
 
   }

@@ -115,6 +115,7 @@ export class ApiService {
 
   getTraineeAssessments(requests: any, courses: any[]){
     let quizzes: any[] = [];
+    let QuizzesSubmissionRequests: any[] = [];
 
     forkJoin(requests).subscribe(async(responses: any) => {
       let index: number = 0;
@@ -138,11 +139,14 @@ export class ApiService {
                   userId: this.userData.id,
                   traineeName: this.userData.short_name,
                   traineeSex: this.userData.profile.sex,
-                  traineeLocation: `${this.userData.profile.city}, ${this.userData.profile.country}`
+                  traineeLocation: `${this.userData.profile.city}, ${this.userData.profile.country}`,
+                  institution: this.userData.profile.organizationName
                  }
                 );
-              }
 
+                QuizzesSubmissionRequests.push(this.mainCanvas(`getQuizSubmission/${course.courseId}/${item.id}`, 'get', {}));
+
+              }
             }
           });
 
@@ -152,7 +156,29 @@ export class ApiService {
 
       });
 
-      console.log(quizzes)
+      this.getQuizzesSubmission(QuizzesSubmissionRequests)
+    });
+
+  }
+
+  getQuizzesSubmission(requests: any){
+    forkJoin(requests).subscribe((responses: any) => {
+      responses.forEach((element: any, index: any) => {
+        if(element.status){
+
+          element.message.forEach((datas: any) => {
+            let data = datas.find((da: any) => { return da.user_id == this.userData.id });
+            console.log(data); 
+
+          });  
+          
+        } else {
+          this.toastr.error(element.message,'Error');
+          
+        }
+
+      });
+
     });
 
   }

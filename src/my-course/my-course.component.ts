@@ -9,6 +9,7 @@ import {
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
 import { ToastrService } from 'ngx-toastr';
+import { ConfirmationService } from 'src/shared/confirmation.service';
 
 @Component({
   selector: 'app-my-course',
@@ -32,7 +33,8 @@ export class MyCourseComponent implements OnInit {
     public service: ApiService,
     public router: Router,
     private _snackBar: MatSnackBar,
-    public toastr: ToastrService
+    public toastr: ToastrService,
+    public confirmation: ConfirmationService,
 
   ) {}
 
@@ -51,31 +53,35 @@ export class MyCourseComponent implements OnInit {
   }
 
   removeCourse(course: any, index: any, type: any) {
-    if (
-      confirm(`are you sure want to remove ${course.name} from your learning plan ?`)
-    ) {
+    this.confirmation.confirm('Confirmation', `Are you sure want to remove ${course.name} from your learning plan ?`,'Yes','No','lg')
+    .then(async (confirmed) => {
+     if(confirmed) {
       this.service
-        .mainCanvas(
-          `selfUnEnroll/${course.id}/${course.enrollment_id}`,
-          'delete',
-          {}
-        )
-        .subscribe((response: any) => {
-          if (response.status) {
-            this.toastr.success(response.message, 'Success');
+      .mainCanvas(
+        `selfUnEnroll/${course.id}/${course.enrollment_id}`,
+        'delete',
+        {}
+      )
+      .subscribe((response: any) => {
+        if (response.status) {
+          this.toastr.success(response.message, 'Success');
 
 
-            if (type == 'inprogress') {
-              this.service.myCourses.inprogress.splice(index, 1);
-            } else {
-              this.service.myCourses.completed.splice(index, 1);
-            }
+          if (type == 'inprogress') {
+            this.service.myCourses.inprogress.splice(index, 1);
           } else {
-            this.toastr.error(response.message, 'Success');
-
+            this.service.myCourses.completed.splice(index, 1);
           }
-        });
-    }
+        } else {
+          this.toastr.error(response.message, 'Success');
+
+        }
+      });
+
+     }
+
+    })
+    .catch(() => null);
   }
 
 

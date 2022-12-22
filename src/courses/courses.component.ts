@@ -92,10 +92,7 @@ export class CoursesComponent implements OnInit {
           }); 
 
           this.loadExtraInfo(request);
-          
-          this.service.loadedCourses = this.courses;
-          this.isLoading = false;
-          this.closeModal();
+      
         });
     }
 
@@ -111,12 +108,32 @@ export class CoursesComponent implements OnInit {
   loadExtraInfo(request: any){
     forkJoin(request).subscribe(async(responses: any) => {
       responses.forEach((element: any) => {
-        let index = this.courses.findIndex((course: any) => {
-          course.id = element.courseId
-        });
 
-        this.courses[index].extraInfo = element;
+        if(element.status){
+
+          let message = element.message[0];
+
+          if(message){
+            message.attributes = JSON.parse(message.attributes);
+            message.attributes.courseFee = +message.attributes.courseFee;
+            message.features = Object.values(JSON.parse(message.features));
+          }
+
+
+          let index = this.courses.findIndex((course: any) => {
+            return course.id == +message.courseId
+          });
+
+          this.courses[index].extraInfo = message;
+
+        }
       });
+
+      this.service.loadedCourses = this.courses;
+
+      this.isLoading = false;
+      this.closeModal();
+
     });
   }
 

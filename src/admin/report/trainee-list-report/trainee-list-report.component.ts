@@ -14,9 +14,14 @@ export class TraineeListReportComponent implements OnInit {
   public data: any;
   public isFiltering: boolean = false;
   public fields: any = { text: 'name',value: 'id' };
+  public fieldsQuiz: any = { text: 'title',value: 'id' };
+
   public formGroup: FormGroup;
   public formSubmitted = false;
   public disable: boolean = false;
+
+  public quizzes:any[] = [];
+
 
   constructor(
     public service: ApiService,
@@ -25,6 +30,8 @@ export class TraineeListReportComponent implements OnInit {
   ) { 
     this.formGroup = new FormGroup({
       courseId: new FormControl(null, Validators.required),
+      quizId: new FormControl(null, Validators.required),
+
       dateRange: new FormControl(null)
     })
   }
@@ -34,10 +41,7 @@ export class TraineeListReportComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.columes = [
-      {
-        field: 'courseTitle', headerText: 'Course Title', width: '120'
-      },
+    this.columes = [ 
       {
         field: 'traineeName', headerText: 'Trainee Full name', width: '120'
       },
@@ -45,12 +49,35 @@ export class TraineeListReportComponent implements OnInit {
         field: 'traineeSex', headerText: 'Sex', width: '40'
       },    
       {
-        field: 'createdAt', headerText: 'Start Date', width: '90'
+        field: 'institution', headerText: 'Institution', width: '40'
       },
       {
-        field: 'progress', headerText: 'Current Progress', width: '60'
-      }
+        field: 'moduleName', headerText: 'Module', width: '90'
+      },  
+      {
+        field: 'score', headerText: 'Result', width: '40'
+      },
     ]
+  }
+
+  loadQuizzes(event: any){
+    this.quizzes = [];
+    this.getControls('quizId').disable();
+
+    this.service
+    .mainCanvas(`getQuizzes/${event.value}`, 'get', {})
+    .subscribe((response: any) => {
+      if (response.status) {
+        this.quizzes = response.message;
+
+      } else {
+        this.toastr.error(response.message, 'Error');
+
+      }
+      this.disable = false;
+      this.getControls('quizId').enable();
+
+    });
   }
 
   filterDate(){
@@ -80,7 +107,9 @@ export class TraineeListReportComponent implements OnInit {
             this.toastr.error(response.message, 'Error');
   
           }
-      this.disable = false;
+          
+          this.disable = false;
+        
         });
     }
 

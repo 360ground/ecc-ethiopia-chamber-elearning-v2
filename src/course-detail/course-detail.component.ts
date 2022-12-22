@@ -101,6 +101,9 @@ export class CourseDetailComponent implements OnInit {
       this.getDetailModules();
     }
     if ('extraInfo' in this.state) {
+      if(this.state.extraInfo.attributes.courseFee > 0) {
+        this.isFree = false;
+      }
     } else {
       this.getExtraInfo();
     }
@@ -206,30 +209,6 @@ export class CourseDetailComponent implements OnInit {
           .mainCanvas(`createEnrollmentSideEffect`, 'post', data)
           .subscribe((result: any) => {
 
-            // let data = {
-            //   moduleName: modules.name,
-            //   assessmentName: item.title,
-            //   quizId: item.id,
-            //   courseId: course.courseId,
-            //   courseTitle: course.courseTitle,
-            //   userId: this.userData.id,
-            //   traineeName: this.userData.short_name,
-            //   traineeSex: this.userData.profile.sex,
-            //   traineeLocation: `${this.userData.profile.city}, ${this.userData.profile.country}`
-            // };
-
-            this.service
-            .mainCanvas(`createAssessmentSideEffect`, 'post', data)
-            .subscribe((result: any) => {
-
-            });
-
-
-
-
-
-
-            
             if(!result.status){
               this.toastr.error(result.message, 'Error');
             }
@@ -252,6 +231,37 @@ export class CourseDetailComponent implements OnInit {
 
         this.enrolling = false;
       });
+  }
+
+
+  createAssessmentSideeffect(){
+    let quizzes: any[] = [];
+        
+    this.state.quizzes.forEach((element: any) => {
+      let ele: any = element;
+
+      ele.userId = this.service.userData.id;
+
+      ele.traineeName = this.service.userData.short_name;
+      ele.traineeSex = this.service.userData.profile.sex;
+      ele.traineeLocation = `${this.service.userData.profile.city}, ${this.service.userData.profile.country}`;
+      ele.institution = this.service.userData.profile.organizationName
+
+      quizzes.push(ele);
+
+    });
+
+    let payload = { data: quizzes  };
+
+    console.log(payload);
+
+    // this.service.mainCanvas(`createAssessmentSideeffect`, 'post', payload)
+    // .subscribe((response: any) => {
+    //   if (!response.status) {
+    //     this.toastr.error(response.message, 'Error');
+    //   } 
+    // });
+
   }
 
   checkPaymnetSettlement() {
@@ -366,12 +376,41 @@ export class CourseDetailComponent implements OnInit {
   getDetailModules() {
     this.isModulesLoading = true;
     this.service
-      .mainCanvas(`getAllModules/${this.id}`, 'get', null)
-      .subscribe((response: any) => {
-        this.state.activities = response;
-        this.service.loadedCourses[this.index].activities = response;
-        this.isModulesLoading = false;
+    .mainCanvas(`getAllModules/${this.id}`, 'get', null)
+    .subscribe((response: any) => {
+      this.state.activities = response;
+      this.service.loadedCourses[this.index].activities = response;
+
+      // extracting quizzes
+
+      let quizzes: any[] = [];
+
+      response.forEach((modules: any) => {
+        modules.items.forEach((item:any) => {
+          if(item.type == 'Quiz'){  
+            let data =  {
+              moduleName: modules.name,
+              assessmentName: item.title,
+              quizId: item.id,
+              courseId: this.id,
+              courseTitle: this.state.name,
+              };
+
+            quizzes.push(data);
+          }
+        });
       });
+
+      this.state.quizzes = quizzes;
+      this.service.loadedCourses[this.index].quizzes = quizzes;
+
+      this.isModulesLoading = false;
+
+      console.log(this.state.quizzes);
+
+    });
+
+
   }
 
   getExtraInfo() {
@@ -417,6 +456,14 @@ export class CourseDetailComponent implements OnInit {
         window.clearInterval(slideVar);
       }
     }, 50);
+  }
+
+  confirm(){
+    this.confirmation.confirm('Confirmation', 'Are you registerd user or new user ?','Existing User','New User','lg')
+    .then((confirmed) => {
+     confirmed ? this.login() : this.signup();
+    })
+    .catch(() => null);
   }
 
   login(){

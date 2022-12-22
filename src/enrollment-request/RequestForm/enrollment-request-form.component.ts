@@ -5,6 +5,7 @@ import { ApiService } from 'src/service/api.service';
 import { ToastrService } from 'ngx-toastr';
 import { Location } from '@angular/common';
 import { environment } from 'src/environments/environment';
+import { ConfirmationService } from 'src/shared/confirmation.service';
 
 @Component({
   selector: 'app-enrollment-request-form',
@@ -39,6 +40,7 @@ export class EnrollmentRequestFormComponent implements OnInit {
     private router: Router,
     public toastr: ToastrService,
     public location: Location,
+    public confirmation: ConfirmationService,
 
   ) {
     this.formGroup = new FormGroup({

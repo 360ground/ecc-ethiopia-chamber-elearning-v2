@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/service/api.service';
+import { ConfirmationService } from 'src/shared/confirmation.service';
 
 @Component({
   selector: 'app-my-request',
@@ -18,6 +19,7 @@ export class MyRequestComponent implements OnInit {
     public service: ApiService,
     private router: Router,
     public toastr: ToastrService,
+    public confirmation: ConfirmationService,
     ) { }
 
   ngOnInit(): void {
@@ -57,9 +59,10 @@ export class MyRequestComponent implements OnInit {
       this.toastr.error(`You can't delete while the request not in the pending state`, 'Error');
 
     } else {
-      if(confirm(`are you sure want to delete this request ?`)){
-  
-         let payload = {id: request.id, url: `uploads/requests/${request.id}`};
+      this.confirmation.confirm('Confirmation', `Are you sure want to delete this request ?`,'Yes','No','lg')
+      .then(async (confirmed) => {
+       if(confirmed) {
+        let payload = {id: request.id, url: `uploads/requests/${request.id}`};
   
         this.service
         .mainCanvas(`deleteEnrollmentRequest/${request.id}`, 'post', payload)
@@ -73,9 +76,11 @@ export class MyRequestComponent implements OnInit {
           }
     
         });
-  
-      }
-
+    
+       }
+    
+      })
+      .catch(() => null);
     }
   }
 
