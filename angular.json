@@ -31,7 +31,10 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/font-awesome/css/font-awesome.css",
               "./src/assets/customCSS/bootstrap5.css",
-              "./src/assets/customCSS/bootstrap5(WithGrid).css"
+              "./src/assets/customCSS/bootstrap5(WithGrid).css",             
+               "./src/assets/customCSS/bootstrap5(accordion).css"
+
+
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.min.js",

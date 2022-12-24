@@ -1,0 +1,28 @@
+.card {
+    /* margin-top: 100px !important; */
+    bottom: 0 !important;
+}
+
+.card-body {
+    background-color: #305ABD !important;
+}
+
+.list-group-item {
+    background-color: #305ABD !important;
+    color: #fff !important;
+    border-style: none !important;
+}
+
+.fa {
+    font-size: 15px !important;
+    margin-right: 10px !important;
+}
+
+.white {
+    color: #FFFFFF !important;
+    font-weight: 500 !important;
+  }
+
+  .white:hover {
+    font-weight:600 !important;
+  }

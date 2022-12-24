@@ -1,16 +1,19 @@
-.container {
-    margin-top: 25px !important;
+.card {
+    margin-top: 50px !important;
     text-align: center;
     background: #fff;
-    box-shadow: 0 2px 15px 0px rgb(0 0 0 / 15%);
-    padding: 50px;
+    /* box-shadow: 0 2px 15px 0px rgb(0 0 0 / 15%); */
+    padding: 20px;
+    /* margin-top: 150px !important; */
+    margin-bottom: 25px !important;
 }
 
 .heading {
     color: #06357a !important;
-    font-size: 35px !important;
+    font-size: 24px;
     text-align: left !important;
     font-weight: bold !important;
+    line-height: 43px;
 }
 
 .body {
@@ -21,4 +24,16 @@
     margin-top: 25px !important;
     line-height: 27px !important;
 
+}
+
+
+@media only screen and (max-width: 760px) {
+    .heading {
+        font-size: 19px !important;
+        line-height: 29px !important;
+    }
+    
+    .card {
+        margin-top: 88px !important;
+    }
 }

@@ -16,7 +16,10 @@
 
 .card{
     border-radius: 0px !important;
+    margin-top: 86px; 
+    padding: 25px;
 }
+
 
 .icons1 {
     margin-right: 8px;

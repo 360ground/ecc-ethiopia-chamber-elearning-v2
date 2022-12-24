@@ -5,13 +5,28 @@
         <div class="col-lg-10 col-md-10 col-sm-12">
             <div class="card">
                 <div class="card-body">
-                    <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
-                        <ngb-panel *ngFor="let q of faq; let i = index" [title]="q.title">
+                    <!-- <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+                        <ngb-panel *ngFor="let q of faq; let i = index" [title]="q.title" class="lalala">
                             <ng-template ngbPanelContent>
                                 {{ q.body }}
                             </ng-template>
                         </ngb-panel>
-                    </ngb-accordion>
+                    </ngb-accordion> -->
+
+                    <ejs-accordion>
+                        <e-accordionitems>
+                          <e-accordionitem [expanded]='i == 0' *ngFor="let q of faq; let i = index">
+                            <ng-template #header>
+                              <div>{{ q.title }}</div>
+                            </ng-template>
+                            <ng-template #content>
+                              <div>{{ q.body }}</div>
+                            </ng-template>
+                          </e-accordionitem>
+                         
+                        </e-accordionitems>
+                    </ejs-accordion>
+
                 </div>
             </div>
         </div>

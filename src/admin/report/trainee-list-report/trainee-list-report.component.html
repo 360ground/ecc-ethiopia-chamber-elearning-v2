@@ -30,6 +30,7 @@
                                 formControlName="quizId"    
                                 [allowFiltering]="true"
                                 [fields]="fieldsQuiz" cssClass="e-outline"
+                                (change)="setModuleName($event)"
                                 >
                             </ejs-dropdownlist>
                             <p *ngIf="formSubmitted && getControls('quizId').hasError('required')" class="error">

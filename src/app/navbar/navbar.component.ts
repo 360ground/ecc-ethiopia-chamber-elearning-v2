@@ -85,7 +85,6 @@ export class NavbarComponent implements OnInit {
   }
 
   toggle(){
-    console.log(this.drawer)
     this.drawer.toggle();
   }
 

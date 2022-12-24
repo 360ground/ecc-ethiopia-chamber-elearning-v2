@@ -1,10 +1,10 @@
 
 <nav *ngIf="!service.isAuthenticating && !service.isLoggingout" id="wider"
  class="navbar navbar-expand-lg bg-light fixed-top header-text" 
-style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
+style="box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
 <div class="container-fluid">
   <a class="navbar-brand white" [routerLink]="['/']">
-    <img style="width: 218px !important;"
+    <img 
       [src]="logoUrl" alt="ecc logo" />
   </a>
 
@@ -149,14 +149,14 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
 
       <span *ngIf="!service.userData">
         <a class="nav-link login"
-        href="{{variables.canvasUrl}}/login/oauth2/auth?client_id={{variables.canvasClient_id}}&response_type=code&redirect_uri={{variables.redirectUrlAfterLoginIncanvas}}" aria-current="page">Login</a>
+        href="{{variables.canvasUrl}}/login/oauth2/auth?client_id={{variables.canvasClient_id}}&response_type=code&redirect_uri={{variables.redirectUrlAfterLoginIncanvas}}" aria-current="page">Sign in</a>
         <!-- [routerLink]="['/account/login']" -->
       </span>
     </span>
 
     <span class="navbar-text" style="margin-right: 32px;">
       <span *ngIf="!service.userData">
-        <a class="nav-link btn btn-primary signupBtn" [routerLink]="['/account/signup']" aria-current="page">Sign up</a>
+        <a class="nav-link btn btn-primary signupBtn" [routerLink]="['/account/signup']" aria-current="page">Register</a>
       </span>
     </span>
   </div>    
@@ -173,9 +173,7 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
       <div class="customNavbarInner">
         <span class="ml-4">
           <a class="navbar-brand white" [routerLink]="['/courses']">
-            <img style="width: 218px !important;
-            margin-top: 2px;
-            margin-left: 15px;"
+            <img class="logoImage"
               [src]="logoUrl" alt="ecc logo" />
           </a>
         </span>
@@ -277,14 +275,12 @@ style="background: #fff !important; box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
   </mat-drawer>
   <mat-drawer-content>
     <div class="customNavbar">
-      <span style="color: gray !important; font-size: 21px !important; margin-left: 10px !important;">
+      <span style="color: #fff !important; font-size: 21px !important; margin-left: 10px !important;">
         <i mat-raised-button (click)="drawer.toggle()" class="fa fa-bars" aria-hidden="true"></i>
       </span>
       <span class="ml-4">
         <a class="navbar-brand white" [routerLink]="['/']">
-          <img style="width: 218px !important;
-          margin-top: 2px;
-          margin-left: 15px;"
+          <img class="logoImage"
             [src]="logoUrl" alt="ecc logo" />
         </a>
       </span>

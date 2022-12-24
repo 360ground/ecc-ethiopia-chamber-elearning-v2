@@ -1,0 +1,125 @@
+<div class="card" *ngIf="!service.isAuthenticating && !service.isLoggingout">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12 col-md-2 col-lg-2"></div>
+            <div class="col-sm-12 col-md-10 col-lg-10">
+                <div class="row">
+                    <div class="col-sm-12 col-md-2 col-lg-2">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                            </li>    
+                            <li class="list-group-item">
+                                <a class="nav-link white" [routerLink]="['/about-us']" 
+                                (click)="navigate(false, '/about-us')"  
+                                [ngClass]="'/about-us' == service.currentUrl ? 'bottomBorder' : ''"
+                                aria-current="page">About us</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a class="nav-link white" [routerLink]="['/contact-us']" 
+                                (click)="navigate(false, '/contact-us')"  
+                                [ngClass]="'/contact-us' == service.currentUrl ? 'bottomBorder' : ''"
+                                aria-current="page">Contact Us</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a class="nav-link white" [routerLink]="['/faq']" 
+                                (click)="navigate(false, '/faq')"  
+                                [ngClass]="'/faq' == service.currentUrl ? 'bottomBorder' : ''"
+                                aria-current="page">Help & Support</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a class="nav-link white" [routerLink]="['/courses']" 
+                                (click)="navigate(false, '/courses')"  
+                                [ngClass]="'/courses' == service.currentUrl ? 'bottomBorder' : ''"
+                                aria-current="page">Courses</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <b>Ethiopian Chamber Academy (ECA)</b>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="mr-4">
+                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                </span>
+                                <span>
+                                    Mexico Square, ECCSA Building, 7th Floor, Rm. No. 717/718
+                                    Addis Ababa, Ethiopia
+                                </span>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="mr-4">
+                                    <i class="fa fa-phone" aria-hidden="true"></i>
+                                </span>
+                                <span>
+                                    +251115514005 or
+                                    +251911810741
+                                </span>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="mr-4">
+                                    <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                </span>
+                                <span>
+                                    bisratluaanda@gmail.com
+                                </span>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="mr-4">
+                                    <i class="fa fa-globe" aria-hidden="true"></i>
+                                </span>
+                                <span>
+                                    http://academy.ethiopianchamber.com/
+        
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-12 col-md-4 col-lg-4">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                            </li>
+                            <li class="list-group-item">
+                                <span class="mr-4">
+                                    <i class="fa fa-facebook-square" aria-hidden="true"></i>
+                                </span>
+                                <span>
+                                    We will provide as soon as possible
+                                </span>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="mr-4">
+                                    <i class="fa fa-twitter-square" aria-hidden="true"></i>
+                                </span>
+                                <span>
+                                    We will provide as soon as possible
+                                </span>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="mr-4">
+                                    <i class="fa fa-youtube-square" aria-hidden="true"></i>
+                                </span>
+                                <span>
+                                    We will provide as soon as possible
+                                </span>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="mr-4">
+                                    <i class="fa fa-linkedin-square" aria-hidden="true"></i>
+                                </span>
+                                <span>
+                                    We will provide as soon as possible
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-2 col-lg-2"></div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -28,6 +28,7 @@
     "@syncfusion/ej2-angular-grids": "^20.3.57",
     "@syncfusion/ej2-angular-inputs": "^20.3.57",
     "@syncfusion/ej2-angular-layouts": "^20.3.57",
+    "@syncfusion/ej2-angular-navigations": "^20.3.58",
     "@syncfusion/ej2-angular-progressbar": "^20.3.57",
     "@types/jquery": "^3.5.14",
     "bootstrap": "^5.2.0",

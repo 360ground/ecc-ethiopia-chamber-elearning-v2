@@ -378,39 +378,39 @@ export class CourseDetailComponent implements OnInit {
     this.service
     .mainCanvas(`getAllModules/${this.id}`, 'get', null)
     .subscribe((response: any) => {
-      this.state.activities = response;
-      this.service.loadedCourses[this.index].activities = response;
-
-      // extracting quizzes
-
-      let quizzes: any[] = [];
-
-      response.forEach((modules: any) => {
-        modules.items.forEach((item:any) => {
-          if(item.type == 'Quiz'){  
-            let data =  {
-              moduleName: modules.name,
-              assessmentName: item.title,
-              quizId: item.id,
-              courseId: this.id,
-              courseTitle: this.state.name,
-              };
-
-            quizzes.push(data);
-          }
+      if(response.status){
+        this.state.activities = response.message;
+        this.service.loadedCourses[this.index].activities = response.message;
+  
+        // extracting quizzes
+  
+        let quizzes: any[] = [];
+  
+        response.message.forEach((modules: any) => {
+          modules.items.forEach((item:any) => {
+            if(item.type == 'Quiz'){  
+              let data =  {
+                moduleName: modules.name,
+                assessmentName: item.title,
+                quizId: item.id,
+                courseId: this.id,
+                courseTitle: this.state.name,
+                };
+  
+              quizzes.push(data);
+            }
+          });
         });
-      });
+  
+        this.state.quizzes = quizzes;
+        this.service.loadedCourses[this.index].quizzes = quizzes;
 
-      this.state.quizzes = quizzes;
-      this.service.loadedCourses[this.index].quizzes = quizzes;
+      } else {
+        this.toastr.error(response.message, 'Error');
+      }
 
       this.isModulesLoading = false;
-
-      console.log(this.state.quizzes);
-
     });
-
-
   }
 
   getExtraInfo() {

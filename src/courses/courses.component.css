@@ -100,7 +100,8 @@
     padding-bottom: 0;
 
     font-size: 41px !important;
-    color: #3c4043 !important;
+    color: #305ABD !important;
+    text-align: center !important;
   }
 
   .header_subtitle {
@@ -154,4 +155,8 @@
     z-index: inherit !important; 
   }
 
+
+  .form-control-lg {
+    border-radius: 0px !important;
+  }
 

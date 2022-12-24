@@ -18,9 +18,11 @@ import { FaqComponent } from './faq/faq.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { NavbarComponent } from './navbar/navbar.component';
+import { FooterComponent } from './footer/footer.component';
+import { AccordionModule } from '@syncfusion/ej2-angular-navigations';
 
 @NgModule({
-  declarations: [AppComponent, AboutUsComponent, ContactUsComponent, FaqComponent, NavbarComponent],
+  declarations: [AppComponent, AboutUsComponent, ContactUsComponent, FaqComponent, NavbarComponent, FooterComponent],
   imports: [
     BrowserModule,
     CommonModule,
@@ -32,6 +34,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
+    AccordionModule,
     ToastrModule.forRoot()
   ],
   providers: [

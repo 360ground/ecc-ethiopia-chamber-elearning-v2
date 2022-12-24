@@ -105,7 +105,7 @@ export class ApiService {
               });
             });
 
-            await this.getTraineeAssessments(moduleRequests, sideEffectCourses);
+            // await this.getTraineeAssessments(moduleRequests, sideEffectCourses);
             await this.separate(extractedCourses, userId);
 
           });
