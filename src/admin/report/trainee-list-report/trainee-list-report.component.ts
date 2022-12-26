@@ -23,6 +23,7 @@ export class TraineeListReportComponent implements OnInit {
   public quizzes:any[] = [];
 
   public moduleName: any = null;
+  public courseTitle: any = null;
 
   constructor(
     public service: ApiService,
@@ -64,6 +65,7 @@ export class TraineeListReportComponent implements OnInit {
   loadQuizzes(event: any){
     this.quizzes = [];
     this.getControls('quizId').disable();
+    this.courseTitle = event.itemData.name;
 
     this.service
     .mainCanvas(`getAllModules/${event.value}`, 'get', {})
@@ -107,12 +109,8 @@ export class TraineeListReportComponent implements OnInit {
     } else {
       
       let payload = this.formGroup.value;
-      payload.moduleName = this.moduleName;
 
-      if(payload.dateRange){
-        payload.dateRange[0]  = new Date(payload.dateRange[0] + 'UTC'); 
-        payload.dateRange[1]  = new Date(payload.dateRange[1] + 'UTC');
-      }
+      payload.moduleName = this.moduleName;
 
       this.disable = true;
       this.isFiltering = true;
@@ -121,18 +119,73 @@ export class TraineeListReportComponent implements OnInit {
         .mainCanvas(`getAllTraineeListReports`, 'post', payload)
         .subscribe((response: any) => {
           if (response.status) {
-            this.data = response.message;
+
+            let users = response.message[0].users;
+            let submissions = response.message[0].quiz_submissions;
+
+
+            let data: any[] = [];            
+
+              if(payload.dateRange) {
+
+                payload.dateRange[0]  = new Date(payload.dateRange[0] + 'UTC'); 
+                payload.dateRange[1]  = new Date(payload.dateRange[1] + 'UTC');
+
+                let result = submissions.filter(function (ele: any) {
+  
+                  let finished_at = new Date(ele.finished_at);
+
+                  if(payload.dateRange[0] == payload.dateRange[1]){
+                    return (finished_at == payload.dateRange[0]);
+
+                  } else {
+                    return (finished_at >= payload.dateRange[0]) && (finished_at <= payload.dateRange[1]);
+
+                  }
+
+  
+                })
+
+                submissions = result;
+
+              }
+
+            users.forEach((element: any) => {
+
+              let result = submissions.find((ele: any) => {
+                return ele.user_id == element.id;
+              })
+
+              if(result){
+                data.push(
+                  {
+                    courseTitle: this.courseTitle,
+                    traineeName: element.sortable_name,
+                    traineeSex: element.pronouns ?? ' -- Not Specified by Trainee -- ',
+                    moduleName: this.moduleName,
+                    score: result.score,
+                    date: result.finished_at,
+                    institution: result.sis_user_id ?? '-- not Specified --'
+                    
+                  }
+                )
+              }
+            });
+
+            this.data = data;
+
+            console.log(this.data)
 
             this.disable = false;
+            this.isFiltering = false;
 
           } else {
             this.toastr.error(response.message, 'Error');
             this.disable = false;
+            this.isFiltering = false;
   
           }
-          
-          this.isFiltering = false;
-        
+                  
         });
     }
 

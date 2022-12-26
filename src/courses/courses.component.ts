@@ -240,8 +240,11 @@ export class CoursesComponent implements OnInit {
         .mainCanvas(`searchCourses`, 'post', payload)
         .subscribe((response: any) => {
           if (response.status) {
+            
             if(!response.message.length){
               this.searcNotFoundhMessage = 'No record found.';
+              this.coursesBackup = [...this.courses];
+              this.courses = response.message;
 
             } else {
               this.coursesBackup = [...this.courses];
@@ -264,6 +267,8 @@ export class CoursesComponent implements OnInit {
 
             }
 
+            this.showFilter = true;
+
           } else {
             this.toastr.error(response.message, 'Error');
             
@@ -283,6 +288,8 @@ export class CoursesComponent implements OnInit {
     this.courses = this.coursesBackup;
     this.showFilter = false;
     this.formSubmitted = false;
+    this.searcNotFoundhMessage = null;
+    this.formGroup.reset();
   }
 
 

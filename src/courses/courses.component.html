@@ -31,7 +31,7 @@
 
 
 <div class="container" style="margin-top: 112px !important;">
-    <div *ngIf="courses.length" style="margin-top: 64px !important;">
+    <div style="margin-top: 64px !important;">
         <div class="row">
             <div class="col-sm-12 col-md-1 col-lg-1">
                 <div class="row" *ngIf="false">
@@ -108,12 +108,13 @@
                                     <p *ngIf="formSubmitted && getControls('courseTitle').hasError('required')" class="error">
                                         <small> * required</small>
                                     </p>
-                                    <p *ngIf="searcNotFoundhMessage">
+                                    <!-- <p *ngIf="searcNotFoundhMessage">
                                         <span>
                                             {{ searcNotFoundhMessage }}
                                         </span>
-                                    </p>
+                                    </p> -->
                                 </div>
+
                                 <div class="col-sm-12 col-md-2 col-lg-2">
                                     <button class="btn btn-primary btn-lg btn-block"  *ngIf="!showFilter" 
                                     (click)="searchCourses()" [disabled]="disable">
@@ -148,9 +149,8 @@
 
 
 
-                <p class="course-counter mb-4 wider">Results: {{ courses.length }} courses
-                </p>
-                <div class="row">
+                <p class="course-counter mb-4 wider"  *ngIf="courses.length">Results: {{ courses.length }} courses </p>
+                <div class="row" *ngIf="courses.length">
                     <div class="col-sm-12 col-md-4 col-lg-4 mb-4 mr-2 course" *ngFor="let course of courses; let i = index">
                         <div class="card">
                             <img class="card-img-top" style="height: 220px !important;"
@@ -195,7 +195,7 @@
         <h2 style="color: gray;
         font-weight: lighter;
         text-align: center;
-        margin-top: 12px;
-    ">-- no courses available --</h2>
+        margin-top: -40px;
+    ">{{ searcNotFoundhMessage ? '-- No courses found --' : '-- No courses available --' }}</h2>
     </div>
 </div>

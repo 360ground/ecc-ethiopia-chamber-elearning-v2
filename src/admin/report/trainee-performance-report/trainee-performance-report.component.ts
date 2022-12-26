@@ -97,15 +97,17 @@ export class TraineePerformanceReportComponent implements OnInit {
                   }
                 )
               });
-    
+  
               this.data = data;
+              
+              this.isFiltering = false;
 
             } else {
               this.toastr.error(lowerResponse.message, 'Error');
+              this.isFiltering = false;
 
             }
 
-            this.isFiltering = false;
 
           });  
 
