@@ -253,8 +253,6 @@ export class CourseDetailComponent implements OnInit {
 
     let payload = { data: quizzes  };
 
-    console.log(payload);
-
     // this.service.mainCanvas(`createAssessmentSideeffect`, 'post', payload)
     // .subscribe((response: any) => {
     //   if (!response.status) {

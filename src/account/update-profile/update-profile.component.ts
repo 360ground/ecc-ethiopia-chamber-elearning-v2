@@ -7,6 +7,8 @@ import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/service/api.service';
 import { CustomValidators } from '../signup/password-validators';
 
+import { Location } from '@angular/common';
+
 @Component({
   selector: 'app-update-profile',
   templateUrl: './update-profile.component.html',
@@ -43,11 +45,14 @@ export class UpdateProfileComponent implements OnInit {
   ];
 
 
+  public state: any = undefined;
+
   constructor(
-    private service: ApiService,
-    private router: Router,
+    public service: ApiService,
+    public router: Router,
     public toastr: ToastrService,
-    private modalService: NgbModal
+    public modalService: NgbModal,
+    public location: Location
   ) {
     this.isIndividual =
       this.service.userData.profile.accountType == 'company' ? false : true;
@@ -120,7 +125,13 @@ export class UpdateProfileComponent implements OnInit {
   ngOnInit() {
     let userData = this.service.userData;
 
+    this.state = this.location.getState();
+
     
+    if(this.state.showFieldIndicatror !== undefined){
+      this.formSubmitted = true;
+    }
+
     if(userData.profile.isaMember){
       userData.profile.isaMember = 1;
 
@@ -177,7 +188,8 @@ export class UpdateProfileComponent implements OnInit {
               this.getControls(`${name}.firstname`).value +
               ' ' +
               this.getControls(`${name}.lastname`).value,
-            email:  this.getControls(`${name}.email`).value
+            email:  this.getControls(`${name}.email`).value,
+            pronouns:  this.getControls(`${name}.sex`).value
           }
         },
 

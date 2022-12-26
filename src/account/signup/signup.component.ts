@@ -186,6 +186,8 @@ export class SignupComponent implements OnInit {
             ' ' +
             this.getControls(`${name}.lastname`).value,
           skip_registration: true,
+          pronouns:  this.getControls(`${name}.sex`).value
+
         },
         pseudonym: {
           unique_id: this.getControls(`${name}.email`).value,
@@ -224,6 +226,7 @@ export class SignupComponent implements OnInit {
             ' ' +
             this.getControls(`${name}.lastname`).value,
           skip_registration: true,
+          pronouns:  this.getControls(`${name}.sex`).value
         },
         pseudonym: {
           unique_id: this.getControls(`${name}.email`).value,

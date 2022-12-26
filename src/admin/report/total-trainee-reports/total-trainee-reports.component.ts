@@ -39,6 +39,8 @@ export class TotalTraineeReportsComponent implements OnInit {
   }
 
   filterDate(event: any){  
+    this.isFiltering = true;
+
     this.service
     .mainCanvas(`getAllTraineeAverageReports/${event.itemData.id}`, 'get', {})
     .subscribe((response: any) => {
@@ -49,6 +51,9 @@ export class TotalTraineeReportsComponent implements OnInit {
         this.toastr.error(response.message, 'Error');
 
       }
+
+      this.isFiltering = false;
+
     });
     
   }

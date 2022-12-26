@@ -48,6 +48,8 @@ export class FinancialReportComponent implements OnInit {
   }
 
   loadRequest(){
+    this.isFiltering = true;
+
     this.service
       .mainCanvas(`getAllFinancialReports`, 'get', {})
       .subscribe((response: any) => {
@@ -58,6 +60,9 @@ export class FinancialReportComponent implements OnInit {
           this.toastr.error(response.message, 'Error');
 
         }
+
+        this.isFiltering = false;
+
       });
   }
 
@@ -80,7 +85,9 @@ export class FinancialReportComponent implements OnInit {
         } else {
           this.toastr.error(response.message, 'Error');
         }
-  
+        
+        this.isFiltering = false
+
       });
 
     } else {

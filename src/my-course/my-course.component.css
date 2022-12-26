@@ -52,7 +52,7 @@
     /* margin-top: 0px !important; */
     padding: 25px !important;
     min-height: 580px !important;
-    height: 500px !important
+    height: auto !important
 }
 
 .upperText {

@@ -100,13 +100,44 @@
             <div class="col-sm-12 col-md-11 col-lg-11 mb-4 mr-2">
                 <div class="row mb-4">
                     <div class="col-sm-12 col-md-1 col-lg-1"></div>
-                    <div class="col-sm-12 col-md-10 col-lg-">
-                        <span>
-                            <input class="form-control form-control-lg" placeholder="search" />
-                        </span>
-                        <span>
-                            <button class="btn btn-primary btn-block">Go</button>
-                        </span>
+                    <div class="col-sm-12 col-md-10 col-lg-10">
+                        <form [formGroup]="formGroup">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-10 col-lg-10">
+                                    <input type="search" formControlName="courseTitle" class="form-control form-control-lg" placeholder="search" />
+                                    <p *ngIf="formSubmitted && getControls('courseTitle').hasError('required')" class="error">
+                                        <small> * required</small>
+                                    </p>
+                                    <p *ngIf="searcNotFoundhMessage">
+                                        <span>
+                                            {{ searcNotFoundhMessage }}
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-sm-12 col-md-2 col-lg-2">
+                                    <button class="btn btn-primary btn-lg btn-block"  *ngIf="!showFilter" 
+                                    (click)="searchCourses()" [disabled]="disable">
+                                        <span *ngIf="disable">
+                                            <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
+                                            style="margin-right: 10px !important; font-size: 24px !important;" aria-hidden="true"></i>
+                                        </span>
+                                        <span>
+                                            Go
+                                        </span>
+                                    </button>
+
+                                    <button class="btn btn-primary btn-lg btn-block" *ngIf="showFilter" (click)="clearFilter()">
+                                        <span>
+                                            <i class='fa fa-refresh' 
+                                            style="margin-right: 10px !important; font-size: 24px !important;" aria-hidden="true"></i>
+                                        </span>
+                                        <span>
+                                            Clear Filter
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>    
                     </div>
                     <div class="col-sm-12 col-md-1 col-lg-1"></div>
 

@@ -10,9 +10,11 @@ import { ApiService } from 'src/service/api.service';
 })
 export class TraineePerformanceReportComponent implements OnInit {
   public columes:any[] = [];
-  public data: any;
+  public data: any[] = [];
   public isFiltering: boolean = false;
   public fields: any = { text: 'name',value: 'id' };
+
+  public currentCourse: any;
 
   constructor(
     public service: ApiService,
@@ -55,16 +57,65 @@ export class TraineePerformanceReportComponent implements OnInit {
   }
 
   filterDate(event:any){
+    this.currentCourse = event.itemData.name;
+
+    this.data = [];
+    this.isFiltering = true;
+
     this.service
       .mainCanvas(`getAllTraineePerformanceReports/${event.itemData.id}`, 'get', {})
-      .subscribe((response: any) => {
-        if (response.status) {
-          this.data = response.message;
+      .subscribe((upperResponse: any) => {
+        if (upperResponse.status) {
+
+          this.service.mainCanvas(`getEnrollmentsInCourse/${event.itemData.id}`, 'get', {}).subscribe((lowerResponse: any) => {
+            if (lowerResponse.status) {
+
+              let data: any[] = [];
+    
+              upperResponse.message.forEach((element: any) => {
+
+                let enrollment = lowerResponse.message.find((ele: any) => {
+                  return ele.user_id == element.id;
+                })
+
+                var startDate: any = new Date(enrollment.created_at);
+                var endDate: any = new Date(element.progress.completed_at);
+                
+                var diffDays: any = (endDate - startDate) / (1000 * 60 * 60 * 24);
+
+                data.push(
+                  {
+                    courseTitle: this.currentCourse,
+                    traineeName: element.display_name,
+                    traineeSex: element.pronouns ?? ' -- Not Specified by Trainee -- ',
+                    requiredModules: element.progress.requirement_count,
+                    createdAt: new Date(enrollment.created_at).toLocaleDateString("en-US"),
+                    completedModules: element.progress.requirement_completed_count,
+                    updatedAt: element.progress.completed_at ?  new Date(element.progress.completed_at).toLocaleDateString("en-US")  : ' -- Not completed -- ',
+                    progress: (element.progress.requirement_completed_count / element.progress.requirement_count) * 100,
+                    totalDaysTaken: element.progress.completed_at ? diffDays :  ' -- Not completed -- '
+                  }
+                )
+              });
+    
+              this.data = data;
+
+            } else {
+              this.toastr.error(lowerResponse.message, 'Error');
+
+            }
+
+            this.isFiltering = false;
+
+          });  
 
         } else {
-          this.toastr.error(response.message, 'Error');
+          this.toastr.error(upperResponse.message, 'Error');
 
         }
+
+        this.isFiltering = false;
+
       });
   }
 

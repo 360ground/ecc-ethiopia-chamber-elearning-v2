@@ -294,7 +294,7 @@ export class ApiService {
       // call update side effect update requests only if there is an updates.
 
       if(enrollmentRequestSideeffectRequests.length){
-        this.updateEnrollmentSideeffect(enrollmentRequestSideeffectRequests) 
+        // this.updateEnrollmentSideeffect(enrollmentRequestSideeffectRequests) 
       }
     
     });

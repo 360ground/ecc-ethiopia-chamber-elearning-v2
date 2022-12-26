@@ -1,6 +1,6 @@
 <ejs-grid #grid
     gridLines="Both"
-    [dataSource]='data' [allowFiltering]="true" [allowPaging]="true" 
+    [dataSource]='data' [allowFiltering]="true" [allowPaging]="true" [showColumnChooser]= "true" 
     [allowSorting]="true" [allowFiltering]="true" [toolbar]="toolbar" 
     [allowExcelExport]='true' [allowPdfExport]='true' (toolbarClick)='toolbarClick($event)'
     (excelExportComplete)='excelExportComplete()' (pdfExportComplete)='pdfExportComplete()'

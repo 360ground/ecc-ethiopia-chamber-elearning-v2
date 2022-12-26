@@ -17,7 +17,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { TimeStampPipe } from 'src/app/timestamp.pipe';
 import { GridComponents } from './grid/grid.component';
 
-import { ExcelExportService, GridModule, PdfExportService, ResizeService, SearchService, ToolbarService } from '@syncfusion/ej2-angular-grids';
+import { ColumnChooserService, ExcelExportService, GridModule, PdfExportService, ResizeService, SearchService, ToolbarService } from '@syncfusion/ej2-angular-grids';
 import { PageService, SortService, FilterService, GroupService } from '@syncfusion/ej2-angular-grids';
 import { ConfirmDialogueComponent } from './confirm-dialogue/confirm-dialogue.component';
 import { ConfirmationService } from './confirmation.service';
@@ -58,6 +58,7 @@ import { ConfirmationService } from './confirmation.service';
     ResizeService,
     ExcelExportService,
     PdfExportService,
+    ColumnChooserService,
     ConfirmationService
   ],
 })

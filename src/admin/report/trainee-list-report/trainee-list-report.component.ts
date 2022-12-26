@@ -115,14 +115,14 @@ export class TraineeListReportComponent implements OnInit {
       }
 
       this.disable = true;
-      
+      this.isFiltering = true;
+
       this.service
         .mainCanvas(`getAllTraineeListReports`, 'post', payload)
         .subscribe((response: any) => {
           if (response.status) {
             this.data = response.message;
 
-            console.log(response.message)
             this.disable = false;
 
           } else {
@@ -131,6 +131,7 @@ export class TraineeListReportComponent implements OnInit {
   
           }
           
+          this.isFiltering = false;
         
         });
     }

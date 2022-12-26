@@ -11,6 +11,8 @@ import {
 
 import { NgbCarousel, NgbSlideEvent, NgbSlideEventSource } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin } from 'rxjs';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-courses',
@@ -21,13 +23,22 @@ export class CoursesComponent implements OnInit {
   @ViewChild('content') content: any;
 
   public courses: any[] = [];
+  public coursesBackup: any[] = [];
+
   public isLoading: Boolean = false;
   public courseCategories: any;
   public isLoadingCourseCategories: Boolean = false;
   public adminToken: any = environment.adminToken;
   public baseImageUrl: any = environment.baseUrlBackend;
 
+  public searcNotFoundhMessage: any = null;
+  public showFilter: boolean = false;
+
   public missingProfileFields:any [] = [];
+
+  public formGroup: FormGroup;
+  public formSubmitted = false;
+  public disable: boolean = false;
 
 
   public paymentOptions: any[] = [
@@ -54,7 +65,6 @@ export class CoursesComponent implements OnInit {
   @ViewChild('carousel', { static: true })
   carousel!: NgbCarousel;
 
-
 	public paused = false;
 	public unpauseOnArrow = false;
 	public pauseOnIndicator = false;
@@ -64,8 +74,13 @@ export class CoursesComponent implements OnInit {
   constructor(
     public service: ApiService,
     public router: Router,
-    private modalService: NgbModal,
-  ) {}
+    public toastr: ToastrService,
+    public modalService: NgbModal,
+  ) {
+    this.formGroup = new FormGroup({
+      courseTitle: new FormControl(null, Validators.required),
+    })
+  }
 
   ngOnInit(): void {
     if (this.service.loadedCourses) {
@@ -103,6 +118,10 @@ export class CoursesComponent implements OnInit {
       );
     }
 
+  }
+
+  public getControls(name: any): FormControl {
+    return this.formGroup.get(name) as FormControl;
   }
 
   loadExtraInfo(request: any){
@@ -160,7 +179,7 @@ export class CoursesComponent implements OnInit {
 		}
 	}
 
-  openModal() {
+  openModal() {    
     this.modalService.open(NgbdModalContent);
   }
 
@@ -200,9 +219,72 @@ export class CoursesComponent implements OnInit {
 
 
 
-  
+  searchCourses(){
+    this.formSubmitted = true;
+    let request: any [] = [];
 
- 
+    if (!this.formGroup.valid) {
+      return;
+
+    } else {
+
+      this.searcNotFoundhMessage = null;
+      
+      let payload = this.formGroup.value;
+
+      this.disable = true;
+      this.formGroup.disable();
+      this.openModal();
+      
+      this.service
+        .mainCanvas(`searchCourses`, 'post', payload)
+        .subscribe((response: any) => {
+          if (response.status) {
+            if(!response.message.length){
+              this.searcNotFoundhMessage = 'No record found.';
+
+            } else {
+              this.coursesBackup = [...this.courses];
+              this.courses = response.message;
+
+              this.showFilter = true;
+
+              this.courses.forEach((element: any) => {
+                if (location.protocol == 'http:'){
+                  if(element.image_download_url){
+                    element.image_download_url = element.image_download_url.replace('https', 'http');
+                  }
+                }
+
+                request.push(this.service.mainCanvas(`getCourseExtraInfo/${element.id}`, 'get', null));
+
+              }); 
+
+              this.loadExtraInfo(request);
+
+            }
+
+          } else {
+            this.toastr.error(response.message, 'Error');
+            
+          }
+
+          this.disable = false;
+          this.formGroup.enable();
+          this.closeModal();
+        
+        });
+    }
+
+  }
+
+
+  clearFilter(){
+    this.courses = this.coursesBackup;
+    this.showFilter = false;
+    this.formSubmitted = false;
+  }
+
 
 }
 

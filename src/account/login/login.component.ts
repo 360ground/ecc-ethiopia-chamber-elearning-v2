@@ -103,7 +103,9 @@ export class LoginComponent implements OnInit {
 
                 this.toastr.info('please fill all the required fields.','Incomplete Profile');
 
-                this.router.navigateByUrl('/account/profile');
+                this.router.navigateByUrl('/account/profile', { state : {
+                  showFieldIndicatror: true
+                }});
 
               } else {
                 this.router.navigateByUrl(previousUrl);
@@ -131,7 +133,9 @@ export class LoginComponent implements OnInit {
 
                 this.toastr.info('please fill all the required fields.','Incomplete Profile');
 
-                this.router.navigateByUrl('/account/profile');
+                this.router.navigateByUrl('/account/profile', { state : {
+                  showFieldIndicatror: true
+                }});
 
               } else {
                 this.router.navigateByUrl(previousUrl);
