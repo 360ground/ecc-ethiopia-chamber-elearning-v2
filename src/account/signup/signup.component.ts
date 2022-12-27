@@ -36,6 +36,7 @@ export class SignupComponent implements OnInit {
         lastname: new FormControl(null, Validators.required),
         sex: new FormControl(null, Validators.required),
         email: new FormControl(null, [Validators.required, Validators.email]),
+        organizationName: new FormControl(null, [Validators.required]),
         phonenumber: new FormControl(null, [
           Validators.required,
           Validators.minLength(10),
@@ -191,6 +192,7 @@ export class SignupComponent implements OnInit {
         },
         pseudonym: {
           unique_id: this.getControls(`${name}.email`).value,
+          sis_user_id: this.getControls(`${name}.organizationName`).value,
           password: this.getControls(`${name}.password`).value,
           send_confirmation: true,
         },

@@ -13,6 +13,9 @@ export class TotalTraineeReportsComponent implements OnInit {
   public data: any;
   public isFiltering: boolean = false;
   public fields: any = { text: 'name',value: 'id' };
+
+  public courseTitle: any;
+
   constructor(
     public service: ApiService,
     private router: Router,
@@ -33,7 +36,7 @@ export class TotalTraineeReportsComponent implements OnInit {
         field: 'averageAssessment', headerText: 'Average Assessment', width: '120'
       },
       {
-        field: 'averageCompletionTime', headerText: 'Average Completion Time', width: '120'
+        field: 'averageCompletionTime', headerText: 'Average Completion Days', width: '120'
       },
     ]
   }
@@ -41,14 +44,68 @@ export class TotalTraineeReportsComponent implements OnInit {
   filterDate(event: any){  
     this.isFiltering = true;
 
+    this.courseTitle = event.itemData.name;
+
     this.service
-    .mainCanvas(`getAllTraineeAverageReports/${event.itemData.id}`, 'get', {})
-    .subscribe((response: any) => {
-      if (response.status) {
-        this.data = response.message;
+    .mainCanvas(`getAllTraineePerformanceReports/${event.itemData.id}`, 'get', {})
+    .subscribe((upperResponse: any) => {
+      if (upperResponse.status) {
+
+        this.service.mainCanvas(`getEnrollmentsInCourse/${event.itemData.id}`, 'get', {}).subscribe((lowerResponse: any) => {
+          if (lowerResponse.status) {
+
+            let avarageProgress: number = 0;
+            let avarageCompletionTime: number = 0;
+
+            upperResponse.message.forEach((element: any) => {
+              avarageProgress += Math.round((element.progress.requirement_completed_count / element.progress.requirement_count) * 100);
+            });  
+
+            avarageProgress = avarageProgress ? Math.round(avarageProgress/upperResponse.message.length) : 0;
+
+            lowerResponse.message.forEach((element: any) => {
+              let result = upperResponse.message.find((ele: any) => {
+                return ele.id == element.user_id;
+              })
+
+              if(result){
+
+                if(result.progress.completed_at){
+
+                  var startDate: any = new Date(element.created_at);
+                  var endDate: any = new Date(result.progress.completed_at);
+    
+                  avarageCompletionTime += (endDate - startDate) / (1000 * 60 * 60 * 24);
+                }
+
+              }
+
+            });
+
+            avarageCompletionTime = avarageCompletionTime ? Math.round(avarageCompletionTime/lowerResponse.message.length) : 0;
+
+            this.data = [
+              {
+                averageProgress: avarageProgress,
+                averageCompletionTime: avarageCompletionTime,
+                courseTitle: this.courseTitle,
+                averageAssessment: '-- not available --'
+              }
+            ];
+        
+            this.isFiltering = false;
+
+          } else {
+            this.toastr.error(lowerResponse.message, 'Error');
+            this.isFiltering = false;
+
+          }
+
+
+        });  
 
       } else {
-        this.toastr.error(response.message, 'Error');
+        this.toastr.error(upperResponse.message, 'Error');
 
       }
 

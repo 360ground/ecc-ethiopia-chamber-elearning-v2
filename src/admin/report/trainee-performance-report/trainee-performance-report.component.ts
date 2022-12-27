@@ -70,6 +70,8 @@ export class TraineePerformanceReportComponent implements OnInit {
           this.service.mainCanvas(`getEnrollmentsInCourse/${event.itemData.id}`, 'get', {}).subscribe((lowerResponse: any) => {
             if (lowerResponse.status) {
 
+
+              
               let data: any[] = [];
     
               upperResponse.message.forEach((element: any) => {
@@ -92,8 +94,8 @@ export class TraineePerformanceReportComponent implements OnInit {
                     createdAt: new Date(enrollment.created_at).toLocaleDateString("en-US"),
                     completedModules: element.progress.requirement_completed_count,
                     updatedAt: element.progress.completed_at ?  new Date(element.progress.completed_at).toLocaleDateString("en-US")  : ' -- Not completed -- ',
-                    progress: (element.progress.requirement_completed_count / element.progress.requirement_count) * 100,
-                    totalDaysTaken: element.progress.completed_at ? diffDays :  ' -- Not completed -- '
+                    progress: Math.round((element.progress.requirement_completed_count / element.progress.requirement_count) * 100),
+                    totalDaysTaken: element.progress.completed_at ? Math.round(diffDays) :  ' -- Not completed -- '
                   }
                 )
               });

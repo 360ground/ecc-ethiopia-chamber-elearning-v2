@@ -190,10 +190,15 @@ export class UpdateProfileComponent implements OnInit {
               this.getControls(`${name}.lastname`).value,
             email:  this.getControls(`${name}.email`).value,
             pronouns:  this.getControls(`${name}.sex`).value
-          }
+          },
+          pseudonym: {
+            sis_user_id: this.getControls(`${name}.organizationName`).value,
+          },
         },
 
-        memberId: this.base64Image
+        memberId: this.base64Image,
+        account_id: this.service.userData.account_id,
+        login_id: this.service.userData.login_id
       };
       
       this.service
@@ -212,7 +217,6 @@ export class UpdateProfileComponent implements OnInit {
           this.toastr.error(response.message, 'Error');
           this.getControls('education').reset();
           this.modalService.dismissAll();
-
         }
 
         this.disable = false;

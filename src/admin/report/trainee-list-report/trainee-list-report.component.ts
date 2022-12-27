@@ -157,6 +157,7 @@ export class TraineeListReportComponent implements OnInit {
               })
 
               if(result){
+
                 data.push(
                   {
                     courseTitle: this.courseTitle,
@@ -165,7 +166,7 @@ export class TraineeListReportComponent implements OnInit {
                     moduleName: this.moduleName,
                     score: result.score,
                     date: result.finished_at,
-                    institution: result.sis_user_id ?? '-- not Specified --'
+                    institution: element.sis_user_id ?? '-- not Specified --'
                     
                   }
                 )
@@ -173,8 +174,6 @@ export class TraineeListReportComponent implements OnInit {
             });
 
             this.data = data;
-
-            console.log(this.data)
 
             this.disable = false;
             this.isFiltering = false;
