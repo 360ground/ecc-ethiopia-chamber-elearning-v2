@@ -88,6 +88,7 @@ export class CourseDetailComponent implements OnInit {
       let index = merged.findIndex((ele: any) => ele.id == +this.id);
 
       this.isEnrolledForThisCourse = index > -1 ? true : false;
+      
     }
 
     if ('activities' in this.state) {

@@ -82,15 +82,24 @@ export class CoursesComponent implements OnInit {
   ) {
     this.formGroup = new FormGroup({
       courseTitle: new FormControl(null, Validators.required),
-    })
+    });
+
   }
 
   ngOnInit(): void {
-    let queryParam: any = this.actRoute.snapshot.queryParams;
+
+
+    // 
+    // let queryParam: any = this.actRoute.snapshot.queryParams;
+
+    const queryParam:any = new URL(window.location.href).searchParams;
+
+    console.log(queryParam.get('id'));
+    console.log(queryParam.get('paymentSuccess'));
+    console.log(queryParam.get('paymentId'));
+
 
     if(queryParam !== undefined){
-
-      console.log(queryParam)
       
       if ('paymentId' in queryParam) {
 
@@ -110,6 +119,7 @@ export class CoursesComponent implements OnInit {
       }
 
     }
+
 
     if (this.service.loadedCourses) {
       this.courses = this.service.loadedCourses;
@@ -187,6 +197,7 @@ export class CoursesComponent implements OnInit {
       this.closeModal();
 
       if(this.id !== undefined){
+        console.log('lalalal')
         this.router.navigateByUrl(`detail/${this.id}/${course.index}?paymentId=${this.paymentId}`,
          { state: { course } })
       }
@@ -194,7 +205,6 @@ export class CoursesComponent implements OnInit {
 
     });
   }
-
 
   togglePaused() {
 		if (this.paused) {
