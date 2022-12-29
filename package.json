@@ -34,6 +34,7 @@
     "bootstrap": "^5.2.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
+    "moment-es6": "^1.0.0",
     "moodle-client": "^0.5.2",
     "ng-circle-progress": "^1.6.0",
     "ngx-cookie-service": "^14.0.1",

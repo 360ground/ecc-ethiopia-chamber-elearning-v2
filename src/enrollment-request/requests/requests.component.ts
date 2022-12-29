@@ -146,24 +146,24 @@ export class RequestsComponent implements OnInit {
 
         // collection of requests for fork request
         let requests: any[] = [];
-        let enrollmentSideeffect: any[] = [];
+        // let enrollmentSideeffect: any[] = [];
 
         this.requestDetail.students.forEach(async (element: any, index: any) => {
           data.enrollment.user_id = element.id; element.isEnrolling = true; element.index = index;
           
           requests.push(this.service.mainCanvas(`selfEnroll/${this.requestDetail.course_id}`, 'post', data));
 
-          enrollmentSideeffect.push(this.service.mainCanvas(`createEnrollmentSideEffect`, 'post', 
-            {
-              courseId: this.requestDetail.course_id,
-              courseTitle: this.requestDetail.course_name,
-              requiredModules: 0,
-              completedModules: 0,
-              progress: 0,
-              userId: element.id,
-              traineeName: element.name
-            })
-          );
+          // enrollmentSideeffect.push(this.service.mainCanvas(`createEnrollmentSideEffect`, 'post', 
+          //   {
+          //     courseId: this.requestDetail.course_id,
+          //     courseTitle: this.requestDetail.course_name,
+          //     requiredModules: 0,
+          //     completedModules: 0,
+          //     progress: 0,
+          //     userId: element.id,
+          //     traineeName: element.name
+          //   })
+          // );
         });
 
         // make all the requests as a collection and wait for all responses as a whore response array
@@ -219,13 +219,13 @@ export class RequestsComponent implements OnInit {
 
         });
 
-          forkJoin(enrollmentSideeffect).subscribe((responses: any) => {
-            responses.forEach((element: any) => {
-              if(!element.status){
-                this.toastr.error(element.message,'Error');
-              }
-            });
-          });
+        // forkJoin(enrollmentSideeffect).subscribe((responses: any) => {
+        //   responses.forEach((element: any) => {
+        //     if(!element.status){
+        //       this.toastr.error(element.message,'Error');
+        //     }
+        //   });
+        // });
 
       }
 

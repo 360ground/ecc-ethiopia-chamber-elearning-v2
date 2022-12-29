@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/service/api.service';
 import {
@@ -70,12 +70,15 @@ export class CoursesComponent implements OnInit {
 	public pauseOnIndicator = false;
 	public pauseOnHover = true;
 	public pauseOnFocus = true;
+  public paymentId: any = undefined;
+  public id: any = undefined;
 
   constructor(
     public service: ApiService,
     public router: Router,
     public toastr: ToastrService,
     public modalService: NgbModal,
+    public actRoute: ActivatedRoute,
   ) {
     this.formGroup = new FormGroup({
       courseTitle: new FormControl(null, Validators.required),
@@ -83,6 +86,31 @@ export class CoursesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let queryParam: any = this.actRoute.snapshot.queryParams;
+
+    if(queryParam !== undefined){
+
+      console.log(queryParam)
+      
+      if ('paymentId' in queryParam) {
+
+        this.paymentId = queryParam.paymentId;
+        
+        if ('paymentCancel' in queryParam) {
+
+          this.toastr.info('Payment canceld by User', 'Information');
+          this.deletePaymentSideEffect();
+        }
+
+      }
+
+      if ('id' in queryParam) {
+        this.id = queryParam.id;
+        
+      }
+
+    }
+
     if (this.service.loadedCourses) {
       this.courses = this.service.loadedCourses;
       
@@ -126,7 +154,9 @@ export class CoursesComponent implements OnInit {
 
   loadExtraInfo(request: any){
     forkJoin(request).subscribe(async(responses: any) => {
-      responses.forEach((element: any) => {
+      let course: any;
+
+      await responses.forEach((element: any) => {
 
         if(element.status){
 
@@ -138,12 +168,15 @@ export class CoursesComponent implements OnInit {
             message.features = Object.values(JSON.parse(message.features));
           }
 
-
           let index = this.courses.findIndex((course: any) => {
             return course.id == +message.courseId
           });
 
           this.courses[index].extraInfo = message;
+
+          if(this.id == +message.courseId){
+            course = { index: index, state: this.courses[index] };
+          }
 
         }
       });
@@ -152,6 +185,12 @@ export class CoursesComponent implements OnInit {
 
       this.isLoading = false;
       this.closeModal();
+
+      if(this.id !== undefined){
+        this.router.navigateByUrl(`detail/${this.id}/${course.index}?paymentId=${this.paymentId}`,
+         { state: { course } })
+      }
+
 
     });
   }
@@ -290,6 +329,16 @@ export class CoursesComponent implements OnInit {
     this.formSubmitted = false;
     this.searcNotFoundhMessage = null;
     this.formGroup.reset();
+  }
+
+  deletePaymentSideEffect(){
+    this.service.mainCanvas(`deletePaymentSideeffect/${this.paymentId}`, 'delete', {})
+    .subscribe((response: any) => {
+      if (!response.status) {
+        this.toastr.error(response.message, 'Error');
+      }
+
+    });  
   }
 
 

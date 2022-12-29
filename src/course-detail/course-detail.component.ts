@@ -63,14 +63,8 @@ export class CourseDetailComponent implements OnInit {
 
     if(queryParam !== undefined){
       if ('paymentId' in queryParam) {
-        this.checkBill(this.paymentId);
-        
-      } else if ('paymentCancel' in queryParam) {
-        this.disabled = false;
-        this.toastr.info('Payment canceld by User', 'Information');
-  
+        this.checkBill(this.paymentId); 
       }
-
     } 
     
     this.id = this.actRoute.snapshot.paramMap.get('id');
@@ -193,37 +187,36 @@ export class CourseDetailComponent implements OnInit {
       .subscribe((response: any) => {
         if (response.status) {
          
-          let data = {
-            userId: this.service.userData.id,
-            courseId: this.id,
-            courseTitle: this.state.name,
-            requiredModules: 0,
-            completedModules: 0,
-            progress: 0,
-            traineeName: this.service.userData.short_name,
-            traineeSex: this.service.userData.profile.sex,
-            traineeLocation: `${this.service.userData.profile.city}, ${this.service.userData.profile.country}`
-          }
+          // let data = {
+          //   userId: this.service.userData.id,
+          //   courseId: this.id,
+          //   courseTitle: this.state.name,
+          //   requiredModules: 0,
+          //   completedModules: 0,
+          //   progress: 0,
+          //   traineeName: this.service.userData.short_name,
+          //   traineeSex: this.service.userData.profile.sex,
+          //   traineeLocation: `${this.service.userData.profile.city}, ${this.service.userData.profile.country}`
+          // }
 
-          this.service
-          .mainCanvas(`createEnrollmentSideEffect`, 'post', data)
-          .subscribe((result: any) => {
+          // this.service
+          // .mainCanvas(`createEnrollmentSideEffect`, 'post', data)
+          // .subscribe((result: any) => {
 
-            if(!result.status){
-              this.toastr.error(result.message, 'Error');
-            }
-            
-            // add course to local variable
-            this.state.percentage = 0;
-            this.state.modules_published = true;
-            this.service.myCourses.inprogress.push(this.state);
-            this.disabled = false;
-            this.router.navigate(['/mycourse']);
-            this.toastr.success(response.message, 'Success');
-  
-            window.open(`${environment.canvasUrl}/courses/${this.id}`, '_blank');
+          //   if(!result.status){
+          //     this.toastr.error(result.message, 'Error');
+          //   }
+          // });
 
-          });
+           // add course to local variable
+           this.state.percentage = 0;
+           this.state.modules_published = true;
+           this.service.myCourses.inprogress.push(this.state);
+           this.disabled = false;
+           this.router.navigate(['/mycourse']);
+           this.toastr.success(response.message, 'Success');
+ 
+           window.open(`${environment.canvasUrl}/courses/${this.id}`, '_blank');
 
         } else {
           this.toastr.error(response.message, 'Error');
@@ -311,7 +304,7 @@ export class CourseDetailComponent implements OnInit {
     this.enrolling = true;
 
     this.service
-      .mainCanvas(`getPaymentSideeffect/${paymentId}`, 'get', {})
+      .mainCanvas(`getPaymentSideeffectById/${paymentId}`, 'get', {})
       .subscribe((response: any) => {
         let billReferenceNumber = response[0].billReferenceNumber;
 
@@ -343,8 +336,8 @@ export class CourseDetailComponent implements OnInit {
             customerPhoneNumber: this.service.userData.profile.phonenumber,
           },
           redirectUrls: {
-            returnUrl: `${environment.applicationUrl}/detail/${this.id}/${this.index}?paymentId=${paymentId}&paymentSuccess=true`,
-            cancelUrl: `${environment.applicationUrl}/detail/${this.id}/${this.index}?paymentId=${paymentId}&paymentCancel=true`,
+            returnUrl: `${environment.applicationUrl}?id=${this.id}&paymentId=${paymentId}&paymentSuccess=true`,
+            cancelUrl: `${environment.applicationUrl}?paymentId=${paymentId}&paymentCancel=true`,
             callbackUrl: `${environment.paymentSuccessCallbackUrl}/paymentSuccessCallBack`,
           },
           metaData: {
@@ -352,7 +345,6 @@ export class CourseDetailComponent implements OnInit {
             course_name: this.state.name,
             paymentId: paymentId
           }
-
         }
     };
 

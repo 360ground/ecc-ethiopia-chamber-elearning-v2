@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/service/api.service';
 
+import moment from 'moment-es6';
+
 @Component({
   selector: 'app-trainee-list-report',
   templateUrl: './trainee-list-report.component.html',
@@ -97,8 +99,17 @@ export class TraineeListReportComponent implements OnInit {
   }
 
   setModuleName(event:any){
-    this.moduleName = event.itemData.moduleName;
+    if(this.quizzes.length){
+      this.moduleName = event.itemData.moduleName;
+    }
   }
+
+  DateDiff(startDate: any,endDate: any){
+    let diff = (endDate - startDate) / (1000 * 60 * 60 * 24);
+
+    return diff;
+  }
+
 
   filterDate(){
     this.formSubmitted = true;
@@ -128,23 +139,28 @@ export class TraineeListReportComponent implements OnInit {
 
               if(payload.dateRange) {
 
-                payload.dateRange[0]  = new Date(payload.dateRange[0] + 'UTC'); 
-                payload.dateRange[1]  = new Date(payload.dateRange[1] + 'UTC');
+                payload.dateRange[0]  = new Date(payload.dateRange[0]); 
+                payload.dateRange[1]  = new Date(payload.dateRange[1]);
 
-                let result = submissions.filter(function (ele: any) {
+                let result = submissions.filter((ele: any) => {
   
                   let finished_at = new Date(ele.finished_at);
-
-                  if(payload.dateRange[0] == payload.dateRange[1]){
-                    return (finished_at == payload.dateRange[0]);
+                  
+                  // if(moment(payload.dateRange[0]).isSame(payload.dateRange[1])){
+                    
+                  if(moment(payload.dateRange[0]).isSame(finished_at, 'day')){
+                    return ele;
 
                   } else {
-                    return (finished_at >= payload.dateRange[0]) && (finished_at <= payload.dateRange[1]);
+                    if(moment(finished_at).isBetween(payload.dateRange[0],payload.dateRange[1])){
+                      return ele;
+                    } 
 
                   }
+                   
+                
 
-  
-                })
+                });
 
                 submissions = result;
 

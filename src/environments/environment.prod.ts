@@ -4,8 +4,8 @@ export const environment = {
   emptyCertificateUrl: `${window.location.origin}/assets/emptyCertificate.png`,
 
   usericonUrl: `${window.location.origin}/assets/user_icon.png`,
-  baseUrlCanvas: 'http://3.216.95.39/api/v1/',
-  canvasUrl: 'http://3.216.95.39',
+  baseUrlCanvas: 'http://ecclms.360magic.link/api/v1/',
+  canvasUrl: 'http://ecclms.360magic.link',
   canvasClient_id: '10000000000001',
   canvasClient_secret:
     'biZJ8hh9durwy4D82KeuKIZelnwI8739xII4lILjsgdQNSq8e7MvkNthFyNRJVVY',
@@ -19,8 +19,8 @@ export const environment = {
 
 
   // back end
-  baseUrlBackend: 'http://3.125.158.58:4000',
-  paymentSuccessCallbackUrl: 'http://3.125.158.58:4000',
+  baseUrlBackend: 'http://ecc.360magic.link:4000',
+  paymentSuccessCallbackUrl: 'http://ecc.360magic.link:4000',
 
 
   // medapay

@@ -56,7 +56,7 @@ export class TraineePerformanceReportComponent implements OnInit {
 
   }
 
-  filterDate(event:any){
+  async filterDate(event:any){
     this.currentCourse = event.itemData.name;
 
     this.data = [];
@@ -67,14 +67,12 @@ export class TraineePerformanceReportComponent implements OnInit {
       .subscribe((upperResponse: any) => {
         if (upperResponse.status) {
 
-          this.service.mainCanvas(`getEnrollmentsInCourse/${event.itemData.id}`, 'get', {}).subscribe((lowerResponse: any) => {
+          this.service.mainCanvas(`getEnrollmentsInCourse/${event.itemData.id}`, 'get', {}).subscribe(async(lowerResponse: any) => {
             if (lowerResponse.status) {
 
-
-              
               let data: any[] = [];
     
-              upperResponse.message.forEach((element: any) => {
+              upperResponse.message.forEach(async (element: any) => {
 
                 let enrollment = lowerResponse.message.find((ele: any) => {
                   return ele.user_id == element.id;
@@ -85,7 +83,7 @@ export class TraineePerformanceReportComponent implements OnInit {
                 
                 var diffDays: any = (endDate - startDate) / (1000 * 60 * 60 * 24);
 
-                data.push(
+                await data.push(
                   {
                     courseTitle: this.currentCourse,
                     traineeName: element.display_name,
@@ -102,14 +100,13 @@ export class TraineePerformanceReportComponent implements OnInit {
   
               this.data = data;
               
-              this.isFiltering = false;
+              this.isFiltering = await false;
 
             } else {
               this.toastr.error(lowerResponse.message, 'Error');
               this.isFiltering = false;
 
             }
-
 
           });  
 
