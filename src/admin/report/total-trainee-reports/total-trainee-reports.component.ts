@@ -15,6 +15,7 @@ export class TotalTraineeReportsComponent implements OnInit {
   public fields: any = { text: 'name',value: 'id' };
 
   public courseTitle: any;
+  public courses: any[] = [];
 
   constructor(
     public service: ApiService,
@@ -39,7 +40,18 @@ export class TotalTraineeReportsComponent implements OnInit {
         field: 'averageCompletionTime', headerText: 'Average Completion Days', width: '120'
       },
     ]
+
+    this.loadCourses();
   }
+
+  loadCourses(){
+    this.service
+    .mainCanvas(`getAllCourses`, 'get', null)
+    .subscribe((response: any) => {
+      this.courses = response;
+    });
+  }
+
 
   filterDate(event: any){  
     this.isFiltering = true;

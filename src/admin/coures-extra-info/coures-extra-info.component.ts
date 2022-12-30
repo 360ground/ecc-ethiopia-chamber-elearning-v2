@@ -118,9 +118,6 @@ export class CouresExtraInfoComponent implements OnInit {
     .subscribe((response: any) => {
       this.disable = false;
       
-
-      this.getControls('courseId').setValue(this.courseAttributes.id);
-
       if (response.status) {
         let message = response.message;
 
@@ -145,8 +142,11 @@ export class CouresExtraInfoComponent implements OnInit {
         this.toastr.error(response.message, 'Error');
       }
 
+      
       this.formGroup.enable();
       this.disable = false;
+      
+      this.getControls('courseId').setValue(this.courseAttributes.id);
     });
   }
 

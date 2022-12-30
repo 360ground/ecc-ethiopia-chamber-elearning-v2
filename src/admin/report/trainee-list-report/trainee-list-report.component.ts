@@ -26,6 +26,7 @@ export class TraineeListReportComponent implements OnInit {
 
   public moduleName: any = null;
   public courseTitle: any = null;
+  public courses: any[] = [];
 
   constructor(
     public service: ApiService,
@@ -61,7 +62,18 @@ export class TraineeListReportComponent implements OnInit {
       {
         field: 'score', headerText: 'Result', width: '40'
       },
-    ]
+    ];
+
+    this.loadCourses();
+    
+  }
+
+  loadCourses(){
+    this.service
+    .mainCanvas(`getAllCourses`, 'get', null)
+    .subscribe((response: any) => {
+      this.courses = response;
+    });
   }
 
   loadQuizzes(event: any){

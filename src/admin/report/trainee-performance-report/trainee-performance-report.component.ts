@@ -15,6 +15,7 @@ export class TraineePerformanceReportComponent implements OnInit {
   public fields: any = { text: 'name',value: 'id' };
 
   public currentCourse: any;
+  public courses: any[] = [];
 
   constructor(
     public service: ApiService,
@@ -52,8 +53,18 @@ export class TraineePerformanceReportComponent implements OnInit {
       {
         field: 'totalDaysTaken', headerText: 'Total days Taken for Completion', width: '60'
       }
-    ]
+    ];
 
+    this.loadCourses();
+
+  }
+
+  loadCourses(){
+    this.service
+    .mainCanvas(`getAllCourses`, 'get', null)
+    .subscribe((response: any) => {
+      this.courses = response;
+    });
   }
 
   async filterDate(event:any){
