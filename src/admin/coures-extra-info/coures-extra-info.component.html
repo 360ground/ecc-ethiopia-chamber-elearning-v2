@@ -12,9 +12,9 @@
 
                 <div class="mb-4">
                     <label>Course</label>
-                    <ejs-dropdownlist id='ddlelement' [dataSource]='service.loadedCourses' 
+                    <ejs-dropdownlist id='ddlelement' [dataSource]='courses' #course
                         formControlName="courseId" [allowFiltering]="true" placeholder="-- select course here --"
-                        [fields]="fields" cssClass="e-outline" (change)="loadData($event)">
+                        [fields]="fields" cssClass="e-outline" (change)="loadData(course)">
                     </ejs-dropdownlist>
                     
                     <p *ngIf="formSubmitted && getControls('courseId').hasError('required')" class="error">
@@ -24,50 +24,68 @@
 
                 <div class="row">
                     <div class="col-sm-12 col-md-6 col-lg-6">
-                        <div formGroupName="attributes">
-                            <div class="mb-4">
-                                <label>Modules</label><br />
-                                <input type="number" class="form-control form-control-lg" min="1"
-                                placeholder="Total number of modules" formControlName="totalModules" />
-                                <p *ngIf="formSubmitted && getControls('attributes.totalModules').hasError('required')" class="error">
-                                    <small> * required</small>
-                                </p>
-                            </div>
-                            <div class="mb-4">
-                                <label>Estimated Course Completion Hour</label><br />
-                                <input type="number" class="form-control form-control-lg" min="1"
-                                placeholder="Enter hour" formControlName="estimatedCompletionHour" />
-                                <p *ngIf="formSubmitted && getControls('attributes.estimatedCompletionHour').hasError('required')" class="error">
-                                    <small> * required</small>
-                                </p>
-                            </div>
-                            <div class="mb-4">
-                                <label>Target Audience</label><br />
-                                <input type="text" class="form-control form-control-lg" 
-                                placeholder="For example 'Beginners'" formControlName="targetAudience" />
-                                <p *ngIf="formSubmitted && getControls('attributes.targetAudience').hasError('required')" class="error">
-                                    <small> * required</small>
-                                </p>
-                            </div>
-                            <div class="mb-4">
-                                <label>Price</label><br />
-                                <input type="number" class="form-control form-control-lg" min="0"
-                                placeholder="Enter 0 if the course if Free" formControlName="courseFee" />
-                                <p *ngIf="formSubmitted && getControls('attributes.courseFee').hasError('required')" class="error">
-                                    <small> * required</small>
-                                </p>
-                            </div>
+                        <div class="mb-4">
+                            <label>Modules</label><br />
+                            <input type="number" class="form-control form-control-lg" min="1"
+                            placeholder="Total number of modules" formControlName="totalModules" />
+                            <p *ngIf="formSubmitted && getControls('totalModules').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
                         </div>
+                        <div class="mb-4">
+                            <label>Estimated Course Completion Hour</label><br />
+                            <ejs-dropdownlist id='ddlelement' [dataSource]='courseLength' 
+                            formControlName="estimatedCompletionHour" placeholder="-- Select Estimated completion hour --"
+                            [fields]="fields" cssClass="e-outline">
+                        </ejs-dropdownlist>
+
+
+                            <p *ngIf="formSubmitted && getControls('estimatedCompletionHour').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                            <label>Audience</label>
+                            <ejs-dropdownlist id='ddlelement' [dataSource]='audience' 
+                                formControlName="targetAudience" placeholder="-- select target audience --"
+                                [fields]="fields" cssClass="e-outline">
+                            </ejs-dropdownlist>
+                            <p *ngIf="formSubmitted && getControls('targetAudience').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div>
+
+
+                        <div class="mb-4">
+                            <label>Price</label><br />
+                            <input type="number" class="form-control form-control-lg" min="0"
+                            placeholder="Enter 0 if the course if Free" formControlName="courseFee" />
+                            <p *ngIf="formSubmitted && getControls('courseFee').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div>
+                        
                         <div class="mb-4">
                             <label>Category</label>
                             <ejs-dropdownlist id='ddlelement' [dataSource]='categories' 
-                                formControlName="category" [allowFiltering]="true" placeholder="-- select course category"
+                                formControlName="categoryId" [allowFiltering]="true" placeholder="-- select course category --"
                                 [fields]="categoryFields" cssClass="e-outline">
                             </ejs-dropdownlist>
-                            <p *ngIf="formSubmitted && getControls('category').hasError('required')" class="error">
+                            <p *ngIf="formSubmitted && getControls('categoryId').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
-                        </div>    
+                        </div>  
+                           
+                        <div class="mb-4">
+                            <label>Certification</label>
+                            <ejs-dropdownlist id='ddlelement' [dataSource]='certification' 
+                                formControlName="hasCertificate" placeholder="-- select course certification --"
+                                [fields]="fields" cssClass="e-outline">
+                            </ejs-dropdownlist>
+                            <p *ngIf="formSubmitted && getControls('hasCertificate').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div>   
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-6">
                         <div class="mb-4">
@@ -75,8 +93,8 @@
                                 <label>Enter Course Features here.</label><br />
                                 <div class="col-sm-12 col-md-10 col-lg-10">
                                     <input type="text" class="form-control form-control-lg"
-                                    formControlName="features" />
-                                    <p *ngIf="formSubmitted && getControls('features').hasError('required')" class="error">
+                                    formControlName="courseFeatures" />
+                                    <p *ngIf="formSubmitted && getControls('courseFeatures').hasError('required')" class="error">
                                         <small> * required</small>
                                     </p>
                                 </div>  

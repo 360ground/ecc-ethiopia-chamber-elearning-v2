@@ -71,8 +71,9 @@ export class CourseDetailComponent implements OnInit {
     this.index = this.actRoute.snapshot.paramMap.get('index');
 
     this.state = this.location.getState();
+
     
-    this.state.short = this.state.public_description !== undefined  ? this.state.public_description?.substring(0, 200) : '';
+    this.state.attributes.short = this.state.attributes.public_description !== undefined  ? this.state.attributes.public_description?.substring(0, 200) : '';
   
     if(this.service.userData){
       this.checkPaymnetSettlement();
@@ -95,22 +96,9 @@ export class CourseDetailComponent implements OnInit {
     } else {
       this.getDetailModules();
     }
-    if ('extraInfo' in this.state) {
-      if(this.state.extraInfo.attributes.courseFee > 0) {
-        this.isFree = false;
-      }
-    } else {
-      this.getExtraInfo();
-    }
-  }
-
-  getCustomeFieldValue(customFields: any[], name: any) {
-    let result = customFields.find((element) => element.shortname == name);
-
-    if (result) {
-      return result.value;
-    } else {
-      return 'N/A';
+   
+    if(+this.state.courseFee > 0) {
+      this.isFree = false;
     }
   }
 
@@ -126,7 +114,7 @@ export class CourseDetailComponent implements OnInit {
       if (this.isEnrolledForThisCourse) {
         window.open(`${environment.canvasUrl}/courses/${this.id}`, '_blank');
       } else {
-        this.courseFee = this.state.extraInfo?.attributes.courseFee;
+        this.courseFee = +this.state.courseFee;
 
         if (this.courseFee == 0) {
           // check the login status and call start enrolling
@@ -187,28 +175,6 @@ export class CourseDetailComponent implements OnInit {
       .mainCanvas(`selfEnroll/${this.id}`, 'post', data)
       .subscribe((response: any) => {
         if (response.status) {
-         
-          // let data = {
-          //   userId: this.service.userData.id,
-          //   courseId: this.id,
-          //   courseTitle: this.state.name,
-          //   requiredModules: 0,
-          //   completedModules: 0,
-          //   progress: 0,
-          //   traineeName: this.service.userData.short_name,
-          //   traineeSex: this.service.userData.profile.sex,
-          //   traineeLocation: `${this.service.userData.profile.city}, ${this.service.userData.profile.country}`
-          // }
-
-          // this.service
-          // .mainCanvas(`createEnrollmentSideEffect`, 'post', data)
-          // .subscribe((result: any) => {
-
-          //   if(!result.status){
-          //     this.toastr.error(result.message, 'Error');
-          //   }
-          // });
-
            // add course to local variable
            this.state.percentage = 0;
            this.state.modules_published = true;
@@ -228,33 +194,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
 
-  createAssessmentSideeffect(){
-    let quizzes: any[] = [];
-        
-    this.state.quizzes.forEach((element: any) => {
-      let ele: any = element;
-
-      ele.userId = this.service.userData.id;
-
-      ele.traineeName = this.service.userData.short_name;
-      ele.traineeSex = this.service.userData.profile.sex;
-      ele.traineeLocation = `${this.service.userData.profile.city}, ${this.service.userData.profile.country}`;
-      ele.institution = this.service.userData.profile.organizationName
-
-      quizzes.push(ele);
-
-    });
-
-    let payload = { data: quizzes  };
-
-    // this.service.mainCanvas(`createAssessmentSideeffect`, 'post', payload)
-    // .subscribe((response: any) => {
-    //   if (!response.status) {
-    //     this.toastr.error(response.message, 'Error');
-    //   } 
-    // });
-
-  }
+ 
 
   checkPaymnetSettlement() {
 
@@ -282,8 +222,8 @@ export class CourseDetailComponent implements OnInit {
       studentId: this.service.userData.id,
       traineeName:this.service.userData.short_name,
       courseId: this.id,
-      courseTitle: this.state.name,
-      courseCode: this.state.course_code,
+      courseTitle: this.state.attributes.name,
+      courseCode: this.state.attributes.course_code,
       status: 'pending',
     };
 
@@ -331,7 +271,7 @@ export class CourseDetailComponent implements OnInit {
         data: {
           purchaseDetails: {
             orderId: 'Not Required',
-            description: `Payment For the course : ${this.state.name}`,
+            description: `Payment For the course : ${this.state.attributes.name}`,
             amount: +this.courseFee,
             customerName: this.service.userData.name,
             customerPhoneNumber: this.service.userData.profile.phonenumber,
@@ -343,7 +283,7 @@ export class CourseDetailComponent implements OnInit {
           },
           metaData: {
             student_name: this.service.userData.name,
-            course_name: this.state.name,
+            course_name: this.state.attributes.name,
             paymentId: paymentId
           }
         }
@@ -372,30 +312,6 @@ export class CourseDetailComponent implements OnInit {
       if(response.status){
         this.state.activities = response.message;
         this.service.loadedCourses[this.index].activities = response.message;
-  
-        // extracting quizzes
-  
-        let quizzes: any[] = [];
-  
-        response.message.forEach((modules: any) => {
-          modules.items.forEach((item:any) => {
-            if(item.type == 'Quiz'){  
-              let data =  {
-                moduleName: modules.name,
-                assessmentName: item.title,
-                quizId: item.id,
-                courseId: this.id,
-                courseTitle: this.state.name,
-                };
-  
-              quizzes.push(data);
-            }
-          });
-        });
-  
-        this.state.quizzes = quizzes;
-        this.service.loadedCourses[this.index].quizzes = quizzes;
-
       } else {
         this.toastr.error(response.message, 'Error');
       }
@@ -404,32 +320,6 @@ export class CourseDetailComponent implements OnInit {
     });
   }
 
-  getExtraInfo() {
-    this.isExtraInfoLoading = true;
-    this.service
-      .mainCanvas(`getCourseExtraInfo/${this.id}`, 'get', null)
-      .subscribe((response: any) => {
-
-        let message = response.message;
-
-        if(message.length){
-          message[0].attributes = JSON.parse(message[0].attributes);
-          message[0].attributes.courseFee = +message[0].attributes.courseFee;
-
-          message[0].features = Object.values(JSON.parse(message[0].features));
-
-          this.state.extraInfo = message[0];
-          this.service.loadedCourses[this.index].extraInfo = message[0];
-
-          if(this.state.extraInfo.attributes.courseFee > 0) {
-            this.isFree = false;
-          }
-
-        }
-        
-        this.isExtraInfoLoading = false;
-      });
-  }
 
   scroll(direction: any) {
     let container: any = document.getElementById('moduleCardsContainer');

@@ -22,6 +22,9 @@ import { PageService, SortService, FilterService, GroupService } from '@syncfusi
 import { ConfirmDialogueComponent } from './confirm-dialogue/confirm-dialogue.component';
 import { ConfirmationService } from './confirmation.service';
 
+import { CheckBoxModule } from '@syncfusion/ej2-angular-buttons';
+import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+
 @NgModule({
   declarations: [HtmlSanitaizerPipe, TimeStampPipe, GridComponents, ConfirmDialogueComponent],
   imports: [
@@ -33,6 +36,8 @@ import { ConfirmationService } from './confirmation.service';
     MatTabsModule,
     NgbModule,
     GridModule,
+    CheckBoxModule,
+    DropDownListModule
   ],
   exports: [
     CommonModule,
@@ -46,7 +51,9 @@ import { ConfirmationService } from './confirmation.service';
     NgbModule,
     GridModule,
     GridComponents,
-    ConfirmDialogueComponent
+    ConfirmDialogueComponent,
+    CheckBoxModule,
+    DropDownListModule
   ],
   providers: [AuthGuard,
     PageService,

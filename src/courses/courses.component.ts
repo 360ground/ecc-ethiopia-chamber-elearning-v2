@@ -32,7 +32,7 @@ export class CoursesComponent implements OnInit {
   public baseImageUrl: any = environment.baseUrlBackend;
 
   public searcNotFoundhMessage: any = null;
-  public showFilter: boolean = false;
+  public showSearch: boolean = true;
 
   public missingProfileFields:any [] = [];
 
@@ -40,26 +40,44 @@ export class CoursesComponent implements OnInit {
   public formSubmitted = false;
   public disable: boolean = false;
 
-
   public paymentOptions: any[] = [
-    { title: 'Free', id: 1 },
-    { title: 'Not Free', id: 0 },
+    { title: 'Free', id: 1, isChecked:false },
+    { title: 'With payment', id: 0, isChecked:false },
   ];
   public certificationOptions: any[] = [
-    { title: 'Have certificate', id: 1 },
-    { title: 'Have not certificate', id: 0 },
+    { title: 'Have certificate', id: 1, isChecked:false },
+    { title: 'Have not certificate', id: 0, isChecked:false },
   ];
   public courseLengthOptions: any[] = [
-    { title: 'Under 2 hours', id: 'under2hours' },
-    { title: '2 - 10 hours', id: '2-10hours' },
-    { title: '11 - 20 hours', id: '11-20hours' },
-    { title: '+ 20 hours', id: '+20hours' },
+    { title: 'Under 2 hours', id: 'Under 2 hours', isChecked:false },
+    { title: '2 - 10 hours', id: '2 - 10 hours', isChecked:false },
+    { title: '11 - 20 hours', id: '11 - 20 hours', isChecked:false },
+    { title: '+20 hours', id: '+20 hours', isChecked:false },
+  ];
+  public audienceOptions: any[] = [
+    { title: 'Beginners', id: 'beginners', isChecked:false },
+    { title: 'Intermediate', id: 'intermediate', isChecked:false },
+    { title: 'Advanced', id: 'advanced', isChecked:false }
   ];
 
-  public selectedCategories: any[] = [];
-  public selectedPayment: any[] = [];
-  public selectedcertificate: any[] = [];
-  public selectedCourseLength: any[] = [];
+  public pageSize: any[] = [
+    { text: '1 - 10', value: '10'},
+    { text: '10 - 20', value: '20'},
+    { text: '20 - 40', value: '40'},
+    { text: '40 - 100', value: '100'},
+    { text: 'More Than 100', value: 'all' }
+  ];
+
+  public fields: any = { text: 'text',value: 'value' };
+
+  public filterOptions: any = {
+    categoryId: [],
+    courseFee: [],
+    hasCertificate: [],
+    targetAudience:[],
+    estimatedCompletionHour:[]
+  };
+
   public messages: any[] | undefined;
 
   @ViewChild('carousel', { static: true })
@@ -88,16 +106,7 @@ export class CoursesComponent implements OnInit {
 
   ngOnInit(): void {
 
-
-    // 
-    // let queryParam: any = this.actRoute.snapshot.queryParams;
-
     const queryParam:any = new URL(window.location.href).searchParams;
-
-    console.log(queryParam.get('id'));
-    console.log(queryParam.get('paymentSuccess'));
-    console.log(queryParam.get('paymentId'));
-
 
     if(queryParam !== undefined){
       
@@ -125,28 +134,7 @@ export class CoursesComponent implements OnInit {
       this.courses = this.service.loadedCourses;
       
     } else {
-      this.isLoading = true;
-      let request: any [] = [];
-
-      this.openModal();
-
-      this.service
-        .mainCanvas('getAllCourses', 'get', null)
-        .subscribe((response: any) => {
-          this.courses = response;
-
-          this.courses.forEach((element: any) => {
-            if (location.protocol == 'http:'){
-              if(element.image_download_url){
-                element.image_download_url = element.image_download_url.replace('https', 'http');
-              }
-            }
-            request.push(this.service.mainCanvas(`getCourseExtraInfo/${element.id}`, 'get', null));
-          }); 
-
-          this.loadExtraInfo(request);
-      
-        });
+      this.LoadCourses(10);
     }
 
     if(this.service.missingProfileFields.length){
@@ -156,6 +144,51 @@ export class CoursesComponent implements OnInit {
       );
     }
 
+    this.getCategories();
+
+  }
+
+  public LoadCourses(limit: any){
+    this.isLoading = true;
+
+    this.openModal();
+
+    this.service
+      .mainCanvas(`getAllCourseExtraInfo/${limit}`, 'get', null)
+      .subscribe((response: any) => {
+        if(response.status){
+          let message = response.message;
+
+          message.forEach((element: any) => {
+            element.attributes = JSON.parse(element.attributes);
+            element.features = Object.values(JSON.parse(element.features));
+
+
+            if (location.protocol == 'http:'){
+
+              if(element.attributes.image_download_url){
+                element.attributes.image_download_url = element.attributes.image_download_url.replace('https', 'http');
+
+              }
+
+            }
+
+            // request.push(this.service.mainCanvas(`getCourseExtraInfo/${element.id}`, 'get', null));
+          }); 
+
+          this.courses = message;
+          this.service.loadedCourses = this.courses;
+
+          this.isLoading = false;
+          this.closeModal();
+          
+        } else {
+          this.toastr.error(response.message, 'Error');
+        }
+
+        // this.loadExtraInfo(request);
+    
+      });
   }
 
   public getControls(name: any): FormControl {
@@ -191,13 +224,9 @@ export class CoursesComponent implements OnInit {
         }
       });
 
-      this.service.loadedCourses = this.courses;
-
-      this.isLoading = false;
-      this.closeModal();
+    
 
       if(this.id !== undefined){
-        console.log('lalalal')
         this.router.navigateByUrl(`detail/${this.id}/${course.index}?paymentId=${this.paymentId}`,
          { state: { course } })
       }
@@ -243,101 +272,122 @@ export class CoursesComponent implements OnInit {
   getCategories() {
     this.isLoadingCourseCategories = true;
 
-    const formData = new FormData();
+    this.service.mainCanvas(`category`, 'get', {}).subscribe((response: any) => {
+      if (response.status) {
+        this.courseCategories = response.message;
 
-    formData.append('wstoken', environment.adminToken);
-    formData.append('wsfunction', 'core_course_get_categories');
-    formData.append('moodlewsrestformat', 'json');
+      } else {
+        this.toastr.error(response.message, 'Error');
 
-    this.service.main(formData).subscribe((response: any) => {
-      this.courseCategories = response;
-      this.service.courseCategories = this.courseCategories;
+      }
+
       this.isLoadingCourseCategories = false;
+
     });
+
   }
 
   // on checkbox select
-  setFilterCategories(isChecked: any, value: any) {
+  setFilterOptions(isChecked: any, option: any, value: any, index: any, dataSource: any) {
+    let _this: any = this;
+    
     if (isChecked) {
-      this.selectedCategories.push(value);
+      this.filterOptions[option].push(value);
+      _this[dataSource][index].isChecked = true;
+
     } else {
-      let index = this.courseCategories.indexOf((ele: any) => (ele.id = value));
-      this.selectedCategories.splice(index, 1);
+
+      let ind = this.filterOptions[option].indexOf((element: any) => (element == value));
+
+      this.filterOptions[option].splice(ind, 1);
+      _this[dataSource][index].isChecked = false;
+
     }
+
   }
-
-
 
   searchCourses(){
     this.formSubmitted = true;
-    let request: any [] = [];
 
     if (!this.formGroup.valid) {
       return;
 
     } else {
 
-      this.searcNotFoundhMessage = null;
-      
+      this.showSearch = false;
+
       let payload = this.formGroup.value;
+      this.findCourses(false, payload);
 
-      this.disable = true;
-      this.formGroup.disable();
-      this.openModal();
-      
-      this.service
-        .mainCanvas(`searchCourses`, 'post', payload)
-        .subscribe((response: any) => {
-          if (response.status) {
-            
-            if(!response.message.length){
-              this.searcNotFoundhMessage = 'No record found.';
-              this.coursesBackup = [...this.courses];
-              this.courses = response.message;
-
-            } else {
-              this.coursesBackup = [...this.courses];
-              this.courses = response.message;
-
-              this.showFilter = true;
-
-              this.courses.forEach((element: any) => {
-                if (location.protocol == 'http:'){
-                  if(element.image_download_url){
-                    element.image_download_url = element.image_download_url.replace('https', 'http');
-                  }
-                }
-
-                request.push(this.service.mainCanvas(`getCourseExtraInfo/${element.id}`, 'get', null));
-
-              }); 
-
-              this.loadExtraInfo(request);
-
-            }
-
-            this.showFilter = true;
-
-          } else {
-            this.toastr.error(response.message, 'Error');
-            
-          }
-
-          this.disable = false;
-          this.formGroup.enable();
-          this.closeModal();
-        
-        });
     }
 
   }
 
 
-  clearFilter(){
-    this.courses = this.coursesBackup;
-    this.showFilter = false;
-    this.formSubmitted = false;
+  findCourses(isFiltering: boolean, payload: any){
+
     this.searcNotFoundhMessage = null;
+
+    this.disable = true;
+    this.formGroup.disable();
+    this.openModal();
+    
+    this.service.mainCanvas(isFiltering ? `filterCourses` : 'searchCourses', 'post', payload).subscribe((response: any) => {
+        if (response.status) {
+          
+          if(!response.message.length){
+
+            this.searcNotFoundhMessage = 'No record found.';
+            this.coursesBackup = [...this.courses];
+            this.courses = response.message;
+
+          } else {
+
+            this.coursesBackup = [...this.courses];
+
+            let message = response.message;
+
+            message.forEach((element: any) => {
+              element.attributes = JSON.parse(element.attributes);
+              element.features = Object.values(JSON.parse(element.features));
+
+              if (location.protocol == 'http:'){
+
+                if(element.attributes.image_download_url){
+                  element.attributes.image_download_url = element.attributes.image_download_url.replace('https', 'http');
+
+                }
+
+              }
+
+            }); 
+
+            this.courses = message;
+
+            this.isLoading = false;
+            this.closeModal();
+
+          }
+
+        } else {
+          this.toastr.error(response.message, 'Error');
+          
+        }
+
+        this.disable = false;
+        this.formGroup.enable();
+        this.closeModal();
+      
+      });
+
+  }
+
+  clearSearch(){
+    this.courses = this.coursesBackup;
+    this.searcNotFoundhMessage = null;
+    this.showSearch = true;
+    this.formSubmitted = false;
+    
     this.formGroup.reset();
   }
 
@@ -351,6 +401,40 @@ export class CoursesComponent implements OnInit {
     });  
   }
 
+  clearFilterOptions(){
+    if(confirm(`Are you sure want to clear filter ?`)){
+      this.filterOptions = {
+        categoryId: [],
+        courseFee: [],
+        hasCertificate: [],
+        targetAudience:[],
+        estimatedCompletionHour:[]
+      };
+
+      this.coursesBackup.length ? this.courses = this.coursesBackup : null;
+      this.searcNotFoundhMessage = null;
+
+      let _this: any = this;
+
+      let Globalvariables = [
+        'courseCategories','paymentOptions','certificationOptions','audienceOptions','courseLengthOptions'
+      ];
+
+      Globalvariables.forEach((element: any) => {
+        _this[element].forEach((ele: any) => {
+          ele.isChecked = false;
+        });
+
+      });
+
+    }
+
+  }
+
+  public applyFilter(){
+    this.findCourses(true, this.filterOptions)
+
+  }
 
 }
 

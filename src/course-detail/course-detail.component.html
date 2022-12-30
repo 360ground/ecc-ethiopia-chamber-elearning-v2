@@ -4,12 +4,11 @@
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
-                    <h1 class="course-title">{{state?.name}}</h1>
-                    <p class="course-subtitle">{{state?.course_code}}</p>
-                    <!-- <p class="gray mb-4">Presented By : {{state?.contacts[0]?.fullname}}</p> -->
+                    <h1 class="course-title">{{state.attributes.name}}</h1>
+                    <p class="course-subtitle">{{state.attributes.course_code}}</p>
                     <p class="mt-4" *ngIf="service?.isIndividual">
                         <span *ngIf="!isEnrolledForThisCourse">
-                            <button type="button" *ngIf="state?.extraInfo" class="btn btn-primary" 
+                            <button type="button" class="btn btn-primary" 
                                 style="border-radius: 0px; width: 231px; padding: 14px;" [disabled]="enrolling" (click)="startLearning()">
                                 <div>
                                     <span *ngIf="enrolling">
@@ -24,29 +23,24 @@
                                     </span>
                                 </div>
                             </button>
-<!-- 
-                            <span style="font-weight: 500; width: 231px;" *ngIf="!state?.extraInfo"
-                                class="btn btn-primary disabled_button disabled">
-                                  {{ paymnetSettlement.length ? 'Enroll' : 'Pay & Enroll'  }}
-                            </span> -->
+
                         </span>
 
                         <span *ngIf="isEnrolledForThisCourse"> 
-                            <button type="button" class="btn btn-primary" *ngIf="state?.extraInfo" style="border-radius: 0px; width: 231px;
+                            <button type="button" class="btn btn-primary" style="border-radius: 0px; width: 231px;
                             padding: 14px;"  [disabled]="enrolling" (click)="startLearning()">
                                 <i class="fa fa-spinner" style="margin-right: 10px !important;" 
                                 aria-hidden="true" *ngIf="enrolling"></i>
                                 <span style="font-weight: 500;">Continue learing</span>
                             </button>
-                            <span style="font-weight: 500; width: 231px;" class="btn btn-primary disabled_button disabled"
-                             *ngIf="!state?.extraInfo">Continue learing</span>
+                           
                         </span>
                     </p>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 smaller">
                     <!-- <img class="card-img-top" [ngStyle]="{'background-image': 'url(' + state?.image_download_url + ')'}"> -->
                     <img class="card-img-top" style="height: 220px !important;"
-                    [ngStyle]="{'background-image': 'url(' + state.image_download_url + ')'}"
+                    [ngStyle]="{'background-image': 'url(' + state.attributes.image_download_url + ')'}"
                     alt="" width="100%" height="30%">
                 </div>
             </div>
@@ -60,7 +54,7 @@
     
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 leftColumen" *ngIf="state?.extraInfo?.attributes">
+                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 leftColumen">
                         <div class="row">
                             <div class="col-sm-1 col-md-1 col-lg-1 smaller">
                                 <div class="vr"></div>
@@ -74,46 +68,46 @@
                                 <p class="lists">
                                     <span><i class="icons1 fa fa-bars" aria-hidden="true"></i>
                                     </span>
-                                    <span>Modules : {{ state?.extraInfo?.attributes.totalModules }}</span>
+                                    <span>Modules : {{ state?.totalModules }}</span>
                                 </p>
                                 <p class="lists">
                                     <span><i class="icons1 fa fa-clock-o" aria-hidden="true"></i>
                                     </span>
-                                    <span>Esti. Hours : {{ state?.extraInfo?.attributes.estimatedCompletionHour }}</span>
+                                    <span>Esti. Hours : {{ state?.estimatedCompletionHour }}</span>
                                 </p>
                                 <p class="lists">
                                     <span><i class="icons1 fa fa-user" aria-hidden="true"></i>
                                     </span>
-                                    <span>{{ state?.extraInfo?.attributes.targetAudience }}</span>
+                                    <span>{{ state?.targetAudience }}</span>
                                 </p>
                                 <p class="lists">
                                     <span><i class="icons1 fa fa-money" aria-hidden="true"></i>
                                     </span>
-                                    <span *ngIf="!state?.extraInfo?.attributes.courseFee">
+                                    <span *ngIf="state?.courseFee == 0">
                                         Free
                                     </span>
 
-                                    <span *ngIf="state?.extraInfo?.attributes.courseFee">
-                                        {{ state?.extraInfo?.attributes.courseFee | number }} ETB
+                                    <span *ngIf="state?.courseFee > 0">
+                                        {{ state?.courseFee | number }} ETB
                                     </span>
                                 </p>
                                 <p class="lists">
                                     <span><i class="icons1 fa fa-bars" aria-hidden="true"></i>
                                     </span>
                                     <span>
-                                        {{ state?.extraInfo?.category | uppercase }}
+                                        {{ state?.category | uppercase }}
                                     </span>
                                 </p>
                             </div>
                         </div>    
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" *ngIf="state?.extraInfo?.features">
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" *ngIf="state?.features">
                         <p class="lists">
                             <span style="
                             font-weight: bolder !important;
                         ">Course features</span>
                         </p> 
-                        <div *ngFor="let feature of state?.extraInfo?.features; let i = index;">
+                        <div *ngFor="let feature of state?.features; let i = index;">
                             <p class="lists">
                                 <span>
                                     <i class="icons2 fa fa-check-circle" aria-hidden="true"></i>
@@ -124,7 +118,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-12" [ngClass]="state?.extraInfo ? 'col-md-5 col-lg-5' : 'col-md-12 col-lg-12'">
+                    <div class="col-xs-12 col-sm-12" [ngClass]="state ? 'col-md-5 col-lg-5' : 'col-md-12 col-lg-12'">
                         <div class="row">
                             <div class="col-sm-1 col-md-1 col-lg-1 smaller">
                                 <div class="vr"></div>
@@ -133,7 +127,7 @@
                             <div class="col-sm-11 col-md-11 col-lg-11">
                                 <h1 class="mb-4" style="font-weight: lighter;">About this Course</h1>
                                 <p style="color: #9aa0a6; margin-top: 10px !important; font-size: 17px;line-height: 32px;" 
-                                [innerHTML]="readmore ? (state?.short | htmlSanitaizer) : (state?.public_description | htmlSanitaizer)">
+                                [innerHTML]="readmore ? (state.attributes?.short | htmlSanitaizer) : (state.attributes?.public_description | htmlSanitaizer)">
                                 </p>
                                 <p>
                                     <button type="button" class="btn btn-light" (click)="readmore = !readmore"> 
@@ -279,164 +273,3 @@
         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"></div>
     </div>    
 </div>
-
-<!-- <div class="container" style="margin-top: 45px !important;">
-    <div class="card" style="padding: 25px !important; border-radius: 0px !important">
-        <div class="row mt-4 mb-4">
-            <div class="col-sm-6 col-xs-6 col-md-6 col-lg-6">
-                <h1 class="gray">{{state?.fullname}}</h1>
-                <p class="gray">{{state?.shortname}}</p>
-                <p class="gray mb-4">Presented By : {{state?.contacts[0]?.fullname}}</p>
-    
-                <div class="row">
-                    <div class="col-sm-6 col-xs-6 col-md-6 col-lg-6">
-                        <p class="">
-                            <span><i class="icons1 fa fa-bars" aria-hidden="true"></i>
-                            </span>
-                            <span>Modules : {{ getCustomeFieldValue(state?.customfields, 'total_number_of_topic') }}</span>
-                        </p>
-                        <p class="">
-                            <span><i class="icons1 fa fa-clock-o" aria-hidden="true"></i>
-                            </span>
-                            <span>Estimated Hours : {{ getCustomeFieldValue(state?.customfields, 'eastimated_completion_hour') }}</span>
-                        </p>
-                        <p class="">
-                            <span><i class="icons1 fa fa-user" aria-hidden="true"></i>
-                            </span>
-                            <span>{{ state?.customfields[3]?.valueraw }}</span>
-                        </p>
-                        <p class="">
-                            <span><i class="icons1 fa fa-money" aria-hidden="true"></i>
-                            </span>
-                            <span>{{ getCustomeFieldValue(state?.customfields, 'isfree') ? 'Free' :  getCustomeFieldValue(state?.customfields, 'price')}}</span>
-                        </p>
-    
-                    </div>
-                    <div class="col-sm-6 col-xs-6 col-md-6 col-lg-6" *ngIf="courseFeatures">
-                        <div *ngFor="let feature of courseFeatures">
-                            <p>
-                                <span>
-                                    <i class="icons2 fa fa-check-circle" aria-hidden="true"></i>
-                                </span>
-                                <span>
-                                    {{ feature | titlecase }}
-                                </span>
-                            </p>
-                        </div>    
-                    </div>
-    
-                <p class="mt-4">
-                    <button type="button" *ngIf="!isEnrolledForThisCourse" class="btn btn-primary" style="border-radius: 0px; width: 200px;
-                    padding: 14px;"  [disabled]="disabled" (click)="startLearning()">
-                        <i class="fa fa-spinner" aria-hidden="true" *ngIf="disabled"></i>
-                        Start course 
-                        <i class="fa fa-chevron-circle-right ml-4"
-                        aria-hidden="true"></i>
-                    </button>
-
-                    <button type="button" *ngIf="isEnrolledForThisCourse" class="btn btn-primary" style="border-radius: 0px; width: 200px;
-                    padding: 14px;"  [disabled]="disabled" (click)="startLearning()">
-                        <i class="fa fa-spinner" aria-hidden="true" *ngIf="disabled"></i>
-                        Continue learing
-                        <i class="fa fa-chevron-circle-right ml-4"
-                        aria-hidden="true"></i>
-                    </button>
-                </p>
-                </div>
-            </div>    
-            <div class="col-sm-6 col-xs-6 col-md-6 col-lg-6">
-                <img class="card-img-top" [src]="state?.overviewfiles[0]?.fileurl + '?token='+ adminToken" [alt]="state?.overviewfiles[0]?.filename"
-                    width="100%" height="100%">
-            </div>
-        </div>
-    </div>
-    
-    <div class="card mb-8" style="padding: 25px !important; border-radius: 0px !important">
-        <div class="row">
-            <div class="col-sm-6 col-xs-6 col-md-12 col-lg-12">
-                <h1 class="mb-4" style="font-weight: lighter;">About this Course</h1>
-                <p class="gray mb-4" [innerHTML]="state?.summary | htmlSanitaizer">
-                    <hr class="mb-4"/>
-                 <h1 class="mb-4 steps" style="color: black;">
-                    How it Works</h1>
-                 <div class="row">
-                    <div class="col-sm-6 col-xs-6 col-md-4 col-lg-4">
-                        <p class="steps">
-                            <span class="btn btn-primary numbers">
-                                1
-                            </span>
-                        </p>
-                        <p class="steps">
-                            Learn all the Lessons in this course and earn the required skills.
-                        </p>
-                    </div>
-                    <div class="col-sm-6 col-xs-6 col-md-4 col-lg-4">
-                        <p class="steps">
-                            <span class="btn btn-primary numbers">
-                                2
-                            </span>
-                        </p>
-                        <p class="steps">
-                            Pass the final 40-question exam and get certified.
-                        </p>
-                    </div>
-                    <div class="col-sm-6 col-xs-6 col-md-4 col-lg-4">
-                        <p class="steps">
-                            <span class="btn btn-primary numbers">
-                                3
-                            </span>
-                        </p>
-                        <p class="steps">
-                            Download and showcase your new qualification on LinkedIn and your CV.
-                        </p>
-                    </div>
-                 </div>    
-            </div>
-        </div>
-    </div>
-  
-    <div class="mb-4 mt-4" *ngIf="!state?.activities">
-        <h4 style="text-align: center;
-        font-weight: lighter;
-        font-size: 24px;
-        margin-top: 22px;
-        color: black;">Loading modules ...</h4>
-    </div>
-    <div  *ngIf="state?.activities">
-        <h1 style="margin-bottom: 20px !important; text-align:center; margin-top: 65px !important">
-            Modules included
-        </h1>
-        <div class="row">
-            <div class="col-sm-12 col-md-1 col-lg-1">
-                <span>
-                    <i class="fa fa-chevron-left scrollButtonLeft" (click)="scroll('left')" aria-hidden="true"></i>
-                </span>
-            </div>
-            <div class="col-sm-12 col-md-10 col-lg-310">
-                <div id="moduleCardsContainer" class="moduleCardsContainer" style="margin-top: 65px !important">
-                    <div class="col-sm-12 col-md-3 col-lg-3" style="display: inline-block;" *ngFor="let activity of state?.activities; let i = index">
-                        <div class="card moduleCards">
-                            <p style="color: #3c4043; font-weight: 500;
-                            text-transform: capitalize;">{{activity.name}}</p>
-                            <p style="color: #3c4043;
-                            font: 300 14px/18px Roboto,Arial,Helvetica,serif;
-                            margin-bottom: 10px;">{{ activity?.modules.length }} LESSONS</p>
-                            <hr class="mb-4" />
-                            <div class="innerModuleCards">
-                                <p *ngFor="let subActivity of activity?.modules; let i = index" 
-                                style="color: #1a73e8;font: 400 14px/22px Google Sans,Arial,sans-serif; margin-bottom: 16px;transition: color .25s ease; cursor: pointer;">
-                                    {{ subActivity?.name }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-1 col-lg-1">
-                <span>
-                    <i class="fa fa-chevron-right scrollButtonRight" (click)="scroll('right')" aria-hidden="true"></i>
-                </span>
-            </div>
-        </div>
-    </div>
-</div> -->

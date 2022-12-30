@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { CouresExtraInfoComponent } from './coures-extra-info/coures-extra-info.component';
 import { Routes, RouterModule } from '@angular/router';
 import { DateRangePickerModule } from '@syncfusion/ej2-angular-calendars';
-import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { RequestsComponent } from 'src/enrollment-request/requests/requests.component';
 import { SharedModule } from 'src/shared/shared.module';
 import { TraineePerformanceReportComponent } from './report/trainee-performance-report/trainee-performance-report.component';
@@ -51,7 +50,6 @@ const routes: Routes = [
         SharedModule,
         CommonModule,
         DateRangePickerModule,
-        DropDownListModule,
         RouterModule.forChild(routes),
         SharedModule
     ]

@@ -165,8 +165,19 @@
   }
 
 
+  .searchBtn {
+    width: 100% !important;
+    height: 100% !important;
+    margin-left: -12px !important;
+  }
+
   .btn {
     width: 100% !important;
+  }
+
+  .btn-light {
+    color: #0d6efd !important;
+    font-weight: 500 !important;
   }
 
 
