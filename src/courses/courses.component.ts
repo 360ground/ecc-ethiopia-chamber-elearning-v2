@@ -91,6 +91,8 @@ export class CoursesComponent implements OnInit {
   public paymentId: any = undefined;
   public id: any = undefined;
 
+  public IsAvailable: boolean = true;
+
   constructor(
     public service: ApiService,
     public router: Router,
@@ -159,25 +161,30 @@ export class CoursesComponent implements OnInit {
         if(response.status){
           let message = response.message;
 
-          message.forEach((element: any) => {
-            element.attributes = JSON.parse(element.attributes);
-            element.features = Object.values(JSON.parse(element.features));
+          if(message.length){
 
-
-            if (location.protocol == 'http:'){
-
-              if(element.attributes.image_download_url){
-                element.attributes.image_download_url = element.attributes.image_download_url.replace('https', 'http');
-
+            message.forEach((element: any) => {
+              element.attributes = JSON.parse(element.attributes);
+              element.features = Object.values(JSON.parse(element.features));
+  
+  
+              if (location.protocol == 'http:'){
+  
+                if(element.attributes.image_download_url){
+                  element.attributes.image_download_url = element.attributes.image_download_url.replace('https', 'http');
+  
+                }
+  
               }
+  
+            }); 
+  
+            this.courses = message;
+            this.service.loadedCourses = this.courses;
 
-            }
-
-            // request.push(this.service.mainCanvas(`getCourseExtraInfo/${element.id}`, 'get', null));
-          }); 
-
-          this.courses = message;
-          this.service.loadedCourses = this.courses;
+          } else {
+            this.IsAvailable = false;
+          }
 
           this.isLoading = false;
           this.closeModal();
@@ -185,8 +192,6 @@ export class CoursesComponent implements OnInit {
         } else {
           this.toastr.error(response.message, 'Error');
         }
-
-        // this.loadExtraInfo(request);
     
       });
   }
@@ -338,12 +343,14 @@ export class CoursesComponent implements OnInit {
           if(!response.message.length){
 
             this.searcNotFoundhMessage = 'No record found.';
-            this.coursesBackup = [...this.courses];
+
+            // !this.coursesBackup.length ? this.coursesBackup = [...this.courses] : null;
+
             this.courses = response.message;
 
           } else {
 
-            this.coursesBackup = [...this.courses];
+            // !this.coursesBackup.length ? this.coursesBackup = [...this.courses] : null;
 
             let message = response.message;
 
@@ -383,7 +390,7 @@ export class CoursesComponent implements OnInit {
   }
 
   clearSearch(){
-    this.courses = this.coursesBackup;
+    this.courses = this.service.loadedCourses;
     this.searcNotFoundhMessage = null;
     this.showSearch = true;
     this.formSubmitted = false;
@@ -402,7 +409,7 @@ export class CoursesComponent implements OnInit {
   }
 
   clearFilterOptions(){
-    if(confirm(`Are you sure want to clear filter ?`)){
+    // if(confirm(`Are you sure want to clear filter ?`)){
       this.filterOptions = {
         categoryId: [],
         courseFee: [],
@@ -411,7 +418,7 @@ export class CoursesComponent implements OnInit {
         estimatedCompletionHour:[]
       };
 
-      this.coursesBackup.length ? this.courses = this.coursesBackup : null;
+      this.courses = this.service.loadedCourses;
       this.searcNotFoundhMessage = null;
 
       let _this: any = this;
@@ -427,7 +434,7 @@ export class CoursesComponent implements OnInit {
 
       });
 
-    }
+    // }
 
   }
 

@@ -59,21 +59,40 @@ export class CourseDetailComponent implements OnInit {
 
   ngOnInit(): void {
     let queryParam: any = this.actRoute.snapshot.queryParams;
+
+    this.id = this.actRoute.snapshot.paramMap.get('id');
+    this.index = this.actRoute.snapshot.paramMap.get('index');
+
     this.paymentId = queryParam.paymentId;
 
     if(queryParam !== undefined){
       if ('paymentId' in queryParam) {
         this.checkBill(this.paymentId); 
       }
+
+      if ('courseId' in queryParam) {
+        this.getCourseDetail(queryParam.courseId);
+      }
     } 
     
-    this.id = this.actRoute.snapshot.paramMap.get('id');
-    this.index = this.actRoute.snapshot.paramMap.get('index');
-
     this.state = this.location.getState();
-
     
-    this.state.attributes.short = this.state.attributes.public_description !== undefined  ? this.state.attributes.public_description?.substring(0, 200) : '';
+    if(this.state.attributes !== undefined) {
+      console.log(this.state)
+      this.id = this.state.attributes.id;
+
+      this.initializeStates();
+    }
+      
+
+  }
+
+  initializeStates(){
+    this.state.attributes ?
+    this.state.attributes.short = 
+    this.state.attributes?.public_description !== undefined  ?
+     this.state.attributes?.public_description?.substring(0, 200) :
+    '' : null;
   
     if(this.service.userData){
       this.checkPaymnetSettlement();
@@ -100,6 +119,37 @@ export class CourseDetailComponent implements OnInit {
     if(+this.state.courseFee > 0) {
       this.isFree = false;
     }
+  }
+
+  getCourseDetail(courseId: any){
+    this.isModulesLoading = true;
+    this.service
+    .mainCanvas(`getCourseExtraInfo/${courseId}`, 'get', null)
+    .subscribe((response: any) => {
+      if(response.status){
+        let message = response.message[0];
+
+        message.attributes = JSON.parse(message.attributes);
+        message.features = Object.values(JSON.parse(message.features));
+
+        if (location.protocol == 'http:'){
+
+          if(message.attributes.image_download_url){
+            message.attributes.image_download_url = message.attributes.image_download_url.replace('https', 'http');
+
+          }
+
+        }
+
+        this.state = message;
+        this.id = courseId;
+        this.initializeStates();
+
+      } else {
+        this.toastr.error(response.message, 'Error');
+      }
+
+    });
   }
 
   startLearning() {
@@ -192,9 +242,6 @@ export class CourseDetailComponent implements OnInit {
         this.enrolling = false;
       });
   }
-
-
- 
 
   checkPaymnetSettlement() {
 
@@ -311,7 +358,8 @@ export class CourseDetailComponent implements OnInit {
     .subscribe((response: any) => {
       if(response.status){
         this.state.activities = response.message;
-        this.service.loadedCourses[this.index].activities = response.message;
+        this.index ? this.service.loadedCourses[this.index].activities = response.message : null;
+
       } else {
         this.toastr.error(response.message, 'Error');
       }
@@ -319,7 +367,6 @@ export class CourseDetailComponent implements OnInit {
       this.isModulesLoading = false;
     });
   }
-
 
   scroll(direction: any) {
     let container: any = document.getElementById('moduleCardsContainer');
@@ -349,7 +396,7 @@ export class CourseDetailComponent implements OnInit {
 
   login(){
     this.router.navigate(['/account/login'], {
-      state: { returnUrl: `/detail/${this.id}`, course: this.state },
+      state: { returnUrl: `/courseDetail`, course: this.state },
     });
   }
 
