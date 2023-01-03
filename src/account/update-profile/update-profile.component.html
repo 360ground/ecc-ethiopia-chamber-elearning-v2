@@ -262,6 +262,9 @@
                                 <div formGroupName="education" class="mb-4">
                                     <label>Institution Name</label>
                                     <input class="form-control form-control-lg"  formControlName="institutionName" />
+                                    <p *ngIf="formSubmittedEducation && getControls('education.institutionName').hasError('required')" class="error">
+                                        <small> * required</small>
+                                    </p>
                                 </div>
                                 <div formGroupName="education" class="mb-4">
                                     <label>Qualification</label>
@@ -269,15 +272,24 @@
                                         formControlName="qualification">
                                         <option [value]="quali.value" *ngFor="let quali of qualification; let i = index">{{ quali.title | titlecase }}</option>
                                     </select>
+                                    <p *ngIf="formSubmittedEducation && getControls('education.qualification').hasError('required')" class="error">
+                                        <small> * required</small>
+                                    </p>
                                 </div>
                                 <div formGroupName="education" class="mb-4">
                                     <label>Field of study</label>
                                     <input class="form-control form-control-lg" formControlName="fieldOfStudy" />
+                                    <p *ngIf="formSubmittedEducation && getControls('education.fieldOfStudy').hasError('required')" class="error">
+                                        <small> * required</small>
+                                    </p>
                                 </div>
                                 <div formGroupName="education" class="mb-4">
                                     <label>Date of Completion</label>
                                     <input class="form-control form-control-lg"
                                     formControlName="dateOfCompletion" />
+                                    <p *ngIf="formSubmittedEducation && getControls('education.dateOfCompletion').hasError('required')" class="error">
+                                        <small> * required</small>
+                                    </p>
                                 </div>
                                 
                             </div>

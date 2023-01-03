@@ -202,19 +202,25 @@
     }
 
     .numbers {
-        width: 16% !important;
+        width: 18% !important;
     }
 
     .course-title {
         margin-top: -16px !important;
+        font: 400 19px/50px Google Sans,Arial,sans-serif !important;
     }
 
     .lists {
-        font: 500 19px Google Sans,Arial,sans-serif !important;
+        font: 500 16px Google Sans,Arial,sans-serif !important;
+        margin-bottom: 28px !important;
     }
 
     .leftColumen {
         padding-left: 31px !important;
+    }
+
+    .features {
+        margin-left: 17px !important;
     }
 
   }
@@ -250,4 +256,12 @@
 
 .fa-spinner {
     font-size: 25px !important;
+}
+
+.aboutus-text {
+    color: #9aa0a6;
+     margin-top: 10px !important;
+      font-size: 17px;
+     line-height: 32px;
+     padding: 0px 10px 0px 10px !important;
 }

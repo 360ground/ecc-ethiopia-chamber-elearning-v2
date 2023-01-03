@@ -42,12 +42,13 @@
 }
 
 .course-counter {
-    color: #3c4043;
+    color: #3c4043 !important;
     display: inline;
     flex-basis: 100%;
-    font-size: 21px !important;
+    /* font-size: 21px !important; */
     font-weight: 500;
     line-height: 2.6rem;
+    font-size: 20px !important;
 }
 @media only screen and (max-width: 760px) {
     #wider {
@@ -62,7 +63,7 @@
     }
 
     .top-header {
-      padding: 22px 8px 2px 11px !important;
+      padding: 22px 0px 2px 0px !important;
       margin-bottom: -101px !important;
     }
     .header_subtitle {
@@ -103,6 +104,14 @@
       margin-left: 0px !important;
     }
 
+    .filterBtn {
+      width: 92% !important;
+    }
+
+    .jumbo {
+      padding: 10px 20px 10px 12px !important;
+    }
+
 
   }
 
@@ -126,17 +135,21 @@
     padding-bottom: 0;
 
     font-size: 41px;
-    color: #305ABD !important;
-    text-align: center;
+    color: #3c4043 !important;
+    text-align: left;
   }
 
   .header_subtitle {
     color: #80868b;
-    font-size: 17px !important;
+    font-size: 1.2rem !important;
     font-weight: 400;
     letter-spacing: normal;
-    line-height: 35px;
+    line-height: 2rem;
 
+  }
+
+  .card {
+    border-radius: 6px 6px 6px 6px !important;
   }
 
   .card-img-top {
@@ -158,16 +171,6 @@
     color: #0d6efd !important;
   }
   
-
-  .course {
-    /* position: relative !important; */
-    /* overflow: hidden !important;
-    margin:0 !important;
-    padding:0 !important;
-    height: 100px !important;
-    width: 100px !important; */
-    
-  }
   
   .course{
     /* height: 100px;   */
@@ -188,13 +191,13 @@
 
 
   .searchBtn {
-    width: 100%;
+    width: 129%;
     height: 100%;
     margin-left: -12px !important;
   }
 
   .filterBtn {
-    width: 100% !important;
+    width: 100%;
   }
 
   .btn-light {
@@ -212,4 +215,48 @@
   font-weight: lighter !important;
   margin-top: -9px !important;
   margin-left: 303px;
+}
+
+
+
+
+/* mine */
+
+.customFilterNavbarInner{
+  margin-bottom: 40px !important;
+  padding: 12px !important;
+}
+
+.customFilterContent {
+  width: 270px !important;
+  overflow-x: hidden !important;
+  height: 100% !important;
+}
+
+.filterIcon {
+  font-size: 16px !important;
+   margin-right: 30px !important;
+   color: gray !important;
+
+}
+
+
+.jumbo {
+  background: white !important;
+  /* background: #ffffff !important; */
+  padding-bottom: 24px !important;
+  padding-top: 18px !important;
+  margin-bottom: -68px !important;
+
+  border-bottom: 1px solid #e8eaed;
+}
+
+.e-label{
+  color: #80868b !important;
+  font-size: 14px !important;
+}
+
+
+.mat-drawer-container {
+  background-color: whitesmoke !important;
 }

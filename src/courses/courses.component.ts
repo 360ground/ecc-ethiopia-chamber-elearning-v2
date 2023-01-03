@@ -60,7 +60,7 @@ export class CoursesComponent implements OnInit {
     { title: 'Advanced', id: 'advanced', isChecked:false }
   ];
 
-  public pageSize: any[] = [
+  public pageSizes: any[] = [
     { text: '1 - 10', value: '10'},
     { text: '10 - 20', value: '20'},
     { text: '20 - 40', value: '40'},
@@ -90,6 +90,8 @@ export class CoursesComponent implements OnInit {
 	public pauseOnFocus = true;
   public paymentId: any = undefined;
   public id: any = undefined;
+  
+  public pageSize: number = 10;
 
   public IsAvailable: boolean = true;
 
@@ -136,7 +138,7 @@ export class CoursesComponent implements OnInit {
       this.courses = this.service.loadedCourses;
       
     } else {
-      this.LoadCourses(10);
+      this.LoadCourses(this.pageSize);
     }
 
     if(this.service.missingProfileFields.length){
@@ -441,6 +443,16 @@ export class CoursesComponent implements OnInit {
   public applyFilter(){
     this.findCourses(true, this.filterOptions)
 
+  }
+
+  public loadmore(){
+    this.pageSize += 10;
+
+    if(this.pageSize > 100){
+      this.LoadCourses('all')
+    } else {
+      this.LoadCourses(this.pageSize)
+    }
   }
 
 }

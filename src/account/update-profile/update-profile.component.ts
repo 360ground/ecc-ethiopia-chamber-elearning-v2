@@ -19,6 +19,8 @@ export class UpdateProfileComponent implements OnInit {
   public formGroup: FormGroup;
 
   public formSubmitted = false;
+  public formSubmittedEducation = false;
+
   public disable: boolean = false;
   public isIndividual: Boolean = true;
   public base64Image: any = null;
@@ -266,9 +268,15 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   addEducation() {
-    this.myEducation.push(this.getControls('education').value);
-    this.getControls('education').reset();
-    this.modalService.dismissAll();
+    this.formSubmittedEducation = true;
+
+    if(this.getControls('education').valid) {
+      this.myEducation.push(this.getControls('education').value);
+      this.getControls('education').reset();
+      this.modalService.dismissAll();
+
+      this.formSubmittedEducation = false;
+    }
 
   }
 
