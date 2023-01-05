@@ -3,14 +3,14 @@
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="card">
                 <div class="card-body">
-                    <p>
+                    <p class="mt-4 mb-4">
                         <span>
-                            <Button class="btn btn-secondary" (click)="navigate()">
+                            <Button class="btn btn-light" (click)="navigate()">
                                 <span class="mr-4">
                                     <i class="fa fa-chevron-left" aria-hidden="true"></i>
                                 </span>
                                 <span class="ml-4">
-                                    Back to list
+                                    Back to requests list
                                 </span>
                             </Button>
                         </span>
@@ -22,7 +22,7 @@
                     <form [formGroup]="formGroup">
                         <div class="mb-4">
                             <label>Course</label>
-                            <ejs-dropdownlist id='ddlelement' [dataSource]='service.loadedCourses' 
+                            <ejs-dropdownlist id='ddlelement' [dataSource]='courses' 
                                 formControlName="course_id" [allowFiltering]="true" placeholder="-- select course here --"
                                 [fields]="fields" cssClass="e-outline">
                             </ejs-dropdownlist>
@@ -118,14 +118,11 @@
                                                     {{ student?.status }}
                                             </span>
                                         </div>
-                                        <!-- <div class="col-md-4 col-sm-12 col-lg-4 nameLable">
-                                            {{ student?.email }}
-                                        </div> -->
+                                        
                                         <div class="col-md-1 col-sm-12 col-lg-1" style="text-align: center !important">
                                             <span (click)="removeStudent(i);">
                                                 <i class="fa fa-times" aria-hidden="true" style="margin-top: 14px !important;"></i>
                                             </span>
-                                            <!-- <mat-icon class="removeButton"  (click)="removeStudent(i);">delete_forever</mat-icon> -->
                                         </div>
                                     </div> 
                                     
@@ -138,108 +135,138 @@
                                 <small> * required</small>
                             </p>
                         </div>
-                        <!-- <div class="mb-4">
-                            <label>Date</label>
-                            <input type="date" class="form-control form-control-lg" formControlName="date" />
-                            <p *ngIf="formSubmitted && getControls('date').hasError('required')" class="error">
-                                <small> * required</small>
-                            </p>
-                        </div> -->
+                       
                         <div class="mb-4">
                             <label>Remarks</label>
-                            <textarea rows="5" class="form-control form-control-lg" 
+                            <textarea rows="3" class="form-control form-control-lg" 
                             placeholder="Write your remarks here ..." formControlName="remark"></textarea>
                         </div>
 
                         <div class="mb-4 row">
-                            <div class="col-sm-12" [ngClass]="traineelist ? 'col-md-11 col-lg-11' : 'col-md-12 col-lg-12'">
-                                <label>please attache the trainee list here.</label>
-                                <input type="file" class="form-control form-control-lg" (change)="onFileUpload($event, false)" 
-                                formControlName="traineelist" accept="application/pdf" />
-                            </div>
-                            <div class="col-sm-12 col-md-1 col-lg-1" *ngIf="traineelist">
-                                <label></label>
-                                <span (click)="removeAttatchment(false)" title="remove attachment">
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                </span>
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                <label>Please attache the trainee list here.</label>
+                                <div id="traineeListDropArea">
+                                    <ejs-uploader 
+                                        (selected)="onFileUpload($event, false)" 
+                                        [allowedExtensions] = 'allowedExtenstion'
+                                        [files]='preLoadTraineeList'
+                                        maxFileSize = '1e+7'
+                                        multiple="false"
+                                        formControlName="traineelist" 
+                                        dropArea="traineeListDropArea"
+                                        [autoUpload]='false'
+                                        #traineeList
+                                        (removing)="removeAttatchment($event,false)"
+                                        >
+                                    </ejs-uploader>
+                                </div>
                             </div>
                             <p *ngIf="formSubmitted && getControls('traineelist').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
-                            <p *ngIf="traineelistErrorMessage" class="fileErrorMessage">
-                                <small>
-                                    {{ traineelistErrorMessage }}
-                                </small>
-                            </p>
 
-                            <p *ngIf="isOnEditing" style="margin-top: 15px !important;">
+                            <p *ngIf="isOnEditing && state?.traineelist" style="margin-top: 15px !important;">
                                 <span class="mr-4" style="margin-right: 25px !important;">
                                     <button type="button" class="btn btn-light mr-4" (click)="openAttachment('traineeList')">
-                                        view trainee's list
+                                        View trainee's list
                                     </button>
                                 </span>
                                 
-                                <span *ngIf="showTraineeListDeleteSpinner">
-                                    <i class='fa fa-spinner fa-spin fa-3x fa-fw mr-2' 
-                                    style="margin-right: 10px !important; font-size: 19px !important;" aria-hidden="true"></i>deleting ...
-                                </span>
-                                <span class="ml-4" *ngIf="!showTraineeListDeleteSpinner" (click)="deleteAttatchment('traineelist')">
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                <span>
+                                    <button type="button" class="btn btn-light mr-4"  (click)="deleteAttatchment('traineelist')">
+                                        <i class='fa fa-spinner fa-spin fa-3x fa-fw mr-2' *ngIf="showTraineeListDeleteSpinner"
+                                        style="margin-right: 10px !important; font-size: 19px !important;" aria-hidden="true"></i>
+                                        Delete trainee's list
+                                    </button>
                                 </span>
                             </p>
+
                         </div> 
+
                         <div class="mb-4 row">
-                            <div class="col-sm-12" [ngClass]="bankSlip ? 'col-md-11 col-lg-11' : 'col-md-12 col-lg-12'">
-                                <label>please attache the bank slip here.</label>
-                                <input type="file" class="form-control form-control-lg" (change)="onFileUpload($event,true)" 
-                                formControlName="bankSlip"
-                                accept="application/pdf" />
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                <label>Please attache the bank slip here.</label>
+                               <div id="bankSlipDropArea">
+                                   <ejs-uploader 
+                                       (selected)="onFileUpload($event, true)" 
+                                       formControlName="bankSlip" 
+                                       [allowedExtensions] = 'allowedExtenstion'
+                                       [files]='preLoadBankSlip'
+                                       maxFileSize = '1e+7'
+                                       multiple="false"
+                                       dropArea="bankSlipDropArea"
+                                       [autoUpload]='false'
+                                       #bankSlip
+                                       (removing)="removeAttatchment($event, true)"
+                                       >
+                                   </ejs-uploader>
+                               </div>
                             </div>
-                            <div class="col-sm-12 col-md-1 col-lg-1" *ngIf="bankSlip">
-                                <label></label>
-                                <span (click)="removeAttatchment(true)" title="remove attachment">
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                </span>
-                            </div>
+
                             <p *ngIf="formSubmitted && getControls('bankSlip').hasError('required')" class="error">
                                 <small> * required</small>
                             </p>
-                            <p *ngIf="bankSlipErrorMessage" class="fileErrorMessage">
-                                <small>
-                                    {{ bankSlipErrorMessage }}
-                                </small>
-                            </p>
-                    
-                            <p *ngIf="isOnEditing" style="margin-top: 15px !important;">
+
+                            <p *ngIf="isOnEditing && state?.bankSlip" style="margin-top: 15px !important;">
                                 <span class="mr-4" style="margin-right: 25px !important;">
                                     <button type="button" class="btn btn-light mr-4" (click)="openAttachment('bankSlip')">
-                                        view bankSlip
+                                        View Bank Slip
                                     </button>
                                 </span>
                                 
-                                <span *ngIf="showbBankslipDeleteSpinner">
-                                    <i class='fa fa-spinner fa-spin fa-3x fa-fw mr-2' 
-                                    style="margin-right: 10px !important; font-size: 19px !important;" aria-hidden="true"></i>deleting ...
-                                </span>
-                                <span class="ml-4" *ngIf="!showbBankslipDeleteSpinner" (click)="deleteAttatchment('bankSlip')">
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                <span>
+                                    <button type="button" class="btn btn-light mr-4"  (click)="deleteAttatchment('bankSlip')">
+                                        <i class='fa fa-spinner fa-spin fa-3x fa-fw mr-2' *ngIf="showbBankslipDeleteSpinner"
+                                        style="margin-right: 10px !important; font-size: 19px !important;" aria-hidden="true"></i>
+                                        Delete Bank Slip
+                                    </button>
                                 </span>
                             </p>
-                        </div> 
+                        </div>
+
                         <div class="mb-4 row">
-                            <Button type="submit" class="btn btn-primary btn-lg btn-block" (click)="Submit()" [disabled]="disable">
-                                <span *ngIf="showSpinner">
-                                    <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
-                                    style="margin-right: 10px !important; font-size: 24px !important;" aria-hidden="true"></i>
-                                </span>
-                                <span *ngIf="!showSpinner">
-                                    {{ isOnEditing ? 'Update request' : 'Submit request'}}
-                                </span>
-                            </Button>
-                        </div>   
+                            <div class="col-sm-12 col-md-2 col-lg-2">
+                                <Button type="submit" class="btn btn-primary" (click)="Submit()" [disabled]="disable">
+                                    <span *ngIf="showSpinner">
+                                        <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
+                                        style="margin-right: 10px !important; font-size: 21px !important;" aria-hidden="true"></i>
+                                    </span>
+                                    <span>
+                                        {{ isOnEditing ? 'Update request' : 'Submit request'}}
+                                    </span>
+                                </Button>
+                            </div>
+
+                            <div class="col-sm-12 col-md-2 col-lg-2" *ngIf="state">
+                                <Button type="submit" class="btn btn-danger" (click)="deleteRequest()" [disabled]="disable">
+                                    <span *ngIf="showSpinner">
+                                        <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
+                                        style="margin-right: 10px !important; font-size: 21px !important;" aria-hidden="true"></i>
+                                    </span>
+                                    <span>
+                                        Delete Request
+                                    </span>
+                                </Button>
+                            </div>    
+
+                        </div> 
                     </form>
                 </div>
             </div>
         </div>
         <div class="col-sm-12 col-md-2 col-lg-2"></div>
     </div>
+
+
+
+
+    <!-- <div class="editDeleteButtonsContainer">
+        <p>
+            <span class="mr-4" title="edit request" (click)="editRequest(request)">
+                <i class="fa fa-pencil icons" aria-hidden="true"></i>
+            </span>
+            <span class="ml-4" title="delete request" (click)="deleteRequest(request,i)">
+                <i class="fa fa-trash icons" aria-hidden="true"></i>
+            </span>
+        </p>
+    </div> -->

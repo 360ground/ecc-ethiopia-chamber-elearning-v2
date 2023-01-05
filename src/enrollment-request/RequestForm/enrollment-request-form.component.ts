@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Location } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { ConfirmationService } from 'src/shared/confirmation.service';
+import { event } from 'jquery';
 
 @Component({
   selector: 'app-enrollment-request-form',
@@ -33,7 +34,15 @@ export class EnrollmentRequestFormComponent implements OnInit {
 
   public fields: any = { text: 'name',value: 'id' };
 
+  public courses: any[] = [];
 
+  public preLoadTraineeList: Object[] = [];
+  public preLoadBankSlip: Object[] = [];
+
+  public id: any = null;
+
+
+  public allowedExtenstion: any = '.pdf';
 
   constructor(
     public service: ApiService,
@@ -41,6 +50,7 @@ export class EnrollmentRequestFormComponent implements OnInit {
     public toastr: ToastrService,
     public location: Location,
     public confirmation: ConfirmationService,
+    public actRoute:ActivatedRoute
 
   ) {
     this.formGroup = new FormGroup({
@@ -59,37 +69,60 @@ export class EnrollmentRequestFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    let state: any  = this.location.getState();
+    this.id = this.actRoute.snapshot.paramMap.get('id');
+
+
+    if(this.id){
+
+      this.service.mainCanvas(`getDetailEnrollmentRequest/${this.id}`, 'get', null).subscribe((response: any) => {
+
+        this.isOnEditing = true;
+
+        this.state = response.message[0];
+
+        this.status = this.state.status;
+
+        this.fields = { text: 'name',value: 'id' };
+
+        this.state.students = Object.values(JSON.parse(this.state.students));
     
-    this.state = state.enrollmentRequestDetail;
+        this.state.students.forEach((element:any) => {
+          this.addStudent(element, true);
+        });
 
-    if(this.state){
-      this.isOnEditing = true;
-      this.status = this.state.status;
+        this.state.course_id = +this.state.course_id;
+        this.formGroup.patchValue(this.state);
+      
+        if(this.state.status !== 'pending'){
+          this.formGroup.disable();
+          this.disable = true;
+        }
 
-      this.fields = { text: 'name',value: 'id' };
+        if(this.state.traineelist){
+          this.getControls('traineelist').clearValidators();
+          this.getControls('traineelist').updateValueAndValidity();
+        }
 
-      this.state.students = Object.values(JSON.parse(this.state.students));
-  
-      this.state.students.forEach((element:any) => {
-        this.addStudent(element, true);
+        if(this.state.bankSlip){
+          this.getControls('bankSlip').clearValidators();
+          this.getControls('bankSlip').updateValueAndValidity();
+        }
+
       });
-      this.state.course_id = +this.state.course_id;
-      this.formGroup.patchValue(this.state);
-    
-      if(this.state.status !== 'pending'){
-        this.disable = true;
-        this.formGroup.disable();
-      }
-
-      this.getControls('bankSlip').clearValidators();
-      this.getControls('bankSlip').updateValueAndValidity();
-
-      this.getControls('traineelist').clearValidators();
-      this.getControls('traineelist').updateValueAndValidity();
 
     }
 
+    this.loadCourses();
+
+  }
+
+  loadCourses(){
+    this.service
+    .mainCanvas(`getAllCourses`, 'get', null)
+    .subscribe((response: any) => {
+      this.courses = response;
+      this.getControls('course_id').setValue(this.state?.course_id)
+    });
   }
 
   public getControls(name: any): FormControl {
@@ -172,45 +205,36 @@ export class EnrollmentRequestFormComponent implements OnInit {
     }
   }
 
-  public onFileUpload($event: any, isSlip: boolean) {
-    this.bankSlipErrorMessage = this.traineelistErrorMessage = "";
+  public onFileUpload(event: any, isSlip: boolean) {
+    let file = event.filesData[0].rawFile;
 
-    let file = $event.target.files[0];
+    const reader: any = new FileReader();
+    reader.readAsDataURL(file);
 
-    const maxAllowedSize = 10 * 1024 * 1024;
-
-    if (file.size <= maxAllowedSize) {
-
-      const reader: any = new FileReader();
-      reader.readAsDataURL(file);
-  
-      reader.onload = () => {
-        if(isSlip) {
-          this.bankSlip = reader.result.toString();
-  
-        } else {
-          this.traineelist = reader.result.toString();
-        }
-      }; 
-
-    } else {
-      $event.target.value = '';
-
+    reader.onload = () => {
       if(isSlip) {
-        this.bankSlipErrorMessage = 'Only file less than 10 MB size is allowed.';
+        this.bankSlip = reader.result.toString();
+        this.getControls('bankSlip').setValue(true)
 
       } else {
-        this.traineelistErrorMessage = 'Only file less than 10 MB size is allowed.';
-      }  
+        this.traineelist = reader.result.toString();
+        this.getControls('traineelist').setValue(true)
 
-    }
+      }
+    }; 
 
   }
 
-  public removeAttatchment(isSlip: boolean) {
-    if(confirm(`are you sure want to remove the ${ isSlip ? 'bank Slip' : 'trainee list' } attachment ?`)){
-      isSlip ?  this.bankSlip = null : this.traineelist = null;
+  public removeAttatchment(event: any, isSlip: boolean) {
+    if(isSlip){
+      this.bankSlip = null;
+      this.getControls('bankSlip').reset();
+
+    } else {
+      this.traineelist = null;
+      this.getControls('traineelist').reset();
     }
+    
   }
 
   openAttachment(attachment: any){
@@ -234,48 +258,28 @@ export class EnrollmentRequestFormComponent implements OnInit {
         attachment == 'traineelist' ? this.showTraineeListDeleteSpinner = true : 
         this.showbBankslipDeleteSpinner = true;
   
-        let payload = {
-          url: `/uploads/requests/${this.state.id}/${attachment}.pdf`
-        };
-    
-        this.service
-          .mainCanvas(
-            `deleteFiles`,
-            'post',
-            payload
-          ).subscribe((response: any) => {
+        attachment == 'traineelist' ? this.showTraineeListDeleteSpinner = false : 
+        this.showbBankslipDeleteSpinner = false;
 
-            attachment == 'traineelist' ? this.showTraineeListDeleteSpinner = false : 
-            this.showbBankslipDeleteSpinner = false;
-    
-            if (response.status) {
-  
-              if(attachment == 'traineelist'){
-                this.traineelist = null;
-                this.getControls('traineelist').setValue(null);
+        if(attachment == 'traineelist'){
+          this.traineelist = null;
+          this.state.traineelist = false;
+          this.getControls('traineelist').setValue(null);
 
-                this.getControls('traineelist').clearValidators();
-                this.getControls('traineelist').updateValueAndValidity();
+          this.getControls('traineelist').setValidators(Validators.required);
+          this.getControls('traineelist').updateValueAndValidity();
 
-              } else {
-                this.traineelist = null;
-                this.getControls('bankSlip').setValue(null);
+        } else {
+          this.traineelist = null;
+          this.state.bankSlip = false;
 
-                this.getControls('bankSlip').clearValidators();
-                this.getControls('bankSlip').updateValueAndValidity();
-              }
+          this.getControls('bankSlip').setValue(null);
 
-              this.toastr.success(response.message, 'Success');
-    
-            } else {
-              attachment == 'traineelist' ? this.showTraineeListDeleteSpinner = false : 
-              this.showbBankslipDeleteSpinner = false;
-  
-              this.toastr.error(response.message, 'Error');
-    
-            }
-    
-          });
+          this.getControls('bankSlip').setValidators(Validators.required);
+          this.getControls('bankSlip').updateValueAndValidity();
+        }
+
+        this.toastr.warning(`${attachment} will not delete unless you click Update request Button`, 'Warning');
       }
     }
   }
@@ -296,10 +300,10 @@ export class EnrollmentRequestFormComponent implements OnInit {
         this.showSpinner = true;
   
         let result = this.service.loadedCourses.find((element:any) => 
-          element.id == this.getControls('course_id').value
+          element.courseId == this.getControls('course_id').value
         );
   
-        this.getControls('course_name').setValue(result.name);
+        this.getControls('course_name').setValue(result.attributes.name);
   
         let payload = this.formGroup.value;
   
@@ -336,6 +340,45 @@ export class EnrollmentRequestFormComponent implements OnInit {
 
   navigate(){
     this.router.navigateByUrl('/enrollment/myrequest');
+  }
+
+
+  deleteRequest(){
+    if(this.state.status == 'Enrolled'){
+      this.toastr.error(`You can't delete while the trainee in the request are 'Enrolled'`, 'Error');
+
+    } else {
+      this.confirmation.confirm('Confirmation', `Are you sure want to delete this request ?`,'Yes','No','lg')
+      .then(async (confirmed) => {
+
+       if(confirmed) {
+        let payload = {id: this.state.id, url: `uploads/requests/${this.state.id}`};
+  
+        this.service
+        .mainCanvas(`deleteEnrollmentRequest/${this.state.id}`, 'post', payload)
+        .subscribe((response: any) => {
+
+          if (response.status) {
+            this.toastr.success(response.message, 'Success');
+            
+            this.router.navigate(['/enrollment/myrequest'])
+            
+          } else {
+            this.toastr.error(response.message, 'Error');
+          }
+    
+        });
+    
+       }
+    
+      })
+      .catch(() => null);
+    }
+
+  }
+
+  editRequest(){
+    this.formGroup.enable();
   }
 
 

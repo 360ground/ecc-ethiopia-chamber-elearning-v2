@@ -168,7 +168,6 @@ export class ApiService {
 
           element.message.forEach((datas: any) => {
             let data = datas.find((da: any) => { return da.user_id == this.userData.id });
-            console.log(data); 
 
           });  
           

@@ -17,6 +17,10 @@ const routes: Routes = [
   {
     path: 'create',
     component: EnrollmentRequestFormComponent,
+  },
+  {
+    path: 'edit/:id',
+    component: EnrollmentRequestFormComponent,
   }
 ];
 

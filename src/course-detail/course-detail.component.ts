@@ -78,7 +78,6 @@ export class CourseDetailComponent implements OnInit {
     this.state = this.location.getState();
     
     if(this.state.attributes !== undefined) {
-      console.log(this.state)
       this.id = this.state.attributes.id;
 
       this.initializeStates();

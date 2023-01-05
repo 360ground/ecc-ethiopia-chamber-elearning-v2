@@ -24,6 +24,7 @@ import { ConfirmationService } from './confirmation.service';
 
 import { CheckBoxModule } from '@syncfusion/ej2-angular-buttons';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+import { UploaderModule  } from '@syncfusion/ej2-angular-inputs';
 
 @NgModule({
   declarations: [HtmlSanitaizerPipe, TimeStampPipe, GridComponents, ConfirmDialogueComponent],
@@ -37,7 +38,8 @@ import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
     NgbModule,
     GridModule,
     CheckBoxModule,
-    DropDownListModule
+    DropDownListModule,
+    UploaderModule
   ],
   exports: [
     CommonModule,
@@ -53,7 +55,8 @@ import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
     GridComponents,
     ConfirmDialogueComponent,
     CheckBoxModule,
-    DropDownListModule
+    DropDownListModule,
+    UploaderModule
   ],
   providers: [AuthGuard,
     PageService,

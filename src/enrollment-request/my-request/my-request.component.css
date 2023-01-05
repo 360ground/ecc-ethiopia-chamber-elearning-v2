@@ -91,3 +91,7 @@ label{
 .top {
     margin-top: 76px !important;
 }
+
+.list-group-item {
+    cursor: pointer !important;
+}

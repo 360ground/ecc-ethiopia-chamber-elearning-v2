@@ -15,6 +15,16 @@ export class MyRequestComponent implements OnInit {
   public isFiltering: boolean = false;
   public isLoading: boolean = false;
 
+  public fields: any = { text: 'text',value: 'value' };
+
+  public pageSizes: any[] = [
+    { text: '1 - 10', value: '10'},
+    { text: '10 - 20', value: '20'},
+    { text: '20 - 40', value: '40'},
+    { text: '40 - 100', value: '100'},
+    { text: 'More Than 100', value: 'all' }
+  ];
+
   constructor(
     public service: ApiService,
     private router: Router,
@@ -23,69 +33,43 @@ export class MyRequestComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.loadRequests();
+    this.loadRequests(10);
   }
 
-  loadRequests(){
+  loadRequests(limit: any){
     this.isLoading = true;
+    this.myrequest = [];
 
     this.service
-    .mainCanvas(`getMyEnrollmentRequest/${this.service.userData.id}`, 'get', null)
+    .mainCanvas(`getMyEnrollmentRequest/${this.service.userData.id}/${limit}`, 'get', null)
     .subscribe((response: any) => {
       if (response.status) {
         this.myrequest = response.message;
-        
+        this.isLoading = false;
+
       } else {
         this.toastr.error(response.message, 'Error');
-      }
+        this.isLoading = false;
 
-      this.isLoading = false;
+      }
 
     });
   }
 
-  editRequest(request: any){
-    this.router.navigate(['/enrollment/create'],{state: {
-      enrollmentRequestDetail: request
-    }})
-  }
-
-  navigate(){
-    this.router.navigateByUrl('/enrollment/create');
-  }
-
-  deleteRequest(request: any, index: any){
-    if(request.status !== 'pending'){
-      this.toastr.error(`You can't delete while the request not in the pending state`, 'Error');
+  navigate(request: any){
+    if(request){
+      this.router.navigateByUrl(`/enrollment/edit/${request.id}`);
 
     } else {
-      this.confirmation.confirm('Confirmation', `Are you sure want to delete this request ?`,'Yes','No','lg')
-      .then(async (confirmed) => {
-       if(confirmed) {
-        let payload = {id: request.id, url: `uploads/requests/${request.id}`};
-  
-        this.service
-        .mainCanvas(`deleteEnrollmentRequest/${request.id}`, 'post', payload)
-        .subscribe((response: any) => {
-          if (response.status) {
-            this.myrequest.splice(index,1);
-            this.toastr.success(response.message, 'Success');
-            
-          } else {
-            this.toastr.error(response.message, 'Error');
-          }
-    
-        });
-    
-       }
-    
-      })
-      .catch(() => null);
+      this.router.navigateByUrl('/enrollment/create');
     }
+    
   }
 
+
   filterRequests($event: any){
-    
+    this.myrequest = [];
+
     if($event.value){
       let payload = { 
         startDate: new Date($event.value[0] + 'UTC'), 
@@ -100,16 +84,19 @@ export class MyRequestComponent implements OnInit {
       .subscribe((response: any) => {
         if (response.status) {
           this.myrequest = response.message;
-          
+          this.isFiltering = false;
+
         } else {
           this.toastr.error(response.message, 'Error');
+          this.isFiltering = false;
+
         }
   
       });
 
     } else {
       if(this.isFiltering){
-        this.loadRequests();
+        this.loadRequests(10);
       }
 
     }

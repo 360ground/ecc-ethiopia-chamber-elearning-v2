@@ -7,18 +7,24 @@
                     <span><h1 class="topHeader">My Enrollment request</h1></span>
                 </p>
                 <p><span><hr /></span></p>
-                <div>
-                    <label class="mb-4">Filter requests by date</label>
-                    <p>
+                <div class="row">
+                    <div class="col-sm-12 col-md-8 col-lg-8 mb-2">
+                        <label class="mb-4">Filter requests by date</label>
                         <ejs-daterangepicker cssClass="e-outline" 
                         placeholder="-- select date range to filter requests --"
                         (change)="filterRequests($event)"></ejs-daterangepicker>
-                    </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4 col-lg-4 mb-2">
+                        <label class="mb-4">Show Per page</label>
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='pageSizes' placeholder="1 - 10"
+                        [fields]="fields" cssClass="e-outline" (change)="loadRequests($event.value)">
+                        </ejs-dropdownlist>
+                    </div>
                     <p><span><hr /></span></p>
                 </div>
 
                 <p>
-                    <button class="btn btn-success" (click)="navigate()">
+                    <button class="btn btn-success" (click)="navigate(null)">
                         <span>
                             <i class="fa fa-plus icons" aria-hidden="true"></i>
                         </span>
@@ -27,30 +33,22 @@
                 </p>
                 <div class="mb-4" *ngIf="myrequest.length">
                     <ul class="list-group">
-                        <li class="list-group-item lists" *ngFor="let request of myrequest; let i = index">
+                        <li class="list-group-item lists" *ngFor="let request of myrequest; let i = index" 
+                        (click)="navigate(request)">
                             <div>
                                 <p class="requestCourseName">{{ request.course_name | titlecase }}</p>
                                 <!-- <p class="requestInstitutionName">{{ request?.institution_name }}</p> -->
                                 <p class="courseFooter">
-                                    <span class="requestDate"><b>({{ request.createdAt | date }})</b></span>
+                                    <span class="requestDate"><b>({{ request.createdAt | date:'medium' }})</b></span>
                                     <span class="requestStatus" [ngClass]="
                                     request?.status == 'pending' ? 'pendingStatus' : 
                                     request?.status == 'Approved' ? 'successStatus': 
                                     request?.status == 'Enrolled' ? 'successStatus' : 'failedStatus'"
 
-                                    >{{ request.status }}</span>
+                                    >{{ request.status | uppercase }}</span>
                                 </p>
                             </div>  
-                            <div class="editDeleteButtonsContainer">
-                                <p>
-                                    <span class="mr-4" title="edit request" (click)="editRequest(request)">
-                                        <i class="fa fa-pencil icons" aria-hidden="true"></i>
-                                    </span>
-                                    <span class="ml-4" title="delete request" (click)="deleteRequest(request,i)">
-                                        <i class="fa fa-trash icons" aria-hidden="true"></i>
-                                    </span>
-                                </p>
-                            </div>
+                           
                         </li>
                     </ul>
                 </div> 

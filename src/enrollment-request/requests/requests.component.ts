@@ -30,6 +30,15 @@ export class RequestsComponent implements OnInit {
   public isFiltering: boolean = false;
   public isLoading: boolean = false;
 
+  public fields: any = { text: 'text',value: 'value' };
+
+  public pageSizes: any[] = [
+    { text: '1 - 10', value: '10'},
+    { text: '10 - 20', value: '20'},
+    { text: '20 - 40', value: '40'},
+    { text: '40 - 100', value: '100'},
+    { text: 'More Than 100', value: 'all' }
+  ];
 
   constructor(
     public service: ApiService,
@@ -39,24 +48,26 @@ export class RequestsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadRequest();
+    this.loadRequest(10);
   }
 
-  loadRequest(){
+  loadRequest(limit: any){
     this.isLoading = true;
+    this.requests = [];
 
     this.service
-      .mainCanvas(`getAllEnrollmentRequest`, 'get', {})
+      .mainCanvas(`getAllEnrollmentRequest/${limit}`, 'get', {})
       .subscribe((response: any) => {
         if (response.status) {
           this.requests = response.message;
+          this.isLoading = false;
 
         } else {
           this.toastr.error(response.message, 'Error');
+          this.isLoading = false;
 
         }
 
-        this.isLoading = false;
       });
   }
 
@@ -146,24 +157,11 @@ export class RequestsComponent implements OnInit {
 
         // collection of requests for fork request
         let requests: any[] = [];
-        // let enrollmentSideeffect: any[] = [];
 
         this.requestDetail.students.forEach(async (element: any, index: any) => {
           data.enrollment.user_id = element.id; element.isEnrolling = true; element.index = index;
           
           requests.push(this.service.mainCanvas(`selfEnroll/${this.requestDetail.course_id}`, 'post', data));
-
-          // enrollmentSideeffect.push(this.service.mainCanvas(`createEnrollmentSideEffect`, 'post', 
-          //   {
-          //     courseId: this.requestDetail.course_id,
-          //     courseTitle: this.requestDetail.course_name,
-          //     requiredModules: 0,
-          //     completedModules: 0,
-          //     progress: 0,
-          //     userId: element.id,
-          //     traineeName: element.name
-          //   })
-          // );
         });
 
         // make all the requests as a collection and wait for all responses as a whore response array
@@ -218,15 +216,6 @@ export class RequestsComponent implements OnInit {
           });
 
         });
-
-        // forkJoin(enrollmentSideeffect).subscribe((responses: any) => {
-        //   responses.forEach((element: any) => {
-        //     if(!element.status){
-        //       this.toastr.error(element.message,'Error');
-        //     }
-        //   });
-        // });
-
       }
 
       })
@@ -237,6 +226,8 @@ export class RequestsComponent implements OnInit {
 
 
   filterRequests($event: any){
+    this.requests = [];
+    
     if($event.value){
       let payload = { 
         startDate: new Date($event.value[0] + 'UTC'), 
@@ -260,7 +251,7 @@ export class RequestsComponent implements OnInit {
 
     } else {
       if(this.isFiltering){
-        this.loadRequest();
+        this.loadRequest(10);
       }
 
     }
