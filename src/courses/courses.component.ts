@@ -41,8 +41,8 @@ export class CoursesComponent implements OnInit {
   public disable: boolean = false;
 
   public paymentOptions: any[] = [
-    { title: 'Free', id: 1, isChecked:false },
-    { title: 'With payment', id: 0, isChecked:false },
+    { title: 'Free', id: 0, isChecked:false },
+    { title: 'With payment', id: 1, isChecked:false },
   ];
   public certificationOptions: any[] = [
     { title: 'Have certificate', id: 1, isChecked:false },
