@@ -26,3 +26,8 @@
   .white:hover {
     font-weight:600 !important;
   }
+
+  a {
+    color: white !important;
+    text-decoration: none !important;
+  }

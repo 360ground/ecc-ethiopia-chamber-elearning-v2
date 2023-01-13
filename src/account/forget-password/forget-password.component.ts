@@ -53,6 +53,8 @@ export class ForgetPasswordComponent implements OnInit {
         if (response.status) {
            this.toastr.success(response.message, 'Success');
            this.messages.push(response.message)
+           this.formGroup.reset();
+           this.formSubmitted = false;
 
         } else {
           this.toastr.error(response.message, 'Error');
