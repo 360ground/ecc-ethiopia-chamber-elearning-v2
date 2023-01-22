@@ -19,9 +19,13 @@ export const environment = {
 
 
   // back end
-  baseUrlBackend: 'http://ecc.360magic.link:4000',
-  paymentSuccessCallbackUrl: 'http://ecc.360magic.link:4000',
+  // baseUrlBackend: 'http://ecc.360magic.link:4000',
+  // paymentSuccessCallbackUrl: 'http://ecc.360magic.link:4000',
 
+
+   // back end
+   baseUrlBackend: 'http://localhost:4000',
+   paymentSuccessCallbackUrl: 'http://localhost:4000',
 
   // medapay
   medapayUrl: 'https://api.pay.meda.chat/v1/bills',
