@@ -1,0 +1,94 @@
+.top {
+    margin-top: 132px !important;
+}
+
+.topHeader {
+    font-weight: lighter !important;
+}
+
+label{
+    color: gray !important;
+    font-weight: lighter; 
+    margin-bottom: 10px !important;
+    font-size: 17px !important;
+}
+
+.error {
+    color: red !important;
+}
+
+.fa-times {
+    /* margin-top: 44px; */
+    font-size: 22px !important;
+    color: red !important;
+    font-weight: 200 !important;
+    cursor: pointer !important;
+    float: right !important;
+}
+
+.topCard {
+    min-height: 400px !important;
+}
+
+.imageThumbnail {
+    min-height: 200px !important;
+    min-width: 171px !important;
+
+    border: 1px solid #ddd; /* Gray border */
+    border-radius: 4px;  /* Rounded border */
+    padding: 10px; /* Some padding */
+    margin-right: 10px !important;
+    width: 382px !important;
+    
+}
+  
+/* Add a hover effect (blue shadow) */
+.imageThumbnail:hover {
+    box-shadow: 0 0 2px 1px rgba(23, 172, 221, 0.5);
+}
+
+.actualImage {
+    min-height: 200px !important;
+    min-width: 171px !important;
+    background-repeat: round !important;
+
+}
+
+ejs-checkbox{
+    margin-top: 15px !important;
+    margin-left: 17px !important;
+}
+
+.e-label {
+    font-size: 20px !important;
+    margin-left: 22px !important;
+}
+
+.btn-danger {
+    float: right !important;
+}
+
+.imageTitle {
+    margin-top: 10px !important;
+    font-size: 18px !important;
+}
+
+.imageInfo {
+    cursor: pointer !important;
+}
+
+.imageInfo:hover {
+    color: #0a58ca !important;
+}
+
+.imageDescription {
+    border: solid gray 1px !important;
+    padding: 11px !important;
+    border-radius: 9px !important;
+}
+
+.noImageFound {
+    text-align: center !important;
+    font-size: 24px !important;
+    color: dimgray !important;
+}

@@ -97,7 +97,11 @@ style="box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
               <a ngbDropdownItem [routerLink]="['/admin/course/category']" 
               [ngClass]="'/admin/course/category' == service.currentUrl ? 'bottomBorder' : ''">
               Course Category
-            </a>
+              </a>
+              <a ngbDropdownItem [routerLink]="['/admin/image-manager']" 
+              [ngClass]="'/admin/image-manager' == service.currentUrl ? 'bottomBorder' : ''">
+              Image Manager
+              </a>
               <a ngbDropdownItem routerLink="/" (click)="redirectToAdmin()"
               >Manage Course's</a>
             </div>

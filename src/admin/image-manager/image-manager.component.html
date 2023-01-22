@@ -1,0 +1,174 @@
+<div class="row top">
+    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+    <div class="col-sm-12 col-md-10 col-lg-10">
+        <div class="card topCard">
+            <div class="card-body">
+                <p>
+                    <span><h1 class="topHeader">Image Uploader</h1></span>
+                </p>
+                <p><span><hr /></span></p>
+                <div class="row">
+                    <div class="col-sm-12 col-md-10 col-lg-10">
+                        <button class="btn btn-success btn-lg btn-block" (click)="addNew()">
+                            <span class="mr-4" style="
+                                margin-right: 10px;
+                            "><i class="fa fa-plus" aria-hidden="true"></i>
+                                </span>New Upload
+                        </button>
+                    </div>
+                    <div class="col-sm-12 col-md-2 col-lg-2">
+                        <button class="btn btn-danger" (click)="deleteImages()" [disabled]="!selectedImages.length">
+                            <span class="mr-4" style="
+                            margin-right: 10px;
+                        "><i class="fa fa-trash-o" aria-hidden="true"></i>
+                            </span>Delete Image
+                        </button>
+                    </div>
+                </div>
+                <p><span><hr /></span></p>
+                <p class="mb-4" *ngIf="images.length">
+                    <input type="search" placeholder="Enter keyword to search" class="form-control form-control-lg" (change)="search($event)" />
+                </p>
+
+                <div class="row" *ngIf="images.length">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <ejs-checkbox (change)="selectAll($event.checked)" label="Select All"></ejs-checkbox>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='optionsSort'  placeholder="Sort by Relevance" (change)="sort($event)"
+                            [fields]="fields" cssClass="e-outline">
+                        </ejs-dropdownlist>
+                    </div>
+
+                </div>
+
+                <div class="row mt-4" *ngIf="images.length">
+                    <div class="col-sm-12 col-md-3 col-lg-3 mb-3 imageThumbnail" *ngFor="let img of images; let i = index">
+                        <div class="card actualImage" [ngStyle]="{background: 'url(' + baseImageUrl + '/' + img.url + '.webp)'}">
+                            <ejs-checkbox  [checked]="SelectAllFlag" (change)="selectImage($event.checked, img)"></ejs-checkbox>
+                        </div>
+                        <div class="imageInfo" (click)="viewDetail(img)">
+                            <p class="imageTitle">{{ img.title | titlecase }}</p>
+                            <p class="imageDate"><small>{{ img.updatedAt | date:'medium' }}</small></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4" *ngIf="!images.length">
+                    <div class="col-sm-12 col-md-12 col-lg-12 mb-3">
+                        <p class="noImageFound">-- No Image Found --</p>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+</div>            
+
+
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Add Image</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <p>One fine body&hellip;</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+    </div>
+</ng-template>
+
+<ng-template #longContent let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">{{ true ? 'Edit Image' : 'Add Image' }}</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="formGroup">
+            <div class="mb-4">
+                <ejs-uploader 
+                (selected)="onFileUpload($event)" 
+                [allowedExtensions] = 'allowedExtenstion'
+                maxFileSize = '1e+7'
+                multiple="false"
+                [autoUpload]='false'
+                formControlName="image"
+                #fileUpload
+                >
+                </ejs-uploader>
+
+                <p *ngIf="formSubmitted && getControls('image').hasError('required')" class="error">
+                    <small> * required</small>
+                </p>
+            </div>
+            <div class="mb-4">
+                <label>Title</label>
+                <input class="form-control form-control-lg"  formControlName="title" />
+                <p *ngIf="formSubmitted && getControls('title').hasError('required')" class="error">
+                    <small> * required</small>
+                </p>
+                <p *ngIf="formSubmitted && getControls('title').hasError('maxLength')" class="error">
+                    <small> * title can't exceed 255 characters</small>
+                </p>
+            </div>
+            <div class="mb-4">
+                <label>Description</label>
+                <textarea class="form-control form-control-lg" formControlName="description"></textarea>
+                <p *ngIf="formSubmitted && getControls('description').hasError('required')" class="error">
+                    <small> * required</small>
+                </p>
+            </div>
+
+            <div class="mb-4">
+                <label>Show In Slide</label>
+                <ejs-dropdownlist id='ddlelement' [dataSource]='options' 
+                    formControlName="showInSlide" 
+                    [fields]="fields" cssClass="e-outline">
+                </ejs-dropdownlist>
+                <p *ngIf="formSubmitted && getControls('showInSlide').hasError('required')" class="error">
+                    <small> * required</small>
+                </p>
+            </div>
+        </form> 
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="submit()">
+            Save
+        </button>
+    </div>
+</ng-template>
+
+
+
+<!-- Preview Modal -->
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Preview Image</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <p>One fine body&hellip;</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+    </div>
+</ng-template>
+
+<ng-template #previewContent let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">{{ previewImage.title }}</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <p>
+            <img src="{{baseImageUrl}}/{{previewImage.url}}.webp" width="100%" height="100%" />
+        </p>
+        <p class="imageDescription">
+            {{ previewImage.description }}
+        </p>
+    </div>
+    <div class="modal-footer">
+    </div>
+</ng-template>    
