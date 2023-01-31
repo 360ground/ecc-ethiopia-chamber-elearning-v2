@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
   }
 
   loadSlideImages(){
-    this.service.mainCanvas('getSlidePhotos', 'get', null)
+    this.service.mainCanvas(`getSlidePhotos/${true}`, 'get', null)
     .subscribe((response: any) => {
       if(response.status){
         this.service.slideImages = response.message;

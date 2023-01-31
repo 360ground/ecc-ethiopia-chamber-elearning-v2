@@ -23,6 +23,12 @@ export class SignupComponent implements OnInit {
   public payload = new FormData();
 
   public base64Image: any = null;
+  public fields: any = { text: 'title',value: 'value' };
+
+  public types: any[] = [
+    { title: 'Student : register for Enrolling My Self.', value: 'individual' },
+    { title: 'Company : register for Enrolling other Student only. ', value: 'company' },
+  ];
 
   constructor(
     private service: ApiService,

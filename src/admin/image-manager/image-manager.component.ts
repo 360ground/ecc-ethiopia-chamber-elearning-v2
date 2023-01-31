@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/service/api.service';
@@ -22,6 +22,7 @@ export class ImageManagerComponent implements OnInit {
   public disable: boolean = false;
   public images: any[] = [];
   public selectedImages: any = [];
+  public imagesBackup: any[] = [];
 
   public previewImage: any;
  
@@ -41,21 +42,29 @@ export class ImageManagerComponent implements OnInit {
   ];
   public SelectAllFlag: boolean = false;
 
+  public isEditing: boolean = false;
+  public fileUrl: any;
+
   constructor(
     public service: ApiService,
     private router: Router,
     public toastr: ToastrService,
     public confirmation: ConfirmationService,
     public modalService: NgbModal,
-
+    public config: NgbModalConfig,
   ) { 
 
     this.formGroup = new FormGroup({
+      id: new FormControl(null),
       image: new FormControl(null, Validators.required),
       title: new FormControl(null, [Validators.required,Validators.maxLength(255)]),
       description: new FormControl(null),
-      showInSlide: new FormControl(null)
+      showInSlide: new FormControl(1),
+      filename: new FormControl(null)
     });
+
+    this.config.backdrop = 'static';
+		this.config.keyboard = false;
 
   }
 
@@ -64,10 +73,11 @@ export class ImageManagerComponent implements OnInit {
   }
 
   public load_images(){
-    this.service.mainCanvas('getSlidePhotos', 'get', null)
+    this.service.mainCanvas(`getSlidePhotos/${false}`, 'get', null)
     .subscribe((response: any) => {
       if(response.status){
         this.images = response.message;
+        this.imagesBackup = response.message;
       
       } else {
         this.toastr.error(response.message,'Error while loading slide images');
@@ -82,27 +92,33 @@ export class ImageManagerComponent implements OnInit {
 
   public onFileUpload(event: any) {
     let file = event.filesData[0].rawFile;
+    this.getControls('filename').setValue(event.filesData[0].type)
 
     const reader: any = new FileReader();
     reader.readAsDataURL(file);
 
     reader.onload = () => {
-      this.getControls('image').setValue(reader.result.toString())
-    }; 
+      this.getControls('image').setValue(reader.result.toString());
+    };
+  }
 
+  public onRemoveFile(){
+    this.getControls('image').reset();
+    this.getControls('filename').reset();
   }
 
   public deleteImages() {
-    this.confirmation.confirm('Confirmation', `${this.service.userData.name} Are you sure want to Delete ${this.selectedImages.length} ?`,'Yes','No','lg')
+    this.confirmation.confirm('Confirmation', `Are you sure want to Delete ${this.selectedImages.length} ?`,'Yes','No','lg')
     .then(async (confirmed) => {
      if(confirmed) {
-      this.service.isLoggingout = true;
-      
       this.service
-        .mainCanvas(`deleteImage`, 'post', { ids : this.selectedImages })
+        .mainCanvas(`deleteImage`, 'post', { images : this.selectedImages })
         .subscribe((response: any) => {
           if (response.status) {
             this.toastr.success(response.message, 'Success');
+            this.load_images();
+            this.selectedImages = [];
+            this.SelectAllFlag = false;
 
           } else {
             this.toastr.error(response.message, 'Error');
@@ -114,16 +130,26 @@ export class ImageManagerComponent implements OnInit {
     .catch(() => null);
   }
 
-
   public submit(){
     this.formSubmitted = true;
-
+    
     if(!this.formGroup.valid){
       return;
-
+      
     } else {
+
+      this.disable = true;
+      let payload = this.formGroup.value;
+
+      if(this.isEditing && this.getControls('image').value){
+        payload.url = this.fileUrl;
+
+      }
+
+      this.formGroup.disable();
+
       this.service
-      .mainCanvas('createImage', 'post', this.formGroup.value)
+      .mainCanvas(this.isEditing ? 'updateImage' : 'createImage', 'post', payload)
       .subscribe((response: any) => {
         if (response.status) {
           this.toastr.success(response.message, 'Success');
@@ -137,12 +163,13 @@ export class ImageManagerComponent implements OnInit {
         }
 
         this.formSubmitted = false;
-
+        this.disable = false;
+        this.formGroup.enable();
       });
       
     }
-  }
 
+  }
 
   public viewDetail(value: any){
     this.previewImage = value;
@@ -152,25 +179,27 @@ export class ImageManagerComponent implements OnInit {
 
   public selectImage(checked: Boolean, image: any){
     if(checked){
-      this.selectedImages.push(image);
+      this.selectedImages.push({ id: image.id, url: image.url });
 
     } else {
-      let index = this.selectedImages.indexOf(image);
+
+      let index = this.selectedImages.findIndex((element: any) => {
+        return element.id == image.id;
+      });
 
       this.selectedImages.splice(index,1);
-    
-
     }
   }
 
   public addNew(){
-    this.modalService.open(this.longContent, { scrollable: true, size: 'lg' });
-
+    this.modalService.open(this.longContent, { scrollable: true, size: 'auto' });
+    this.getControls('image').enable();
   }
 
-  public closeModal(){
+  public closeModal(){    
     this.modalService.dismissAll();
-
+    this.isEditing = false;
+    this.formGroup.reset();
   }
 
   public selectAll(checked: boolean){
@@ -180,7 +209,7 @@ export class ImageManagerComponent implements OnInit {
       this.SelectAllFlag = true;
 
       this.images.forEach((element: any) => {
-        this.selectedImages.push(element.id)
+        this.selectedImages.push({ id: element.id, url: element.url })
       });
 
     } else {
@@ -223,9 +252,25 @@ export class ImageManagerComponent implements OnInit {
       });
 
     } else {
-      this.toastr.info('Please enter something','Information');
+      this.images = this.imagesBackup;
 
     }
+  }
+
+  public editImage(image: any){
+    this.isEditing = true;
+
+    this.formGroup.patchValue(image);
+    this.modalService.open(this.longContent, { scrollable: true, size: 'lg' });
+
+    this.getControls('image').clearValidators();
+    this.getControls('image').updateValueAndValidity();
+
+
+    this.fileUrl = image.url;
+
+    
+
   }
 
 }

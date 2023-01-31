@@ -26,8 +26,9 @@
                     </div>
                 </div>
                 <p><span><hr /></span></p>
-                <p class="mb-4" *ngIf="images.length">
-                    <input type="search" placeholder="Enter keyword to search" class="form-control form-control-lg" (change)="search($event)" />
+                <p class="mb-4">
+                    <input type="search" placeholder="Enter keyword to search" class="form-control form-control-lg" 
+                    (change)="search($event)" (emptied)="search($event)" />
                 </p>
 
                 <div class="row" *ngIf="images.length">
@@ -44,12 +45,17 @@
 
                 <div class="row mt-4" *ngIf="images.length">
                     <div class="col-sm-12 col-md-3 col-lg-3 mb-3 imageThumbnail" *ngFor="let img of images; let i = index">
-                        <div class="card actualImage" [ngStyle]="{background: 'url(' + baseImageUrl + '/' + img.url + '.webp)'}">
+                        <div class="card actualImage" [ngStyle]="{background: 'url(' + baseImageUrl + '/' + img.url + ')'}">
                             <ejs-checkbox  [checked]="SelectAllFlag" (change)="selectImage($event.checked, img)"></ejs-checkbox>
                         </div>
-                        <div class="imageInfo" (click)="viewDetail(img)">
-                            <p class="imageTitle">{{ img.title | titlecase }}</p>
-                            <p class="imageDate"><small>{{ img.updatedAt | date:'medium' }}</small></p>
+                        <div class="imageInfo">
+                            <p class="imageTitle" (click)="viewDetail(img)">{{ img.title | titlecase }}</p>
+                            <p class="imageDate">
+                                <small (click)="viewDetail(img)">{{ img.updatedAt | date:'medium' }}</small>
+                                <span title="edit image" (click)="editImage(img)">
+                                    <i class="fa fa-pencil-square editBtn" aria-hidden="true"></i>
+                                </span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -68,27 +74,29 @@
 
 <ng-template #content let-modal>
     <div class="modal-header">
-        <h4 class="modal-title">Add Image</h4>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        <h4 class="modal-title">{{ isEditing ? 'Edit Image' : 'Add Image' }}</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
     </div>
-    <div class="modal-body">
+    <div class="modal-body"> 
         <p>One fine body&hellip;</p>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+        <button type="button" class="btn btn-light" (click)="closeModal()">Close</button>
     </div>
 </ng-template>
 
 <ng-template #longContent let-modal>
     <div class="modal-header">
-        <h4 class="modal-title">{{ true ? 'Edit Image' : 'Add Image' }}</h4>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        <h4 class="modal-title">{{ isEditing ? 'Edit Image' : 'Add Image' }}</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
     </div>
     <div class="modal-body">
         <form [formGroup]="formGroup">
+            <label>Image</label>
             <div class="mb-4">
                 <ejs-uploader 
                 (selected)="onFileUpload($event)" 
+                (removing)="onRemoveFile()"
                 [allowedExtensions] = 'allowedExtenstion'
                 maxFileSize = '1e+7'
                 multiple="false"
@@ -133,8 +141,12 @@
         </form> 
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-light" (click)="submit()">
-            Save
+        <button type="button" class="btn btn-success" (click)="submit()" [disabled]="disable" >
+            <span *ngIf="disable">
+                <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
+                style="margin-right: 10px !important; font-size: 24px !important;" aria-hidden="true"></i>
+            </span>
+            <span>{{ !isEditing ? 'Create Image' : 'Update Image' }}</span>
         </button>
     </div>
 </ng-template>
@@ -146,24 +158,24 @@
 <ng-template #content let-modal>
     <div class="modal-header">
         <h4 class="modal-title">Preview Image</h4>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
     </div>
     <div class="modal-body">
         <p>One fine body&hellip;</p>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+        <button type="button" class="btn btn-light" (click)="closeModal()">Close</button>
     </div>
 </ng-template>
 
 <ng-template #previewContent let-modal>
     <div class="modal-header">
         <h4 class="modal-title">{{ previewImage.title }}</h4>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
     </div>
     <div class="modal-body">
         <p>
-            <img src="{{baseImageUrl}}/{{previewImage.url}}.webp" width="100%" height="100%" />
+            <img src="{{baseImageUrl}}/{{previewImage.url}}" width="100%" height="100%" />
         </p>
         <p class="imageDescription">
             {{ previewImage.description }}

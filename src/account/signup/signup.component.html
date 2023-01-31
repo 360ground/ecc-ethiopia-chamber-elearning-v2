@@ -17,15 +17,12 @@
                     <hr class="hr mb-4" /> 
                     <div class="mb-4">
                         <label>Who are you ?</label>
-                        <select formControlName="type" required class="form-control form-control-lg" (click)="changeType()" 
-                            placeholder="--select --">
-                            <option value="individual">
-                                <small>Student : register for Enrolling My Self.</small>
-                            </option>
-                            <option value="company">
-                                <small>Company : register for Enrolling other Student only. </small>
-                            </option>
-                        </select>
+                        <ejs-dropdownlist id='ddlelement' [dataSource]='types' 
+                            formControlName="type"
+                            placeholder="-- Select Type --" 
+                            (click)="changeType()"
+                            [fields]="fields" cssClass="e-outline">
+                        </ejs-dropdownlist>
                     </div>
 
                     <div *ngIf="isIndividual" class="mb-4">

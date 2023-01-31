@@ -10,11 +10,11 @@
             (slide)="onSlide($event)"
             >
             <ng-template ngbSlide *ngFor="let img of service?.slideImages; let i = index">
-                <!-- <div class="carousel-caption">
-                    <h3>{{ img }}</h3>
-                </div> -->
+                <div class="carousel-caption">
+                    <h3>{{ img.description|titlecase }}</h3>
+                </div>
                 <div class="picsum-img-wrapper">
-                    <img src="{{baseImageUrl}}/{{img}}" class="slideImages"
+                    <img src="{{baseImageUrl}}/{{img.url}}" class="slideImages"
                     [ngClass]="service.largeScreen ? 'largeScreen' : 'smallScreen'"
                     alt="{{img}}" width="100%"  />
                 </div>

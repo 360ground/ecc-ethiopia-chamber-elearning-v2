@@ -12,6 +12,8 @@ import { TotalTraineeReportsComponent } from './report/total-trainee-reports/tot
 import { CategoryComponent } from './category/category.component';
 import { ImageManagerComponent } from './image-manager/image-manager.component';
 
+import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 const routes: Routes = [
   {
     path: 'financial-reports',
@@ -50,7 +52,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [RequestsComponent, FinancialReportComponent, CouresExtraInfoComponent, TraineePerformanceReportComponent, TraineeListReportComponent, TotalTraineeReportsComponent, CategoryComponent, ImageManagerComponent],
     exports: [RouterModule],
-    providers: [],
+    providers: [NgbModalConfig, NgbModal],
     imports: [
         SharedModule,
         CommonModule,

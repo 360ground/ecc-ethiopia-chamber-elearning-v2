@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-confirm-dialogue',
@@ -13,7 +13,10 @@ export class ConfirmDialogueComponent implements OnInit {
   @Input() btnOkText: any;
   @Input() btnCancelText: any;
 
-  constructor(public activeModal: NgbActiveModal) { }
+  constructor(public activeModal: NgbActiveModal, public config: NgbModalConfig,) { 
+    this.config.backdrop = 'static';
+		this.config.keyboard = false;
+  }
 
   ngOnInit() {
   }

@@ -82,13 +82,26 @@ ejs-checkbox{
 }
 
 .imageDescription {
-    border: solid gray 1px !important;
+    /* border: solid gray 1px !important; */
     padding: 11px !important;
-    border-radius: 9px !important;
+    color: gray !important;
+    /* border-radius: 9px !important; */
 }
 
 .noImageFound {
     text-align: center !important;
     font-size: 24px !important;
     color: dimgray !important;
+}
+
+.editBtn {
+    float: right;
+    font-size: 27px;
+    color: #007bff;
+}
+
+.modal-title {
+    color: gray;
+    font-size: 19px;
+    font-weight: lighter;
 }

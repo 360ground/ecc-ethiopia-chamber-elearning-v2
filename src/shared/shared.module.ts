@@ -26,6 +26,8 @@ import { CheckBoxModule } from '@syncfusion/ej2-angular-buttons';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { UploaderModule  } from '@syncfusion/ej2-angular-inputs';
 
+import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 @NgModule({
   declarations: [HtmlSanitaizerPipe, TimeStampPipe, GridComponents, ConfirmDialogueComponent],
   imports: [
@@ -69,7 +71,9 @@ import { UploaderModule  } from '@syncfusion/ej2-angular-inputs';
     ExcelExportService,
     PdfExportService,
     ColumnChooserService,
-    ConfirmationService
+    ConfirmationService,
+    NgbModalConfig, 
+    NgbModal
   ],
 })
 export class SharedModule {}
