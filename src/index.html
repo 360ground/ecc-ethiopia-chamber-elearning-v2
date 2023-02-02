@@ -27,7 +27,7 @@
       `${window.location.origin}/courses?id=${params.get('id')}&paymentCancel=${params.get('paymentCancel')}`);
 
     } else if(params.get('user_id')) {
-      window.history.replaceState('data', 'Ethiopia Chamber of Commerce - Digital School',`${window.location.origin}/account/setnewpassword/?user_id=` + params.get('user_id'));
+      window.history.replaceState('data', 'Ethiopia Chamber of Commerce - Digital School',`${window.location.origin}/profile/setnewpassword/?user_id=` + params.get('user_id'));
 
     } else if(params.get('forget')){
       window.history.replaceState('data', 'Ethiopia Chamber of Commerce - Digital School',`${window.location.origin}/account/forget`);

@@ -8,6 +8,8 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
 import { MatIconModule } from '@angular/material/icon';
 import { Overlay } from '@angular/cdk/overlay';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { InterceptorService } from 'src/service/interceptor.service';
 
 const routes: Routes = [
   {
@@ -43,6 +45,12 @@ const routes: Routes = [
     }),
   ],
   exports: [RouterModule],
-  providers: [MatSnackBar, Overlay],
+  providers: [MatSnackBar, Overlay,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorService,
+      multi: true,
+    },
+  ],
 })
 export class MyCoursesModule {}

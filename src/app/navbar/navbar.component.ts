@@ -57,7 +57,6 @@ export class NavbarComponent implements OnInit {
           if (response.status) {
             this.service.userData = null;
             this.service.myCourses = null;
-            this.service.token = null;
             this.cookieService.delete('access_token');
             this.service.isLoggingout = false;
 
@@ -105,8 +104,6 @@ export class NavbarComponent implements OnInit {
         
         this.service.userData = response.message;
 
-        this.service.token = response.message.access_token;
-
         if('profile' in response.message){
           if (response.message.profile.accountType == 'individual') {
             this.service.getEnrolledCourses(response.message.id);
@@ -133,7 +130,7 @@ export class NavbarComponent implements OnInit {
 
               this.toastr.info('please fill all the required fields.','Incomplete Profile');
 
-              this.router.navigateByUrl('/account/profile');
+              this.router.navigateByUrl('//profile');
 
             } else {
               this.router.navigateByUrl('/');
@@ -161,7 +158,7 @@ export class NavbarComponent implements OnInit {
 
                 this.toastr.info('please fill all the required fields.','Incomplete Profile');
 
-                this.router.navigateByUrl('/account/profile');
+                this.router.navigateByUrl('//profile');
 
               } else {
                 this.router.navigateByUrl('/');

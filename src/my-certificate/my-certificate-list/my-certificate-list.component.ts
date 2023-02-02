@@ -41,8 +41,36 @@ export class MyCertificateListComponent implements OnInit {
 
   }
   
-  viewCertificate(id: any){
-    window.open(`${this.certificateViewUrl}/viewCertificate/${id}`,'_blank');
+  viewCertificate(certificate: any){
+
+    let course: any = this.service.loadedCourses.find((element: any) => {
+      return element.courseId == certificate.courseId;
+    });
+
+    let payload: any = {
+      id: certificate.id,
+      studentName: this.service.userData.short_name,
+      email: this.service.userData.email,
+      courseName: course.courseTitle
+    };
+
+    this.service
+    .mainCanvas(
+      `updateCertificate`,
+      'post',
+      payload
+      ).subscribe((response: any) => {
+        
+      if (response.status) {
+        window.open(`${this.certificateViewUrl}/viewCertificate/${certificate.id}`,'_blank');
+
+      } else {
+        this.toastr.error(response.message, 'Error');
+
+      }
+
+    });
+
   }
 
   deleteCertificate(id: any, index: any){

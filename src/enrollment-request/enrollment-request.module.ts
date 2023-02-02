@@ -8,6 +8,8 @@ import { MyRequestComponent } from './my-request/my-request.component';
 import { EnrollmentRequestFormComponent } from './RequestForm/enrollment-request-form.component';
 import { DateRangePickerModule } from '@syncfusion/ej2-angular-calendars';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { InterceptorService } from 'src/service/interceptor.service';
 
 const routes: Routes = [
   {
@@ -27,7 +29,13 @@ const routes: Routes = [
 @NgModule({
     declarations: [EnrollmentRequestFormComponent, MyRequestComponent],
     exports: [RouterModule],
-    providers: [NgbModal, NgbActiveModal, NgbModalConfig],
+    providers: [NgbModal, NgbActiveModal, NgbModalConfig,
+      {
+        provide: HTTP_INTERCEPTORS,
+        useClass: InterceptorService,
+        multi: true,
+      },
+    ],
     imports: [
         SharedModule,
         CommonModule,

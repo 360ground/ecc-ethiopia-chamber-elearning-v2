@@ -17,10 +17,10 @@
                     <hr class="hr mb-4" /> 
                     <div class="mb-4">
                         <label>Who are you ?</label>
-                        <ejs-dropdownlist id='ddlelement' [dataSource]='types' 
+                        <ejs-dropdownlist [dataSource]='types' 
                             formControlName="type"
                             placeholder="-- Select Type --" 
-                            (click)="changeType()"
+                            (change)="changeType($event)"
                             [fields]="fields" cssClass="e-outline">
                         </ejs-dropdownlist>
                     </div>

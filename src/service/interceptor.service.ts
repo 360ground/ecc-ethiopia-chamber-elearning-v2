@@ -1,18 +1,29 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { HttpRequest, HttpHandler } from '@angular/common/http';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InterceptorService {
-  constructor() {}
+  constructor(public service: ApiService) {}
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    const token = environment.tokenCanvas;
-    const cloned = req.clone({
-      headers: req.headers.set('authorization', `${token}`).set('content-type','application/json'),
-    });
-    return next.handle(cloned);
+    
+    if(this.service.userData !== null){
+      const cloned = req.clone({ headers: req.headers.set('authorization', this.service.userData.token)});
+
+      console.log('lalalalla');
+      return next.handle(cloned);
+
+
+    } else {
+      const cloned = req.clone({ headers: req.headers.set('authorization', '')});
+
+      console.log('kakakaka');
+
+      return next.handle(cloned);
+    }     
+
   }
+
 }

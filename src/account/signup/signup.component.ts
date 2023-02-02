@@ -166,8 +166,8 @@ export class SignupComponent implements OnInit {
     }
   }
 
-  changeType() {
-    if (this.getControls('type').value == 'individual') {
+  changeType(event: any) {
+    if (event.itemData.value == 'individual') {
       this.getControls('company').reset();
       this.isIndividual = true;
     } else {

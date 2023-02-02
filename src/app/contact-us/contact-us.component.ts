@@ -22,7 +22,8 @@ export class ContactUsComponent implements OnInit {
     private router: Router,
   ) {
     this.formGroup = new FormGroup({
-        fullName: new FormControl(null, Validators.required),
+        firstName: new FormControl(null, Validators.required),
+        lastName: new FormControl(null, Validators.required),
         email: new FormControl(null, [Validators.required,Validators.email]),
         phoneNumber: new FormControl(null, Validators.required),
         message: new FormControl(null, [Validators.required]),  
@@ -46,20 +47,24 @@ export class ContactUsComponent implements OnInit {
       return;
     } else {
       this.disable = true;
+      this.formGroup.disable();
 
       this.service
         .mainCanvas('contactUs', 'post', this.formGroup.value)
         .subscribe((response: any) => {
           if (response.status) {
             this.success = true;
-            this.disable = false;
             this.formGroup.reset();
             this.messages.push({ message: response.message, type: 'success' });
+            this.formSubmitted = false;
           } else {
             this.messages.push({ message: response.message, type: 'danger' });
             this.error = true;
-            this.disable = false;
           }
+          
+          this.disable = false;
+          this.formGroup.enable();
+
         });
     }
   }

@@ -35,7 +35,8 @@
               "./src/assets/customCSS/bootstrap5(accordion).css",
               "./src/assets/customCSS/material(Checkbox).css",
               "./src/assets/customCSS/bootstrap5(Dropdown).css",
-              "./src/assets/customCSS/bootstrap5(Uploader).css"
+              "./src/assets/customCSS/bootstrap5(Uploader).css",
+              "./src/assets/customCSS/bootstrap5(Dates).css"
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.min.js",

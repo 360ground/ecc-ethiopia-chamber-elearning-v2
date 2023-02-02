@@ -1,5 +1,5 @@
 .row {
-    margin-top: 102px !important;
+    margin-bottom: 30px !important;
 }
 
 .error {
@@ -12,4 +12,27 @@
 
 .fa-spinner {
     font-size: 32px !important;
+  }
+
+  label{
+    color: gray;
+    font-weight: lighter;
+    font-size: 17px;
+    margin-bottom: 20px !important;
+  }
+
+  .heading-title {
+    color: gray !important;
+    font-weight: lighter !important;
+    font-size: 32px !important;
+    text-align: center !important;
+    margin-top: 23px !important;
+  }
+
+  .heading-subtitle {
+    color: gray !important;
+    font-size: 16px !important;
+    text-align: center !important;
+    margin-bottom: 37px !important;
+    font-weight: lighter !important;
   }

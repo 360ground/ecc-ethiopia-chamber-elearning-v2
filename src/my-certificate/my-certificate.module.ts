@@ -4,6 +4,8 @@ import { MyCertificateListComponent } from './my-certificate-list/my-certificate
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from 'src/service/AuthGuard';
 import { SharedModule } from 'src/shared/shared.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { InterceptorService } from 'src/service/interceptor.service';
 
 const routes: Routes = [
   {
@@ -17,5 +19,12 @@ const routes: Routes = [
   declarations: [MyCertificateListComponent],
   imports: [SharedModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorService,
+      multi: true,
+    },
+  ]
 })
 export class MyCertificateModule { }

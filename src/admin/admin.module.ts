@@ -13,6 +13,8 @@ import { CategoryComponent } from './category/category.component';
 import { ImageManagerComponent } from './image-manager/image-manager.component';
 
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { InterceptorService } from 'src/service/interceptor.service';
 
 const routes: Routes = [
   {
@@ -50,9 +52,26 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [RequestsComponent, FinancialReportComponent, CouresExtraInfoComponent, TraineePerformanceReportComponent, TraineeListReportComponent, TotalTraineeReportsComponent, CategoryComponent, ImageManagerComponent],
+  declarations: [
+    RequestsComponent,
+    FinancialReportComponent,
+    CouresExtraInfoComponent,
+    TraineePerformanceReportComponent,
+    TraineeListReportComponent,
+    TotalTraineeReportsComponent,
+    CategoryComponent,
+    ImageManagerComponent
+  ],
     exports: [RouterModule],
-    providers: [NgbModalConfig, NgbModal],
+    providers: [
+      NgbModalConfig,
+      NgbModal,
+      {
+        provide: HTTP_INTERCEPTORS,
+        useClass: InterceptorService,
+        multi: true,
+      },
+    ],
     imports: [
         SharedModule,
         CommonModule,

@@ -39,12 +39,7 @@ import { AccordionModule } from '@syncfusion/ej2-angular-navigations';
   ],
   providers: [
     ApiService,
-    CookieService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: InterceptorService,
-      multi: true,
-    },
+    CookieService
   ],
   bootstrap: [AppComponent],
 })

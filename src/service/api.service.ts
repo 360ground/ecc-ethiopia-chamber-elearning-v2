@@ -207,25 +207,6 @@ export class ApiService {
 
           element.modules_published = true;
 
-          // extract the enrollment side effect data
-
-          if(progress.requirement_count !== progress.requirement_completed_count){
-            let data = {
-              requiredModules: progress.requirement_count,
-              completedModules: progress.requirement_completed_count,
-              progress: element.percentage,
-              courseTitle: element.name,
-              userId: this.userData.id,
-              courseId: element.id,
-              traineeName: this.userData.short_name,
-              traineeSex: this.userData.profile.sex,
-              traineeLocation: `${this.userData.profile.city}, ${this.userData.profile.country}`
-            }
-        
-            enrollmentRequestSideeffectRequests.push(this.mainCanvas(`updateEnrollmentSideEffect`, 'post', data));
-
-          }
-
           if (
             progress.requirement_count == progress.requirement_completed_count
           ) {
@@ -244,14 +225,17 @@ export class ApiService {
 
             } else {
             
-                let payload = {
+                let payload: any = {
                   courseId: element.id,
                   courseCode: element.course_code,
                   courseName: element.name,
                   studentName: this.userData.short_name,
                   studentId: this.userData.id,
-                  email: this.userData.email
+                  email: this.userData.email,
+                  coureseStartDate: element.created_at
                 };
+
+                element.end_at ? payload.coureseEndDate = element.end_at : null;
             
                 this
                 .mainCanvas(
