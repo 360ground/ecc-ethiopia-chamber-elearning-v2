@@ -30,6 +30,8 @@ export class SignupComponent implements OnInit {
     { title: 'Company : register for Enrolling other Student only. ', value: 'company' },
   ];
 
+  public allowedExtenstion: any = '.jpeg,.jpg,.png';
+
   constructor(
     private service: ApiService,
     private router: Router,
@@ -155,15 +157,21 @@ export class SignupComponent implements OnInit {
 
   onFileUpload($event: any) {
     if (!this.isIndividual) {
-      let file = $event.target.files[0];
 
-      const reader: any = new FileReader();
-      reader.readAsDataURL(file);
+      let file = $event.filesData[0].rawFile;
+      
+      if(+$event.filesData[0].statusCode){
+        const reader: any = new FileReader();
+        reader.readAsDataURL(file);
+  
+        reader.onload = () => {
+          this.base64Image = reader.result.toString();
+        };
+        
+      }
 
-      reader.onload = () => {
-        this.base64Image = reader.result.toString();
-      };
     }
+
   }
 
   changeType(event: any) {

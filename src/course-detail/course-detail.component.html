@@ -7,7 +7,7 @@
                     <h1 class="course-title">{{state?.attributes?.name}}</h1>
                     <p class="course-subtitle">{{state?.category | titlecase}}</p>
                     <p class="mt-4" *ngIf="service?.isIndividual">
-                        <span *ngIf="!isEnrolledForThisCourse">
+                        <span *ngIf="!checkEnrolledInCourse()">
                             <button type="button" class="btn btn-primary" 
                                 style="border-radius: 0px; width: 231px; padding: 14px;" [disabled]="enrolling" (click)="startLearning()">
                                 <div>
@@ -26,7 +26,7 @@
 
                         </span>
 
-                        <span *ngIf="isEnrolledForThisCourse"> 
+                        <span *ngIf="checkEnrolledInCourse()"> 
                             <button type="button" class="btn btn-primary" style="border-radius: 0px; width: 231px;
                             padding: 14px;"  [disabled]="enrolling" (click)="startLearning()">
                                 <i class="fa fa-spinner" style="margin-right: 10px !important;" 
@@ -242,7 +242,7 @@
                                     margin-bottom: 10px;">{{ activity?.items?.length }} LESSONS</p>
                                     <hr class="mb-4" />
                                     <div class="innerModuleCards">
-                                            <span *ngIf="isEnrolledForThisCourse">
+                                            <span *ngIf="checkEnrolledInCourse()">
                                                 <a *ngFor="let subActivity of activity?.items; let i = index" target="_blank" [href]="subActivity.html_url"
                                                 class="moduleList">
                                                     <p>
@@ -250,9 +250,9 @@
                                                     </p>
                                                 </a>
                                             </span>
-                                            <span *ngIf="!isEnrolledForThisCourse">
+                                            <span *ngIf="!checkEnrolledInCourse()">
                                                 <p *ngFor="let subActivity of activity?.items; let i = index" class="moduleList" (click)="confirm();"
-                                                    [title]="service.userData ? isEnrolledForThisCourse ? 'click to open' : 'Not enrolled' : 'login to open'" 
+                                                    [title]="service.userData ? checkEnrolledInCourse() ? 'click to open' : 'Not enrolled' : 'login to open'" 
                                                     >
                                                     {{ subActivity?.title }}
                                                 </p>

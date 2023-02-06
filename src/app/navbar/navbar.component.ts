@@ -60,7 +60,7 @@ export class NavbarComponent implements OnInit {
             this.cookieService.delete('access_token');
             this.service.isLoggingout = false;
 
-            window.location.reload();
+            this.router.navigateByUrl('/');
 
           } else {
             this.toastr.error(response.message, 'Error');
@@ -130,10 +130,10 @@ export class NavbarComponent implements OnInit {
 
               this.toastr.info('please fill all the required fields.','Incomplete Profile');
 
-              this.router.navigateByUrl('//profile');
+              this.router.navigateByUrl('/profile');
 
             } else {
-              this.router.navigateByUrl('/');
+              // this.router.navigateByUrl('/');
 
             }
 
@@ -158,10 +158,10 @@ export class NavbarComponent implements OnInit {
 
                 this.toastr.info('please fill all the required fields.','Incomplete Profile');
 
-                this.router.navigateByUrl('//profile');
+                this.router.navigateByUrl('/profile');
 
               } else {
-                this.router.navigateByUrl('/');
+                // this.router.navigateByUrl('/');
 
               }
           } 

@@ -130,8 +130,8 @@ style="box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
               <a ngbDropdownItem [routerLink]="['/mycertificate']" 
               [ngClass]="'/mycertificate' == service.currentUrl ? 'bottomBorder' : ''"
               *ngIf="service.userData && service?.isIndividual">My certification</a>
-              <a ngbDropdownItem  [routerLink]="['//profile']"
-              [ngClass]="'//profile' == service.currentUrl ? 'bottomBorder' : ''"
+              <a ngbDropdownItem  [routerLink]="['/profile']"
+              [ngClass]="'/profile' == service.currentUrl ? 'bottomBorder' : ''"
                 >Update profile</a>
               <a ngbDropdownItem  [routerLink]="['/profile/changePassword']"
               [ngClass]="'/profile/changePassword' == service.currentUrl ? 'bottomBorder' : ''"
@@ -206,8 +206,8 @@ style="box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
             </a>
           </li>
           <li class="list-group-item" style="width: fit-content;" *ngIf="service.userData">
-            <a  class="nav-link white" (click)="navigate(true,'//profile')"
-            [ngClass]="'//profile' == service.currentUrl ? 'bottomBorder' : ''"
+            <a  class="nav-link white" (click)="navigate(true,'/profile')"
+            [ngClass]="'/profile' == service.currentUrl ? 'bottomBorder' : ''"
             >My profile</a>
           </li>
           <li class="list-group-item" style="width: fit-content;" *ngIf="service.userData">

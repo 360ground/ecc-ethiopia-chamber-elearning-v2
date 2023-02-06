@@ -11,7 +11,7 @@
             >
             <ng-template ngbSlide *ngFor="let img of service?.slideImages; let i = index">
                 <div class="carousel-caption">
-                    <h3>{{ img.description|titlecase }}</h3>
+                    <h3 class="carousel-description">{{ img.description|titlecase }}</h3>
                 </div>
                 <div class="picsum-img-wrapper">
                     <img src="{{baseImageUrl}}/{{img.url}}" class="slideImages"

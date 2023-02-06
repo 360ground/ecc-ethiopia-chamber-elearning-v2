@@ -19,7 +19,7 @@ import { ConfirmationService } from 'src/shared/confirmation.service';
   templateUrl: './course-detail.component.html',
   styleUrls: ['./course-detail.component.css'],
 })
-export class CourseDetailComponent implements OnInit {
+export class CourseDetailComponent implements OnInit,OnChanges {
   public detail: any;
   public state: any;
   public id: any;
@@ -39,8 +39,8 @@ export class CourseDetailComponent implements OnInit {
   public readmore: boolean = true;
   public isExtraInfoLoading: boolean = false;
   public courseFee: any;
-  queryParam: any;
-  paymentId: any;
+  public queryParam: any;
+  public paymentId: any;
   public enrolling: boolean = false;
   public paymnetSettlement: any[] = [];
   public courseQuizzes: any[] = [];
@@ -72,18 +72,37 @@ export class CourseDetailComponent implements OnInit {
 
       if ('courseId' in queryParam) {
         this.getCourseDetail(queryParam.courseId);
+
+        this.id = queryParam.courseId;
       }
+
     } 
     
-    this.state = this.location.getState();
+    // this.state = this.location.getState();
     
-    if(this.state.attributes !== undefined) {
-      this.id = this.state.attributes.id;
+    // if(this.state.attributes !== undefined) {
+    //   this.id = this.state.attributes.id;
 
-      this.initializeStates();
+    //   this.initializeStates();
+    // }
+
+  }
+
+
+  checkEnrolledInCourse(){
+    if (this.service.userData?.profile?.accountType == 'individual' && this.service.myCourses) {
+      this.isEnrolledForThisCourse = this.service.checkCourseEnrollment(this.id);
+
+      return this.isEnrolledForThisCourse;
+
+    } else {
+      return this.isEnrolledForThisCourse;
     }
-      
 
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(changes);
   }
 
   initializeStates(){
@@ -95,19 +114,6 @@ export class CourseDetailComponent implements OnInit {
   
     if(this.service.userData){
       this.checkPaymnetSettlement();
-    }
-
-    // load user enrolled courses
-    if (this.service.userData?.profile?.accountType == 'individual' && this.service.myCourses) {
-      let inprogress: any[] = this.service.myCourses.inprogress;
-      let completed: any[] = this.service.myCourses.completed;
-
-      let merged = inprogress.concat(completed);
-
-      let index = merged.findIndex((ele: any) => ele.id == +this.id);
-
-      this.isEnrolledForThisCourse = index > -1 ? true : false;
-      
     }
 
     if ('activities' in this.state) {
@@ -352,13 +358,14 @@ export class CourseDetailComponent implements OnInit {
 
   getDetailModules() {
     this.isModulesLoading = true;
+
     this.service
     .mainCanvas(`getAllModules/${this.id}`, 'get', null)
     .subscribe((response: any) => {
       if(response.status){
         this.state.activities = response.message;
-        this.index ? this.service.loadedCourses[this.index].activities = response.message : null;
 
+        this.index ? this.service.loadedCourses[this.index].activities = response.message : null;
       } else {
         this.toastr.error(response.message, 'Error');
       }

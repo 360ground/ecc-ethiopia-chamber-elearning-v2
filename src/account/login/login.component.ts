@@ -75,7 +75,6 @@ export class LoginComponent implements OnInit {
         .subscribe((response: any) => {
   
           this.service.userData = response.message;
-          console.log(this.service.userData.token);
           this.cookieService.set('UserId', response.message.id,1,'/');
             
           if('profile' in response.message){
@@ -102,7 +101,7 @@ export class LoginComponent implements OnInit {
 
                 this.toastr.info('please fill all the required fields.','Incomplete Profile');
 
-                this.router.navigateByUrl('//profile', { state : {
+                this.router.navigateByUrl('/profile', { state : {
                   showFieldIndicatror: true
                 }});
 
@@ -132,7 +131,7 @@ export class LoginComponent implements OnInit {
 
                 this.toastr.info('please fill all the required fields.','Incomplete Profile');
 
-                this.router.navigateByUrl('//profile', { state : {
+                this.router.navigateByUrl('/profile', { state : {
                   showFieldIndicatror: true
                 }});
 

@@ -185,8 +185,8 @@ export class ApiService {
   separate(data: any, userId: any) {
     let completed: any[] = [];
     let inprogress: any[] = [];
-    let enrollmentRequestSideeffectRequests: any[] = [];
 
+    let enrollmentRequestSideeffectRequests: any[] = [];
 
     this.mainCanvas(`getAllCertificates/${userId}`, 'get', {})
     .subscribe((response: any) => {
@@ -279,11 +279,13 @@ export class ApiService {
       if(enrollmentRequestSideeffectRequests.length){
         // this.updateEnrollmentSideeffect(enrollmentRequestSideeffectRequests) 
       }
-    
+
+      this.myCourses.completed = completed;
+      this.myCourses.inprogress = inprogress;  
+      this.myCourses.merged = inprogress.concat(completed);
+
     });
 
-    this.myCourses.completed = completed;
-    this.myCourses.inprogress = inprogress;
   }
 
 
@@ -298,9 +300,53 @@ export class ApiService {
 
   }
 
+  checkCourseEnrollment(courseId: any){    
+    let index: any;
+    
+    if((this.myCourses.merged)){
+      index = this.myCourses.merged.findIndex((ele: any) => ele.id == +courseId);
+    }
+
+    if(index > -1){
+      return true;
+
+    } else {
+      return false;
+    }
+
+  }
+
+  loadCourses(limit: any){
+    this
+    .mainCanvas(`getAllCourseExtraInfo/${limit}`, 'get', null)
+    .subscribe((response: any) => {
+      if(response.status){
+
+        let message = response.message;
+
+        message.forEach((element: any) => {
+          element.attributes = JSON.parse(element.attributes);
+          element.features = Object.values(JSON.parse(element.features));
+
+          if (location.protocol == 'http:'){
+
+            if(element.attributes.image_download_url){
+              element.attributes.image_download_url = element.attributes.image_download_url.replace('https', 'http');
+            }
+          }
+
+        }); 
+
+        this.loadedCourses = message;
+
+      } else {
+        this.toastr.error(response.message, 'Error');
+      }
+  
+    });
+
+
+  }
+
 
 }
-
-
-
-     

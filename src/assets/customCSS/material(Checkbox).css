@@ -3022,7 +3022,7 @@
 }
 .e-checkbox-wrapper .e-frame.e-check,
 .e-css.e-checkbox-wrapper .e-frame.e-check {
-  background-color: rgb(41, 98, 255);
+  background-color: rgb(48, 79, 254);
   border-color: transparent;
   color: #fff;
 }
@@ -3035,7 +3035,7 @@
 
 .e-checkbox-wrapper .e-ripple-element,
 .e-css.e-checkbox-wrapper .e-ripple-element {
-  background: rgba(41, 98, 255, 0.26);
+  background: rgba(48, 79, 254, 0.26);
 }
 
 .e-checkbox-wrapper .e-ripple-check .e-ripple-element,
@@ -3049,7 +3049,7 @@
 }
 .e-checkbox-wrapper:active .e-ripple-check .e-ripple-element,
 .e-css.e-checkbox-wrapper:active .e-ripple-check .e-ripple-element {
-  background: rgba(41, 98, 255, 0.26);
+  background: rgba(48, 79, 254, 0.26);
 }
 
 .e-checkbox-wrapper .e-label,
@@ -3065,7 +3065,7 @@
 }
 .e-checkbox-wrapper .e-checkbox:focus + .e-frame.e-check,
 .e-css.e-checkbox-wrapper .e-checkbox:focus + .e-frame.e-check {
-  background-color: rgb(41, 98, 255);
+  background-color: rgb(48, 79, 254);
   border-color: transparent;
   box-shadow: none;
   color: #fff;
@@ -3084,7 +3084,7 @@
 }
 .e-checkbox-wrapper .e-checkbox:active + .e-frame.e-check,
 .e-css.e-checkbox-wrapper .e-checkbox:active + .e-frame.e-check {
-  background-color: rgb(41, 98, 255);
+  background-color: rgb(48, 79, 254);
   border-color: transparent;
   box-shadow: none;
   color: #fff;
@@ -3102,7 +3102,7 @@
 }
 .e-checkbox-wrapper:hover .e-frame.e-check,
 .e-css.e-checkbox-wrapper:hover .e-frame.e-check {
-  background-color: rgb(41, 98, 255);
+  background-color: rgb(48, 79, 254);
   border-color: transparent;
   color: #fff;
 }
@@ -3144,7 +3144,7 @@
 }
 .e-checkbox-wrapper.e-focus .e-ripple-container.e-ripple-check,
 .e-css.e-checkbox-wrapper.e-focus .e-ripple-container.e-ripple-check {
-  background-color: rgba(41, 98, 255, 0.26);
+  background-color: rgba(48, 79, 254, 0.26);
 }
 .e-checkbox-wrapper.e-focus .e-frame,
 .e-css.e-checkbox-wrapper.e-focus .e-frame {

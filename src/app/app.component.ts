@@ -36,6 +36,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadSlideImages();
+    this.service.loadCourses(10);
   }
 
   loadSlideImages(){

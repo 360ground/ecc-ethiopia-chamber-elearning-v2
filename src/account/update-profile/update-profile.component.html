@@ -228,7 +228,7 @@
                                         </p>
                                         
                                         <p class="empty-card-button">
-                                            <button class="btn btn-outline-primary" (click)="editEducation(i)">
+                                            <button class="btn btn-outline-primary editButton" (click)="editEducation(i)">
                                                 <i class="fa fa-pencil mr-4" aria-hidden="true"></i> Edit
                                             </button>
                                             <button class="btn btn-outline-danger" style="margin-right: 29px;" (click)="removeEducation(i)">
@@ -452,18 +452,18 @@
                                     </div>
                                 </div>  
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <div formGroupName="company" class="mb-4 row">
-                                        <div class="col-sm-12" [ngClass]="getControls('company.memberId').value ? 'col-md-11 col-lg-11' : 'col-md-12 col-lg-12'">
+                                    <div formGroupName="company" class="mb-4">
                                             <label>If So, please attache the membership id here.</label>
-                                            <input type="file" class="form-control form-control-lg" (change)="onFileUpload($event)" 
-                                            accept="image/*" formControlName="memberId" />
-                                        </div>
-                                        <div class="col-sm-12 col-md-1 col-lg-1" *ngIf="getControls('company.memberId').value">
-                                            <label></label>
-                                            <span (click)="removeMemberId()" title="remove member id attachment">
-                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                            </span>
-                                        </div>
+                                            <ejs-uploader 
+                                                (selected)="onFileUpload($event)" 
+                                                (removing)="removeMemberId()"
+                                                [allowedExtensions] = 'allowedExtenstion'
+                                                maxFileSize = '1e+7'
+                                                multiple="false"
+                                                [autoUpload]='false'
+                                                formControlName="memberId"
+                                            >
+                                            </ejs-uploader>
                                     </div>
 
                                     <hr class="mb-4"/>
@@ -476,13 +476,13 @@
                                             <div class="memberIdCardContainer" (click)="openImage()">
                                                 <img [src]="memberId" style="width: 100% !important; height: 100% !important"/>
                                             </div>
-                                            <hr class="mt-4 mb-4"/>
-                                            <button class="btn btn-danger btn-lg btn-block" style="width: 100% !important"
+                                            <!-- <hr class="mt-4 mb-4"/> -->
+                                            <button class="btn btn-outline-danger btn-lg btn-block deleteButton"
                                             (click)="deleteMemberId()"    
                                             >
-                                                Delete
+                                                Delete Member Id
                                             </button>
-                                        </div>    
+                                        </div>
                                     </div>
 
                                 </div>   

@@ -208,20 +208,23 @@ export class EnrollmentRequestFormComponent implements OnInit {
   public onFileUpload(event: any, isSlip: boolean) {
     let file = event.filesData[0].rawFile;
 
-    const reader: any = new FileReader();
-    reader.readAsDataURL(file);
+    if(+event.filesData[0].statusCode){
+      const reader: any = new FileReader();
+      reader.readAsDataURL(file);
+  
+      reader.onload = () => {
+        if(isSlip) {
+          this.bankSlip = reader.result.toString();
+          this.getControls('bankSlip').setValue(true)
+  
+        } else {
+          this.traineelist = reader.result.toString();
+          this.getControls('traineelist').setValue(true)
+  
+        }
+      }; 
 
-    reader.onload = () => {
-      if(isSlip) {
-        this.bankSlip = reader.result.toString();
-        this.getControls('bankSlip').setValue(true)
-
-      } else {
-        this.traineelist = reader.result.toString();
-        this.getControls('traineelist').setValue(true)
-
-      }
-    }; 
+    }
 
   }
 

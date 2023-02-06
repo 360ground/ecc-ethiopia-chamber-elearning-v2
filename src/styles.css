@@ -110,11 +110,12 @@ Button:hover{
    
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #305ABD; 
-    border-radius: 10px;
+    display: none;
+    background: gray; 
+    border-radius: 7px;
   }
   
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: rgb(72, 70, 70); 
+    display: block;
   }

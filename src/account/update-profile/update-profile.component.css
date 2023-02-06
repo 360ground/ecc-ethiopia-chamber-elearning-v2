@@ -167,3 +167,15 @@ label{
     text-transform: capitalize !important;
     font-weight: lighter !important;
 }
+
+.deleteButton {
+    width: 100% !important;
+    margin-left: 12px !important;
+    margin-top: 10px !important;
+    border-radius: 5px !important;
+}
+
+.editButton {
+    margin-right: 19px !important;
+    margin-left: 53px !important;
+}

@@ -181,7 +181,7 @@
               
                                       <div class="card-body">
                                           <h5 class="card-title">
-                                              <a routerLink="/courseDetail" [state]="course" class="card-title-text">
+                                              <a routerLink="/courseDetail" [queryParams]="{courseId: course.courseId}" class="card-title-text">
                                                   {{course.attributes.name}}
                                               </a>
                                           </h5>
@@ -200,7 +200,7 @@
                                           </p>
                                           <p>
                                               <span style="float: right !important; color: #1a73e8 !important; margin-right: 13px; margin-top: 14px;">
-                                                  <a routerLink="/courseDetail" [state]="course">
+                                                  <a routerLink="/courseDetail" [queryParams]="{courseId: course.courseId}">
                                                       <mat-icon>arrow_forward</mat-icon>
                                                   </a>     
                                               </span>
@@ -419,7 +419,7 @@
                     
                                             <div class="card-body">
                                                 <h5 class="card-title">
-                                                    <a routerLink="/courseDetail" [state]="course" class="card-title-text">
+                                                    <a routerLink="/courseDetail" [queryParams]="{courseId: course.courseId}" class="card-title-text">
                                                         {{course.attributes.name}}
                                                     </a>
                                                 </h5>
@@ -438,7 +438,7 @@
                                                 </p>
                                                 <p>
                                                     <span style="float: right !important; color: #1a73e8 !important; margin-right: 13px; margin-top: 14px;">
-                                                        <a routerLink="/courseDetail" [state]="course">
+                                                        <a routerLink="/courseDetail" [queryParams]="{courseId: course.courseId}">
                                                             <mat-icon>arrow_forward</mat-icon>
                                                         </a>     
                                                     </span>

@@ -8,6 +8,7 @@ import { ApiService } from 'src/service/api.service';
 import { CustomValidators } from '../signup/password-validators';
 
 import { Location } from '@angular/common';
+import { ConfirmationService } from 'src/shared/confirmation.service';
 
 @Component({
   selector: 'app-update-profile',
@@ -46,6 +47,7 @@ export class UpdateProfileComponent implements OnInit {
     { value: 'Phd', title: 'Phd' },
   ];
 
+  public allowedExtenstion: any = '.jpeg,.jpg,.png';
 
   public state: any = undefined;
 
@@ -54,7 +56,8 @@ export class UpdateProfileComponent implements OnInit {
     public router: Router,
     public toastr: ToastrService,
     public modalService: NgbModal,
-    public location: Location
+    public location: Location,
+    public confirmation: ConfirmationService,
   ) {
     this.isIndividual =
       this.service.userData.profile.accountType == 'company' ? false : true;
@@ -228,14 +231,20 @@ export class UpdateProfileComponent implements OnInit {
 
   onFileUpload($event: any) {
     if (!this.isIndividual) {
-      let file = $event.target.files[0];
 
-      const reader: any = new FileReader();
-      reader.readAsDataURL(file);
+      let file = $event.filesData[0].rawFile;
 
-      reader.onload = () => {
-        this.base64Image = reader.result.toString();
-      };
+      if(+$event.filesData[0].statusCode){
+
+        const reader: any = new FileReader();
+        reader.readAsDataURL(file);
+  
+        reader.onload = () => {
+          this.base64Image = reader.result.toString();
+        };
+
+      }
+
     }
   }
 
@@ -307,34 +316,37 @@ export class UpdateProfileComponent implements OnInit {
     window.open(this.memberId, '_blank');
   }
 
-  deleteMemberId(){
-    if(confirm(`are you sure want to delete this file ?`)){
-      this.disable = true;
+  async deleteMemberId(){
+      this.confirmation.confirm('Confirmation', `Are you sure want to delete this member Id ?`,'Yes','No','lg')
+      .then(async (confirmed) => {
+       if(confirmed) {
+        this.disable = true;
 
-      let payload = {
-        url: this.service.userData.profile.memberId
-      };
-  
-      this.service
-        .mainCanvas(
-          `deleteFiles`,
-          'post',
-          payload
-        ).subscribe((response: any) => {
-  
-          if (response.status) {
-            this.toastr.success(response.message, 'Success');
-            this.memberId = null;
-  
-          } else {
-            this.toastr.error(response.message, 'Error');
-  
-          }
-  
-          this.disable = false;
-        });
-
-    }
+        let payload = {
+          url: this.service.userData.profile.memberId
+        };
+    
+        this.service
+          .mainCanvas(
+            `deleteFiles`,
+            'post',
+            payload
+          ).subscribe((response: any) => {
+    
+            if (response.status) {
+              this.toastr.success(response.message, 'Success');
+              this.memberId = null;
+    
+            } else {
+              this.toastr.error(response.message, 'Error');
+    
+            }
+    
+            this.disable = false;
+          });
+       }
+      })
+      .catch(() => null);
   }
 
 }

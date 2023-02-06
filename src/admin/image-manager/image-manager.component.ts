@@ -92,14 +92,18 @@ export class ImageManagerComponent implements OnInit {
 
   public onFileUpload(event: any) {
     let file = event.filesData[0].rawFile;
-    this.getControls('filename').setValue(event.filesData[0].type)
 
-    const reader: any = new FileReader();
-    reader.readAsDataURL(file);
+    if(+event.filesData[0].statusCode){
+      this.getControls('filename').setValue(event.filesData[0].type)
+  
+      const reader: any = new FileReader();
+      reader.readAsDataURL(file);
+  
+      reader.onload = () => {
+        this.getControls('image').setValue(reader.result.toString());
+      };
 
-    reader.onload = () => {
-      this.getControls('image').setValue(reader.result.toString());
-    };
+    }
   }
 
   public onRemoveFile(){
