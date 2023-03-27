@@ -35,6 +35,12 @@ style="box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
         aria-current="page">Online courses</a>
         <!-- <hr class="bottomBorder" /> -->
       </li>
+      <li class="nav-item">
+        <a class="nav-link white" [routerLink]="['/certificate/verification']" (click)="navigate(false, '/certificate/verification')" 
+        [ngClass]="'/certificate/verification' == service.currentUrl ? 'bottomBorder' : ''"
+        aria-current="page">Verify Certificate</a>
+        <!-- <hr class="bottomBorder" /> -->
+      </li>
       <!-- [ngClass]="url == 'courses' ? 'bottomBorder' : ''" -->
 
       <li class="nav-item" *ngIf="service.userData?.profile?.accountType == 'company'">
@@ -107,6 +113,12 @@ style="box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
             </div>
           </div>
         </li>
+
+        <li class="nav-item">
+          <a class="nav-link white" [routerLink]="['/certificate/verification']" (click)="navigate(false, '/certificate/verification')" 
+          [ngClass]="'/certificate/verification' == service.currentUrl ? 'bottomBorder' : ''"
+          aria-current="page">Verify Certificate</a>
+        </li>
         
     </ul>
 
@@ -127,8 +139,8 @@ style="box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
               [ngClass]="'/mycourse' == service.currentUrl ? 'bottomBorder' : ''"
               *ngIf="service.userData && service?.isIndividual">My learning plan</a>
               <!-- <a ngbDropdownItem [routerLink]="['/myeducation']" *ngIf="service.userData && service?.isIndividual">My Education</a> -->
-              <a ngbDropdownItem [routerLink]="['/mycertificate']" 
-              [ngClass]="'/mycertificate' == service.currentUrl ? 'bottomBorder' : ''"
+              <a ngbDropdownItem [routerLink]="['/certificate/mylist']" 
+              [ngClass]="'/certificate/mylist' == service.currentUrl ? 'bottomBorder' : ''"
               *ngIf="service.userData && service?.isIndividual">My certification</a>
               <a ngbDropdownItem  [routerLink]="['/profile']"
               [ngClass]="'/profile' == service.currentUrl ? 'bottomBorder' : ''"
@@ -199,8 +211,8 @@ style="box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
             <a  class="nav-link white" (click)="navigate(true,'myeducation')">My Education</a>
           </li> -->
           <li class="list-group-item" style="width: fit-content;" *ngIf="service.userData && service?.isIndividual">
-            <a class="nav-link white" (click)="navigate(true,'/mycertificate')" 
-            [ngClass]="'/mycertificate' == service.currentUrl ? 'bottomBorder' : ''"
+            <a class="nav-link white" (click)="navigate(true,'/certificate/mylist')" 
+            [ngClass]="'/certificate/mylist' == service.currentUrl ? 'bottomBorder' : ''"
            >
               My certification
             </a>
@@ -233,9 +245,13 @@ style="box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%);">
             [ngClass]="'/faq' == service.currentUrl ? 'bottomBorder' : ''"
             aria-current="page">Help & FAQs</a>
           </li>
+          <li class="list-group-item" style="width: fit-content;">
+            <a class="nav-link white" (click)="navigate(true,'/certificate/verification')" 
+            [ngClass]="'/certificate/verification' == service.currentUrl ? 'bottomBorder' : ''"
+            aria-current="page">Verify Certificate</a>
+          </li>
 
           <hr />
-
 
           <li class="list-group-item" *ngIf="service.userData?.profile?.accountType == 'company'">
             <a class="nav-link white" [routerLink]="['/enrollment/myrequest']" 

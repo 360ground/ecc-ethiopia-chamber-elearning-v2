@@ -1,22 +1,26 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MyCertificateListComponent } from './my-certificate-list/my-certificate-list.component';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from 'src/service/AuthGuard';
 import { SharedModule } from 'src/shared/shared.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from 'src/service/interceptor.service';
+import { VerifayCertificateComponent } from './verifay-certificate/verifay-certificate.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'mylist',
     component: MyCertificateListComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'verification',
+    component: VerifayCertificateComponent,
   },
 ];
 
 @NgModule({
-  declarations: [MyCertificateListComponent],
+  declarations: [MyCertificateListComponent, VerifayCertificateComponent],
   imports: [SharedModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
   providers: [
@@ -27,4 +31,4 @@ const routes: Routes = [
     },
   ]
 })
-export class MyCertificateModule { }
+export class CertificateModule { }

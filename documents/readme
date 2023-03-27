@@ -1,0 +1,1 @@
+sudo ssh -i "ecc.pem" ubuntu@3.125.158.58

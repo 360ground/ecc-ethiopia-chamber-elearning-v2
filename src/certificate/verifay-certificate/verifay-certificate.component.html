@@ -1,0 +1,47 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-1 col-md-1 col-sm-12"></div>
+        <div class="col-lg-10 col-md-10 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Certificate Verification</h2>
+                    
+                    <form [formGroup]="formGroup">
+                        <div class="mb-4">
+                            <label class="mb-2">Please enter the verifcation code here.</label>
+                            <input required class="form-control form-control-lg" formControlName="code" />
+                            <p *ngIf="formSubmitted && getControls('code').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div>
+                        <!-- <hr /> -->
+                        <ngb-alert [dismissible]="true" 
+                        *ngFor="let message of messages; let i = index" [type]="message.type"
+                        (closed)="closeMessage(i)"
+                        >
+                            <p>
+                               {{ message.message }}
+                            </p>   
+                        </ngb-alert>
+                        <div class="mb-4">
+                            <Button type="submit" class="btn btn-primary btn-lg"  [disabled]="disable"
+                            (click)="Submit()"
+                            >
+                            <div>
+                                <span *ngIf="disable">
+                                    <i class='fa fa-spinner fa-spin fa-3x fa-fw' style="font-size: 21px !important;"></i> 
+                                </span>
+                                <span>
+                                    Submit
+                                </span>
+                            </div>
+                            </Button>
+                        </div>
+                    </form>
+                        
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-12"></div>
+    </div>
+</div>                

@@ -46,10 +46,10 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'mycertificate',
+    path: 'certificate',
     loadChildren: () =>
-      import('../my-certificate/my-certificate.module').then(
-        (m) => m.MyCertificateModule
+      import('../certificate/certificate.module').then(
+        (m) => m.CertificateModule
       ),
   },
   {

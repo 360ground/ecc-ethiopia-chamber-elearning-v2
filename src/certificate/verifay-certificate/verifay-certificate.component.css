@@ -1,0 +1,40 @@
+.card {
+    margin-top: 77px !important;
+    /* text-align: center; */
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 25px !important;
+}
+
+.row {
+    margin-bottom: 30px !important;
+}
+
+.error {
+    color: red !important;
+}
+
+.btn-block {
+    width: 100% !important;
+}
+
+.fa-spinner {
+    font-size: 32px !important;
+}
+
+label{
+    color: gray;
+    font-weight: lighter;
+    font-size: 17px;
+    margin-bottom: 20px !important;
+}
+
+@media only screen and (max-width: 760px) {    
+    .card {
+        margin-top: 88px !important;
+    }
+}
+
+h2 {
+    font-weight: lighter !important;
+}
