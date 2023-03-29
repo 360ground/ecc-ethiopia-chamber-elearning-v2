@@ -8,6 +8,14 @@
                         {{ isEditing ? 'Edit' : 'Create' }} Course Extra Information</h1></span>
                 </p>
                 <p><span><hr /></span></p>
+                <ngb-alert [dismissible]="true" 
+                *ngFor="let message of messages; let i = index" [type]="message.type"
+                (closed)="closeMessage(i)"
+                >
+                    <p>
+                       {{ message.message }}
+                    </p>   
+                </ngb-alert>
                 <form [formGroup]="formGroup">
 
                 <div class="mb-4">
@@ -86,6 +94,16 @@
                                 <small> * required</small>
                             </p>
                         </div>   
+                        <div class="mb-4">
+                            <label>Publish Status</label>
+                            <ejs-dropdownlist id='ddlelement' [dataSource]='publishStatus' 
+                                formControlName="publishStatus" placeholder="-- select publish status --"
+                                [fields]="fields" cssClass="e-outline">
+                            </ejs-dropdownlist>
+                            <p *ngIf="formSubmitted && getControls('publishStatus').hasError('required')" class="error">
+                                <small> * required</small>
+                            </p>
+                        </div> 
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-6">
                         <div class="mb-4">
@@ -136,7 +154,7 @@
                 <div class="mb-4 row">
                     <div class="col-sm-12 col-md-6 col-lg-6">
                         <span>
-                            <Button type="submit" class="btn btn-primary btn-lg btn-block" 
+                            <Button type="submit" class="btn btn-primary btn-lg btn-block" *ngIf="isCourseAvailable"
                             (click)="Submit()" [disabled]="disable">
                                 <span *ngIf="showSpinner">
                                     <i class='fa fa-spinner fa-spin fa-3x fa-fw' 
@@ -147,7 +165,7 @@
                                 </span>
                             </Button>
                         </span>
-                        <span *ngIf="isEditing" style="margin-left: 20px !important;">
+                        <span *ngIf="isEditing || !isCourseAvailable" style="margin-left: 20px !important;">
                             <Button type="button" class="btn btn-danger btn-lg btn-block" 
                             (click)="Delete()" [disabled]="disable">
                                 <span *ngIf="showSpinnerDelete">

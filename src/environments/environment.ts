@@ -8,8 +8,8 @@ export const environment = {
   logoUrl: '/assets/logo.png',
   emptyCertificateUrl: '/assets/emptyCertificate.png',
   usericonUrl: '/assets/user_icon.png',
-  baseUrlCanvas: 'http://3.216.95.39/api/v1/',
-  canvasUrl: 'http://3.216.95.39',
+  baseUrlCanvas: 'http://ecclms.360magic.link/api/v1/',
+  canvasUrl: 'http://ecclms.360magic.link',
   canvasClient_id: '10000000000001',
   canvasClient_secret:
     'biZJ8hh9durwy4D82KeuKIZelnwI8739xII4lILjsgdQNSq8e7MvkNthFyNRJVVY',

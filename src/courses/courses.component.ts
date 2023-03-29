@@ -158,7 +158,7 @@ export class CoursesComponent implements OnInit {
     this.openModal();
 
     this.service
-      .mainCanvas(`getAllCourseExtraInfo/${limit}`, 'get', null)
+      .mainCanvas(`getAllCourseExtraInfo/${limit}/published`, 'get', null)
       .subscribe((response: any) => {
         if(response.status){
           let message = response.message;

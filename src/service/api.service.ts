@@ -318,7 +318,7 @@ export class ApiService {
 
   loadCourses(limit: any){
     this
-    .mainCanvas(`getAllCourseExtraInfo/${limit}`, 'get', null)
+    .mainCanvas(`getAllCourseExtraInfo/${limit}/published`, 'get', null)
     .subscribe((response: any) => {
       if(response.status){
 
