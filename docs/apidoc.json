@@ -1,0 +1,11 @@
+{
+    "name": "Ecc backend App API",
+    "version": "1.0.0",
+    "description": "API documentation for Ecc backend App",
+    "title": "Ecc backend App API",
+    "url": "http://localhost:3000",
+    "template": {
+      "forceLanguage": "en"
+    }
+  }
+  
