@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node index.js"
   },
   "author": "surafel habte",
   "license": "ISC",
@@ -26,10 +26,10 @@
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
     "node-base64-image": "^2.0.4",
-    "node-canvas-api": "^1.7.3",
+    "node-canvas-api": "git+https://github.com/360ground/node-canvas-api.git",
     "node-fetch": "^2.6.6",
     "node-querybuilder": "^2.1.1",
-    "nodemailer": "^6.8.0",
+    "nodemailer": "^6.7.7",
     "nodemon": "^2.0.19",
     "redis": "^4.3.1",
     "request-promise": "^4.2.6",

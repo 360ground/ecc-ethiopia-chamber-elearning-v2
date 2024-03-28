@@ -1,14 +1,14 @@
-const redis = require('redis');
-const QueryBuilder = require('node-querybuilder');
+const redis = require("redis");
+const QueryBuilder = require("node-querybuilder");
 
 const connection = {
-  host: 'localhost',
-  user: 'root',
-  password: 'Abcd@5304',
-  database: 'ecc'
+  host: "localhost",
+  user: "root",
+  password: "@360Ground",
+  database: "ecc",
 };
 
-const pool = new QueryBuilder(connection, 'mysql', 'pool');
+const pool = new QueryBuilder(connection, "mysql", "pool");
 
 var redisClient;
 

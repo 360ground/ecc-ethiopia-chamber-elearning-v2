@@ -1,32 +1,13 @@
-var nodemailer = require('nodemailer');
+var nodemailer = require("nodemailer");
+require("dotenv").config();
 
-const transporter = nodemailer.createTransport({
-    port: 465,          
-    host: "smtp.gmail.com",
-       auth: {
-            user: 'surafel@360ground.com',
-            pass: 'Abcd@5304',
-         },
-    secure: true,
+let transporter = nodemailer.createTransport({
+  service: "gmail",
+
+  auth: {
+    user: "michael@360ground.com",
+    pass: process.env.EMAIL_PASSWORD,
+  },
 });
-
-const send = async (to, subject, text, from = 'surafel@360ground.com')=> {        
-    const mailData = {
-        from: from,
-        to: to,
-        subject: subject,
-        text: text,
-    };
-
-    let result  = await transporter.sendMail(mailData, async function (err, info) {
-        if(err){
-            return await { status: false, message: err.message}
-
-        } else {
-            return await { status: true, message: 'success'}
-        }   
-    });
-
-}
 
 module.exports = transporter;
